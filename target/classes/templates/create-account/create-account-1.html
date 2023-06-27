@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragments :: header}">
+    <title>Create Account</title></head>
+<body>
+
+<div class="text-center">
+    <div class="text-center">
+        <div class="card-fast-login">
+
+            <div class="card-body">
+                <div class="basic-form">
+                    <form>
+                        <div class="mb-2 create-left">
+                            <a><img th:src="@{/images/logo.svg}" alt="Fast Credit" width="130" height="90"></a>
+                        </div>
+                        <div class="mb-4 create-left">Let's get to know you.
+                        </div>
+                        <div class="mb-4 create-left">Let's get to know you.
+                        </div>
+                        <div class="mb-4">
+                            <label for="phone" class="label-create"> Phone Number</label>
+                            <input id="phone" type="text" class="form-control" placeholder="">
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="label-create"> Email</label>
+                            <input id="email" type="text" class="form-control" placeholder="">
+                        </div>
+                    </form>
+
+                    <div class="text-center mb-4">
+                        <button class="btn-block btn-login">Proceed</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

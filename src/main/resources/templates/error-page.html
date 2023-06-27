@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Error</title>
+</head>
+<body>
+<h1>Error Page</h1>
+
+<div th:if="${#httpServletRequest.getAttribute('javax.servlet.error.status_code')} == 401">
+  <p>The application has been refreshed. Please <a href="/login">login</a> again.</p>
+</div>
+
+<div th:if="${#httpServletRequest.getAttribute('javax.servlet.error.status_code')} == 500">
+  <p>The application has been refreshed. Please <a href="/login">login</a> again.</p>
+</div>
+
+<!-- Add more error handling conditions and messages as needed -->
+
+</body>
+</html>

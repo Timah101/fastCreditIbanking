@@ -1,0 +1,147 @@
+<!DOCTYPE html >
+<html lang="en" class="h-100" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragments :: header}">
+
+</head>
+
+<body class="loggin">
+<div class=" container">
+    <div id='landing' class='landing'>
+        <div id='amblogo_fullcolor_rgb2' class='amblogo_fullcolor_rgb2'>
+            <img
+                    src='data:image/png;base64,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' />
+        </div>
+        <div id='screentitle' class='screentitle'>
+            Welcome to Accion</div>
+        <div id='rectangle' class='rectangl'>
+        </div>
+        <div class="quickbanking-div">
+            <div id='frame864' class='frame864'>
+                <div id='-green-flashing-circle-icon1' class='-green-flashing-circle-icon1'>
+                    <img
+                            src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAC/klEQVR4Ae2X208TQRTGv+2FLaW1LW0p4SoGxIqBEBHxQXwx8cEX/1Hf9E2jYoJgiHhDEIICWrRSaEu3le3S1jmbkNidmXa7jeHFX586nTPz7ZmzZ74qNQbOERfOmXMX4GllslE1sF/6hpS2i4x+gHJFN8cVxYVEZy8uBkfR5x+AS3HbXlOxUwN6VcfqwTJWD19Dr5w0nHvBG8Ll8FVMRW8g6L2AtgVs5TfwNPUIJ002thJkQuYSdzARmYRjAa/SL7D86yXaYa7ntilEhrQIl9ILbW9ursPWoAeRISzC9ewHFrggDcrpWWT1DEqnJVTZJ+AJIKJGEVa7hfPpQeK+BEZDV5oL0E6PsZh+Jlwozzb+UthiAo7qxjNIY6ewjS5vAEl25qLie8LqaDAwAtWt1o1zR/A2s4KCccwt8LO0j3eHK9zmf1M0NLw5WDLnWqEiXs0sc+N1AqgeN/Nr3CSNCfqc+4hKrYJmVGtVbObWzGOyQq+xUS3LBaSKezgu57nAT0fvzYXtQkK/sqOyQj1kv/hdLmBH2+aCKOXFUw2tQnG5Mp+FVHFXLiD9+wcXcKQfwilZQSy1cKmAmiDNVFhOKRlFbuzs/hAKEOFWnF+Y1COaUbd6h+UdJTo9XXBKF2tQ3IaWB6r7FlPjXEDEF4VTulU+NtHZJxfQHxjmAsIdEWmLbQQ9vShuOHhJLoDMhOr2cUEjwTFWC/ZNBqU52c1fw+QV+v1DcgFeVwemo7NcYFiNMJMxwZ2fCBI6Hr4mvA/G2RqKosgFENOxWWEWev19uB6/xVIbhAxK+VRsxpxrhQzKZHSGGxcakq38Oh7vPYQM6nLUZDSjYPo/v8fPCi6GEMuUjHuDD5BkmbElgCBD0sgTtMJczzxzRfPC36SHSgFkp9rlpmnJ5qW/NzWl5I4W08+ZR8ijFVSXD3cH7mMslGw4z5YtJz9AZmSD3fPNhNDG0/FZ820SFbMjAWfU2Ic8wy6zX3RznnkEauExtYc1siGzl9DrbJeWBPwL/v85/QN/kj65LGUnCgAAAABJRU5ErkJggg==' />
+                </div>
+                <div id='frame865' class='frame865'>
+                    <div id='quickbanking' class='quickbanking'>
+                        Quick Banking</div>
+                    <div id='arrow-right2' class='arrow-right2'>
+                        <div id='iconly-two-tone' class='iconly-two-tone'>
+                            <div id='arrow---right-22' class='arrow---right-22'>
+                                <div id='stroke-1' class='stroke-1'>
+                                    <img
+                                            src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAMCAYAAABfnvydAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAQUlEQVR4AcWQuwkAIBBDgy7gCI7gKLd/4whaWhrQzg96zT14VQKBeAyENlqxIdBCM404kOxKcPjkOqEPn46SWVzo7nkVTHLvPzwAAAAASUVORK5CYII=' />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-group">
+            <div  class='frame1'>
+                <a th:href="@{/open/account/with/bvn1}"> <div id='account2' class='account2'>
+                    <div id='duotone' class='duotone'>
+                        <img
+                                src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAfCAYAAAAbW8YEAAAACXBIWXMAAAsTAAALEwEAmpwYAAAENElEQVR4AcWXXUxTZxjH/6eHLaNAaCTWabbQTHcBmgw/shgthbFkrs6oG2BqExHFJcyFMnazzG0qsunNlgE3mmxacNlkA5RtCtxZivNGcLAIJDpDOxPqWowlpdUo5fV9Tj2lQHs8RRP/CWnP4bzP7/l6n/cUWIjWWwziBks5FigxqacLt+s0r6z5bFGmtmPT+rzt11lWuebVVRPs1rUBPHMRzGg9JBqtd2samtndQJCRRj1eVlRVx8SNO0efJvJ5EvMt5WSUjLs4JJ6aOnvYa6U2Jhp3nqPUY8EyWgq5kYsEc1wdYmoUhedb7cnBN1jzCLacL1YLixWlvPZkG0XNqCTKcF43caPVnmWukBY9yTBFlSjd8jN7vzket96C1CRT2upFGamfVJWYdbYdZujStXH9ct32oe5UO8729GHNyly4b7lRttmE3WYTsl9erLimudPpAmO14cstTdAYLYeLqo4oek0ir3XvVLDKhjZ28WaQ9XkY+/MfL9v65XG2vMTGak8pZ4dKlfVuBePly9aQNwV5uQk9lb1t7nJC5Lt6zOfD9VE3xrzj3HEB+0pLsH/XLooESipYnYvMjDTpewpUipzqtx/D7719aPz5NPyTISxUqqEkqjXVj/5iRZl4u+pr1XY0eA5SDZ2YDEp1nStKc2NrN3QZWrWm1EENvJ7f2cpwxN6OFaXVEpxgkWsb/IEgzh79FGqluqZyLQlIsIqjJ1DGr6m5lDr/qaCytuWvkyLv+XtY+p4sUDWUUklb5Y/eKxw2gjdeN0id3NzthMAA0+ocnoUCvhdz1JhThja2dkmwwX/d0gDZyiM7eeCjWWNy8IYbPQPDUsoHD7gk8ME9Jdyx7MSGaQwmGvB0THU4r0QPbVl0/cHn3yYc8kr2omNQSXkrsucdAH6+fQZu/DfvWaq1mhpH0xvmtfEGgRf5fM1KnXnAdXscdBjFyi3d45+e8XkGySFdetosm6mcontpDvSmx4dhvv5BOHJzbJJ7nRmJcu+xE4gr7kdRdV3cf31RXgwPt/E/H8/h6ci9DCGECb6fpaUv8DeFsMDOrV2VYzi4vxJL9TPpoYiXpUeiV6s79yJOywGQLjic+N5+GoFQqCN86cz70bzRCxibFg5tectk+LC0OGl44AGk6OhTVv/QCH5sbcPVoRGHAFY7danFIUU6d3EK72YGTbXlvU06y2bzLLie99OStNlwJVj/tRGXRmB7ZJgsAfFEb/AiDi/V63fv21GMLYUzRxkBl2gjjUFppHTK8nh9+KG1HecdvX6Rv5o8/OtMfTzz8aEq4LEKBENo6ezCbxe6+eyfbJhKuV8PR4c/kVll6GPxlBdOM8G+TL/Y8NXHlVi7cmbcUWS/nu9C4F6wKSzer1GCJQWVFdtspjfXod7+Ezw+nyM8LdTg8i+qf88kBY2FgwnbeEc2zG0SNXoEA18bWqGSXNAAAAAASUVORK5CYII=' />
+                    </div>
+                    <img id='frames-24px' class='frames-24px'
+                         src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAEElEQVR4AQEFAPr/AAAAAAAABQABZHiVOAAAAABJRU5ErkJggg==' />
+                </div>
+                <div id='frame8612' class='frame8612'>
+                    <div id='openaccount' class='openaccount'>
+                        Open Account</div>
+                    <div id='newtoaccionmfb' class='newtoaccionmfb'>
+                        New to Accion MFB? Click here to open an account with us.</div>
+                </div> </a>
+            </div>
+            <div  class='frame1'>
+                <a> <div id='bank1' class='bank1'>
+                    <img
+                            src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAADkklEQVR4Ae2We0xTVxzHv/cWCpXB2oJKt4beGsskTKouDjYgu+zBJI6MhWQpZJldkDBiHJiQxSxZoBl/ODbjK8ZHYqoEg4lBiC/iHwqaGHzEIKbxURWvAiHx0UKqVBT92XNLiwhq1Bb9w09ykvs753fz+57f75dzDvCW4fC6ZFlEHhCTZkwfaFtd12I0qiS8Bq8uQCxQK0ZUzQtMJnFhigl9t2/i3NXr2Pxnec336Sk2hJUMi6DILLr2+6p66rrgomPOEeroJvpvZytpF5VQxZqGNQgXiuyfCzS5JW7b1v10/soAOXofU/42ouyNJIu4IN0kY+EfZK3d0un2koBQwmdZqvU/LqPG1rPU3eOhe16iZU3+4H8d8Atgc0zEvCUrqah647WVm5oFvDG+evOZxfY5lira136JevqH5EBs1B0mQhWRoXZMQGAsX11Px7u63Xe9ZH1ZCMVzV3z1jkBkq+UbcVHt0l9h/kSPuNio4LIqApjxAXBjEDBogDTd2K/fLjQjMV4Tvaq+qaA3OhHu8yeP4pX4sngea7aqdbvJ4XTTgGdk3A7ZYLtmJWB98OxaYLCSnHBI9PfWJrubSD1ZqIhnJ/is4oq4adFr68pKsSB5NvS6WERGTEwU23FdHl5I0szpGIwZQsOho9Y7Ho/oa84cjYqTnvYJngOKbIsVj/mvwJF1cUY6dPFahIp+lwsHOk4i1WiQlJHKHRuWl2//Yr5OCgpQZBcV6LTaZhY43Fzu7cVMrUZq/KfcyOzREpDad7Kh9Ic8hBuWiTPOK0LA5gMfd71DmAo8Xu84298DolXNPxzu5DgICDOx01RYUfiTrbosv2ZMwCisEdOSZtlLc/PwmTkZCgWPXUfa4ezpw97/K7lQ+ozPQIBJMsEU/1tWYisrzKwJqc+kAkbVp89Osf8ifo1bw4OsYSaoDpUPg8db5r2A9wIm3IYcOHOf6xYOnjmNoUf35bmOzn4hcHmE0ocxLgPsUtLGxFbONcxCQvyHMOn18vz6PS1tofaZmAHfOx+EJaoopWxGKSODS52Xrwq+d2GNbBDMb+KTWlRVuTR3ccuK33Ikf6bgPzTiY+LsnyfPQbg55byITw1GKT8jY75PxICcASKuovS7PHyckIBwkzM3DdWNDYKYmmr1mWv9PUBQR4+mLNyolFFg5XF57slvxGAPtDvOyYtTgXf4QfBbFsDxZGtzdAmYQkwfJbbgXeAJzm7xlri9Q04AAAAASUVORK5CYII=' />
+                </div>
+
+                <div id='frame862' class='frame862'>
+                    <div id='register' class='register'>
+                        Register</div>
+                    <div id='alreadyhaveanoffline' class='alreadyhaveanoffline'>
+                        Already have an offline account with Accion MFB? Click here to register. </div>
+                </div></a>
+            </div>
+            <div class='frame1'>
+                <a th:href="@{/login}">  <div id='frame863' class='frame863'>
+                    <div id='login-variant' class='login-variant'>
+                        <img
+                                src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAABnklEQVR4Ae2WQU7CQBSG/9c2MbriCBzBpRGI5QasTHEDnsB4AuEEegNnhSx7A5tIjEuPwBE8QKfPN5UAUmrKTAkL+RZk0s7M//fNm8cDjvx3qPDkImr6AT3LKES9xDrle3xM5+sPg81ZIv64B3FDT/ZuaKD7pwEz0fwwY04eJ6gBzigkQhNbPiwoW2TE9dv0FjXgtSIlOza3vsOBsTcQ9hpe++YOjtgZEPEgPX0l8JOYeIADVgZ8fRoycG7GYmLkYoJgiX8ZDeHl9SKHQaNsNhlvm2uSkIgGZqxnL780rXNAv08VMl7eEttIFK9hR76sqgkjzIi9Re1YmEBZJCoZ8HkVVht2NbGXOuDtkFvFIyDerfpxnlzhcjlonM4mo4qriwak/CpUxG/1B6IY2oobrI9gIa5cxA3FJGz3+WdHVmV/Rn7nuicXX7mKG6wioP2zRFx+uopbG0CivrLgpGsKkYu4IYAtYkIKkYIjB+8HyiMgbZTfiZyq4tpeV6huwPSBFML0cExD1MGqLsabrwpHoFPI1cti1E+St+VHjmzwDZCciHaC/QBVAAAAAElFTkSuQmCC' />
+                    </div>
+                    <div id='login' class='login'>
+                        Login</div>
+                    <div id='alreadyhaveanofflineaccount' class='alreadyhaveanofflineaccount'>
+                        Already have an offline account with Accion MFB? Click here to login</div>
+                </div></a>
+            </div>
+        </div>
+        <div class="btn-index-group">
+            <button class='button-index btn-outline-primary' onclick="googleStore()">
+                <span class='group896'>
+                    <span id='google-play' class='googleplay'>
+                        Google Play
+                    </span>
+                    <span id='google-play-fill' class='google-play-fill'>
+                        <img
+                                src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAABEElEQVR4Ad2V4Q2CMBCFr8QB3EDcwBXYwA2oG7iBOglswAiygW5QnUA2OO/0mmClUAr+8UteKE36rryDAvBXIKIh5TJOYQaUUwBlqEl3UqqUKmECiWe+JK2kKD/VBuYAv8lJWsbF5Niwm3YR5gCxoB+3iOF7GAv24xZhLkOx+d4iH1rWFK25HakhXemNu7kLEhhHyfsQU2vO9xXpTPvb967GcHKORq4uZsoTWJRz9RJTwMZi4DMu7sOJ+rDu2smLgCZb87I1p+F9rHCTG3fBAsLpMq/ZnIzrIIeepmqnoYa0hbEEmD9IR9ISYhgwrzDisOvrgc1ck7LgnAML2M+ffzgZzIVkrGUcl/NAgflNf80TZwG1eBKZOIUAAAAASUVORK5CYII=' />
+                    </span>
+                </span>
+            </button>
+            <button class='button-index btn-outline-primary' onclick="appleStore()">
+               <a href="http://localhost:8080"> <span  class='group896'>
+                    <span id='applestore' class='googleplay'>
+                        Apple store
+                    </span>
+                    <span id='apple' class='google-play-fill'>
+                        <img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAA50lEQVR4Ae2U4Q2CMBCFr07ACIzABjKCIzCCG+gGxgkYQZ2gI6ATwAZlg/M1lBhjkd6l//RLXght791dCyX6SZi5gA6Qo9zAtIR6nugoNzBt+UVDufHbEsyPKevNilmNRwUN0N0YM2BsH94LqIRG6OrnSFCl32fLn9ggF5k7SRL0LMeFjlfNG9ZRpRTvE3Qsp13y20TG0ip550GCBBpGSYLFxV/YJq/k+OepPuRYBzfSceGUq4Onm1JLt9oBfnl/BmfSkRYXunDC6i1JQEAtMO+hkqQgaBeCfTeWp2ukDk87V64y/zPzBCinNfqV8Vk1AAAAAElFTkSuQmCC' />
+                    </span>
+                </span></a>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    <!-- Required vendors -->
+<!--    <script src="./vendor/global/global.min.js"></script>-->
+<!--    <script src="./js/custom.min.js"></script>-->
+<!--    <script src="./js/dlabnav-init.js"></script>-->
+
+<script th:inline="javascript">
+    function togglePasswordVisibility() {
+        const passwordInput = document.getElementById('password');
+        const eyeIcon = document.getElementById('eye-icon');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            eyeIcon.classList.remove('fa-eye');
+            eyeIcon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            eyeIcon.classList.remove('fa-eye-slash');
+            eyeIcon.classList.add('fa-eye');
+        }
+    }
+
+        function googleStore() {
+        // window.location.href = 'https://play.google.com/store/search?q=accion&c=apps&hl=en_US';
+             window.open('https://play.google.com/store/search?q=accion&c=apps&hl=en_US','_blank')
+    }
+    function appleStore() {
+        window.location.href = 'https://apps.apple.com/us/app/new-accion-mobile/id1626083336';
+    }
+</script>
+	
+</body>
+</html>

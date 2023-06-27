@@ -1,0 +1,182 @@
+
+
+
+    /*body {*/
+    /*    background: rgba(255, 145, 0, 0.199);*/
+    /*}*/
+
+body {
+    background: rgba(255, 145, 0, 0.199);
+}
+.row.content {
+    height: auto;
+
+}
+
+.sidenav {
+    padding-top: 20px;
+    height: auto;
+    /*border: 1.25rem;*/
+    border-radius: 1.25rem;
+    /*box-shadow: 0px 15px 30px 0px rgba(0, 0, 0, 0.02);*/
+    /*background-color: #fff;*/
+}
+
+.firstBox {
+    background-color: white;
+    border-radius: 13px;
+    width: 400px;
+}
+
+.texts {
+    font-size: 2.4vh;
+    color: #E97623;
+    margin: 30px 0px 30px 20px;
+}
+
+@media screen and (max-width: 768px) {
+    .sidenav {
+        height: auto;
+        padding: 15px;
+        border-radius: 1.25rem;
+        /*box-shadow: 0px 15px 30px 0px rgba(0, 0, 0, 0.02);*/
+        /*background-color: #fff;*/
+    }
+
+    .row.content {height:auto;}
+}
+
+
+.arrow {
+    position: absolute;
+    top: -7px;
+    left: 0;
+    margin: 10px;
+    font-size: 1em;
+    color: gray;
+}
+
+.name {
+    font-size:2.4vh;
+    text-align: left;
+}
+
+.box1 {
+    flex: 1 1 calc(25% - 20px);
+    margin: 10px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+
+}
+
+h1 {
+    font-family: helvetica;
+    text-align:center;
+    font-size: 23px;
+}
+
+/*css code for toggle switch*/
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 15px;
+    left: 1px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #E97623;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #E97623;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+#glyph {
+    margin-left: 125px;
+    color: gray;
+}
+
+.fingerprint-scan {
+    margin-left: 750px;
+}
+
+.box2 {
+    flex: 1 1 calc(25% - 20px);
+    margin-left: 111px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    position: relative;
+    font-size: 2.6vh;
+    background-color: white;
+    border-radius: 10px;
+    width: 500px;
+    line-height: 75px;
+}
+/*    .text_left {*/
+/*        text-align: left;*/
+/*        !*padding-left: 50px;*!*/
+/*    }*/
+
+.first-column {
+    padding: 10px 30px 10px 0px;
+    text-align: left;
+    border: 0px;
+    margin-top: auto;
+    align-items: flex-start;
+}
+
+.second-column {
+    padding: 10px 10px 10px 0px;
+    text-align: right;
+    border: 0px;
+}

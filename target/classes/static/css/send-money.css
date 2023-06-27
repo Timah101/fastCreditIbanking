@@ -1,0 +1,331 @@
+@media (min-width: 900px) {
+
+
+    .send-money-module {
+        background-color: #03582c;
+        max-height: 100vh;
+        /*overflow-y: auto;*/
+        height: 100vh;
+
+    }
+
+    .submit-send-money {
+        background-color: #029247;
+        width: 300px;
+        border: 0.0625rem solid #029247;
+        padding: 0.3125rem 1.25rem;
+        color: #fff;
+        height: 2.6rem;
+        border-radius: 5px;
+    }
+
+    .submit-comfirm-money {
+        background-color: #029247;
+        width: 200px;
+        border: 0.0625rem solid #029247;
+        padding: 0.3125rem 1.25rem;
+        color: #fff;
+        height: 2.6rem;
+        border-radius: 5px;
+    }
+
+    .label-span {
+        font-size: 10px;
+        color: #000000;
+    }
+
+    .label-confirm {
+        font-size: 10px;
+        color: #000000;
+    }
+
+    .confirm-pin {
+        text-align: center;
+        font-weight: bold;
+        font-size: 14px;
+        color: #023018;
+        padding-left: 55px
+    }
+
+    .send-money {
+        background: #fff;
+        max-height: 100vh;
+        overflow-y: auto;
+        height: 100vh;
+        position: relative;
+        /*align-items: center;*/
+        /*display: flex;*/
+        /*justify-content: center;*/
+    }
+
+
+    .send-money-title {
+        font-size: 15px;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+        color: #fff;
+        text-transform: capitalize;
+        margin-left: auto;
+        margin-right: auto;
+        font-family: "Lato Black";
+        align-items: center;
+        border-bottom: 1px solid #029247;
+        padding: 10px;
+    }
+
+    .transfer-money-form {
+        padding: 2rem 2rem 3rem 2rem;
+        /*position: relative;*/
+        /*background: #fbfbfb;*/
+        /*border-radius: 4px;*/
+        /*margin-bottom: 1.5em;*/
+        /*box-shadow: 0 0 2px rgba(0, 0, 0, 0.16), 0 1px 9px rgba(0, 0, 0, 0.08);*/
+    }
+
+    .confirm-money-form {
+        padding: 0rem 0rem 0rem 0rem;
+    }
+
+    .form-control-send-money {
+        background: #fff;
+        border: 1px solid green;
+        padding: 0.6rem 1.25rem;
+        color: #6e6e6e;
+        height: 2.5rem;
+        width: 300px;
+        border-radius: 0.3rem;
+        font-size: 12px;
+    }
+
+    .transfer-money-block {
+        /*padding: 2rem 1rem 2rem 3rem;*/
+        position: relative;
+        background: #fbfbfb;
+        border-radius: 4px;
+        margin-bottom: 1.5em;
+        box-shadow: 1px 1px 6px 2px #888888;
+    }
+
+    .confirm-money-block {
+        /*padding: 2rem 1rem 2rem 3rem;*/
+        width: 300px;
+        position: relative;
+        background: #fbfbfb;
+        border-radius: 4px;
+        margin-bottom: 1.5em;
+        box-shadow: 1px 1px 6px 2px #888888;
+    }
+
+    .payment-block {
+        padding: 2rem 2rem 3rem 2rem;
+    }
+
+    .confirm-block {
+        padding: 0rem 2rem 2rem 3rem;
+    }
+
+    .form-transfer-money {
+        padding: 2rem 2rem 3rem 2rem;
+
+    }
+
+    .form-confirm-money {
+        padding: 3rem 3rem 2rem 2rem;
+
+    }
+
+    .transfer-money-title {
+        font-size: 25px;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+        color: #029247;
+        width: 200px;
+        text-transform: capitalize;
+        margin-left: auto;
+        margin-right: auto;
+        font-family: "Lato Black";
+        align-items: center;
+        border-bottom: 1px solid #029247;
+        padding: 10px;
+    }
+
+    .float-right {
+        float: right;
+        font-weight: bold;
+        color: #023018;
+    }
+
+    .confirm-money-title {
+        font-size: 20px;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+        color: #029247;
+        width: 205px;
+        text-transform: capitalize;
+        margin-left: 100px;
+        /*margin-right: auto;*/
+        font-family: "Lato Black";
+        align-items: center;
+        border-bottom: 1px solid #029247;
+        padding: 10px;
+    }
+
+    .receive-money-title {
+        font-size: 15px;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+        color: #fff;
+        text-transform: capitalize;
+        margin-left: auto;
+        margin-right: auto;
+        font-family: "Lato Black";
+        align-items: center;
+        border-top: 1px solid #029247;
+        padding: 10px;
+    }
+
+    .send-money-title svg {
+        height: 40px;
+    }
+
+    .send-money-span {
+        position: absolute;
+
+    }
+
+    .send-money-mini a svg {
+        height: 15px;
+        fill: white;
+        /*position: absolute;*/
+    }
+
+    .send-money-mini {
+        /*width: 300px;*/
+        padding-top: 17px;
+        padding-left: 10px;
+        height: 50px;
+        /*background-color: red;*/
+        font-size: 10px;
+        margin-top: 25px;
+        color: #fff;
+    }
+
+    .send-money-mini:hover {
+        background-color: #023018;
+        /*width: 320px;*/
+        padding-top: 17px;
+        height: 50px;
+        padding-left: 10px;
+        font-size: 10px;
+        margin-top: 25px;
+        cursor: pointer;
+        color: #fff;
+    }
+
+    .send-money-mini div a {
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .send-money-mini div a:hover {
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .send-money-clicked {
+        background-color: #023018;
+        width: 300px;
+        padding-top: 17px;
+        height: 50px;
+        margin-left: -15px;
+        font-size: 10px;
+        margin-top: 25px;
+        cursor: pointer;
+    }
+
+    .send-money-mini-svg {
+        padding-left: 170px;
+        fill: white;
+        position: absolute;
+    }
+
+    .send-money-label {
+        margin-left: -265px;
+        margin-bottom: 2px;
+    }
+
+    .transaction-confirm {
+        background-color: red;
+        height: 200px;
+
+        /*display: none;*/
+        position: fixed;
+        top: 105px;
+        left: 628px;
+        width: 200px;
+        overflow-y: auto;
+        align-items: center;
+    }
+
+
+    .send-money-content {
+        /*display: none;*/
+        background-color: #03582c;
+        height: calc(100% - 60px);
+        /*position: fixed;*/
+        /*top: 105px;*/
+        /*left: 110px;*/
+        width: 260px;
+        overflow-y: auto;
+        align-items: center;
+
+    }
+
+    .main-send-money {
+        left: 125px;
+        background-color: yellow;
+        height: calc(100% - 30px);
+        position: fixed;
+        top: 105px;
+        width: 100%;
+        /*overflow-y: auto;*/
+        /*align-items: center;*/
+    }
+
+    /*07542b*/
+    .send-money-content-2 {
+        /*display: none;*/
+        background-color: #fff;
+        height: calc(100% - 60px);
+        /*position: fixed;*/
+        /*top: 105px;*/
+        /*left: 428px;*/
+        width: 350px;
+        overflow-y: auto;
+        align-items: center;
+
+    }
+}
+
+
+@media (max-width: 899px) {
+    .send-money-content {
+        /*display: none;*/
+        background-color: #fff;
+        height: calc(100% - 60px);
+        position: fixed;
+        top: 105px;
+        overflow-y: auto;
+        align-items: center;
+    }
+
+    .send-money-content-2 {
+        display: none;
+        background-color: #fff;
+        height: calc(100% - 60px);
+        position: fixed;
+        top: 105px;
+        overflow-y: auto;
+        align-items: center;
+    }
+}

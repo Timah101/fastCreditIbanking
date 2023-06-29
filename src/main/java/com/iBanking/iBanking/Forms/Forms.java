@@ -9,6 +9,7 @@ public class Forms {
     private String securityQuestion;
     private String securityAnswer;
     private String pin;
+    private String dataPin;
     private String otp;
     private String referredBy;
     private String referralCode;
@@ -17,4 +18,7 @@ public class Forms {
     private String telco;
     private String debitAccount;
     private String creditAccount;
+    private String dataPlans;
+    private String beneficiaryBank;
+    private String smartCardNumber;
 }

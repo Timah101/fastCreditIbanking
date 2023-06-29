@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragments :: header}">
+
+    <title>Send Money</title>
+</head>
+<body>
+
+
+<div class="loader" id="loader">
+    <div class="loader-inner"></div>
+</div>
+
+<header th:insert="~{dashboard :: headerfast}"></header>
+<div th:insert="~{dashboard :: sidebarfast}"></div>
+
+<div class="main-send-money">
+    <div class="row no-gutters">
+        <div th:if="${errorMessage}" class="alert-fast" role="alert" style="width: 400px">
+            <span th:text="${errorMessage}">Error message</span>
+        </div>
+        <!--        THE MODULE/TOGGLE DIV-->
+        <div class="col-md-2 col-sm-12 col-xs-12">
+            <div class="send-money-module">
+                <div class="send-money-title">Send Money</div>
+                <div id="send-money-min" class="send-money-mini">
+                    <a class="" onclick="toggleSendMoneyLocal()">
+                    <span class="send-money-span">
+                    Send Money to Fast Credit</span>
+                        <span class="send-money-mini-svg"> <svg viewBox="0 0 129 129" version="1.1"
+                                                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                            <g>
+                                <path fill="#fff"
+                                      d="m40.4,121.3c-0.8,0.8-1.8,1.2-2.9,1.2s-2.1-0.4-2.9-1.2c-1.6-1.6-1.6-4.2 0-5.8l51-51-51-51c-1.6-1.6-1.6-4.2 0-5.8 1.6-1.6 4.2-1.6 5.8,0l53.9,53.9c1.6,1.6 1.6,4.2 0,5.8l-53.9,53.9z"></path>
+                            </g>
+                        </svg> </span>
+                    </a>
+                </div>
+                <div id="send-money-min-1" class="send-money-mini">
+                    <a class="" onclick="toggleSendMoneyOthers()">
+                    <span class="send-money-span">
+                    Send Money to Others</span>
+                        <span class="send-money-mini-svg"> <svg viewBox="0 0 129 129" version="1.1"
+                                                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                            <g>
+                                <path fill="#fff"
+                                      d="m40.4,121.3c-0.8,0.8-1.8,1.2-2.9,1.2s-2.1-0.4-2.9-1.2c-1.6-1.6-1.6-4.2 0-5.8l51-51-51-51c-1.6-1.6-1.6-4.2 0-5.8 1.6-1.6 4.2-1.6 5.8,0l53.9,53.9c1.6,1.6 1.6,4.2 0,5.8l-53.9,53.9z"></path>
+                            </g>
+                        </svg> </span>
+                    </a>
+                </div>
+
+
+                <div class="send-money-module">
+                    <div class="receive-money-title">Receive Money</div>
+                    <div id="receive-money-min-2" class="send-money-mini">
+                        <a class="" onclick="toggleSendMoneyDiv2()">
+                    <span class="send-money-span">
+                    Receive Money via Transfer</span>
+                            <span class="send-money-mini-svg"> <svg viewBox="0 0 129 129" version="1.1"
+                                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                    xmlns="http://www.w3.org/2000/svg">
+                            <g>
+                                <path fill="#fff"
+                                      d="m40.4,121.3c-0.8,0.8-1.8,1.2-2.9,1.2s-2.1-0.4-2.9-1.2c-1.6-1.6-1.6-4.2 0-5.8l51-51-51-51c-1.6-1.6-1.6-4.2 0-5.8 1.6-1.6 4.2-1.6 5.8,0l53.9,53.9c1.6,1.6 1.6,4.2 0,5.8l-53.9,53.9z"></path>
+                            </g>
+                        </svg> </span>
+                        </a>
+                    </div>
+                    <div id="receive-money-min-1" class="send-money-mini">
+                        <a class="" onclick="toggleSendMoneyDiv2()">
+                    <span class="send-money-span">
+                    Receive Money via Card</span>
+                            <span class="send-money-mini-svg"> <svg viewBox="0 0 129 129" version="1.1"
+                                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                    xmlns="http://www.w3.org/2000/svg">
+                            <g>
+                                <path fill="#fff"
+                                      d="m40.4,121.3c-0.8,0.8-1.8,1.2-2.9,1.2s-2.1-0.4-2.9-1.2c-1.6-1.6-1.6-4.2 0-5.8l51-51-51-51c-1.6-1.6-1.6-4.2 0-5.8 1.6-1.6 4.2-1.6 5.8,0l53.9,53.9c1.6,1.6 1.6,4.2 0,5.8l-53.9,53.9z"></path>
+                            </g>
+                        </svg> </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--        THE SEND TRANSFER TO LOCAL DIV-->
+        <div id="send-money-local" class="col-md-5 col-sm-12 col-xs-12" style="display: none">
+
+            <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
+
+                <div class="transfer-money-title"> <!-- SEND MONEY TITLE-->
+                    Transfer money to fast credit
+                </div>
+
+                <div class="transfer-money-form"> <!-- SEND TRANSFER MONEY-->
+
+                    <div class="col-md-12">
+                        <div class="form-transfer-money">
+                            <div class="transfer-money-block">
+                                <div class="payment-block">
+                                    <form method="post" th:object="${sendMoneyLocalForm}"
+                                          th:action="@{/local-form}">
+
+                                        <div class="mb-4">
+                                            <label for="select-account" class="label-span">Select Account</label>
+                                            <select id="select-account" class="form-control-send-money mb-3"
+                                                    th:field="*{debitAccount}">
+                                                <option disabled hidden selected value="0"> -- Select Account --
+                                                </option>
+                                                <option style="background-color: #D1D0CE"
+                                                        th:each="accountBalance : ${accountBalanceResponse}"
+                                                        th:text="${accountBalance.getAccountNumber()}"
+                                                        th:value="${accountBalance.getAccountNumber()}"></option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="account_local" class="label-span">Account Number</label> <span
+                                                id="localName" class="float-right"></span>
+                                            <input id="account_local" class="form-control-send-money" maxlength="10"
+                                                   placeholder="" th:field="*{creditAccount}">
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="amount" class="label-span">Amount</label>
+                                            <input id="amount" class="form-control-send-money" placeholder=""
+                                                   th:field="*{amount}">
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="narration" class="label-span">Narration</label>
+                                            <input id="narration" class="form-control-send-money" placeholder=""
+                                                   th:field="*{narration}">
+                                        </div>
+                                        <div class="mb-4">
+                                            <input class="submit-send-money" type="submit" placeholder="Proceed">
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+        </div>
+
+
+        <!--        THE SEND TRANSFER TO OTHERS DIV-->
+        <div id="send-money-others" class="col-md-5 col-sm-12 col-xs-12" style="display: none">
+
+            <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
+
+                <div class="transfer-money-title"> <!-- SEND MONEY TITLE-->
+                    Transfer Money to Other Banks
+                </div>
+
+
+                <div class="transfer-money-form"> <!-- SEND TRANSFER MONEY-->
+
+                    <div class="col-md-12">
+                        <div class="form-transfer-money">
+                            <div class="transfer-money-block">
+                                <div class="payment-block">
+                                    <form method="post" th:object="${sendMoneyOthersForm}"
+                                          th:action="@{/others-form}">
+                                        <div th:if="${errorMessage}" class="alert-fast" role="alert">
+                                            <span th:text="${errorMessage}">Error message</span>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="select-account" class="label-span">Select Account</label>
+                                            <select id="select-account-others" class="form-control-send-money mb-3"
+                                                    th:field="*{debitAccount}">
+                                                <option disabled selected value="0"> -- Select Account --
+                                                </option>
+                                                <option style="background-color: #D1D0CE"
+                                                        th:each="accountBalance : ${accountBalanceResponse}"
+                                                        th:text="${accountBalance.getAccountNumber()}"
+                                                        th:value="${accountBalance.getAccountNumber()}"></option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="select-bank-others" class="label-span">Select Bank</label> <span
+                                                id="othersName" class="float-right"></span>
+                                            <select id="select-bank-others" class="form-control-send-money mb-3"
+                                                    th:field="*{beneficiaryBank}">
+                                                <option disabled hidden selected value="0"> -- Select Bank --</option>
+                                                <option style="background-color: #D1D0CE"
+                                                        th:each="bankList : ${bankListResponse}"
+                                                        th:text="${bankList.getBank()}"
+                                                        th:value="${bankList.getBankCode()}"></option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="account_others" class="label-span">Account Number</label> <span
+                                                id="otherName" class="float-right"></span>
+                                            <input id="account_others" class="form-control-send-money" maxlength="10"
+                                                   placeholder="" th:field="*{creditAccount}">
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="amount-others" class="label-span">Amount</label>
+                                            <input id="amount-others" class="form-control-send-money" placeholder=""
+                                                   th:field="*{amount}">
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="narration-others" class="label-span">Narration</label>
+                                            <input id="narration-others" class="form-control-send-money" placeholder=""
+                                                   th:field="*{narration}">
+                                        </div>
+                                        <div class="mb-4">
+                                            <input class="submit-send-money" type="submit" placeholder="Proceed">
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+        </div>
+
+
+        <!--        THE CONFIRM LOCAL TRANSFER DIV-->
+        <div class="col-md-5 col-sm-12 col-xs-12" th:if="${submitted}">
+            <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
+
+                <div class="confirm-money-title"> <!-- SEND MONEY TITLE-->
+                    Confirm Transaction
+                </div>
+
+                <div class="confirm-money-form"> <!-- SEND TRANSFER MONEY-->
+                    <div class="col-md-12">
+                        <div class="form-confirm-money">
+                            <div class="confirm-money-block">
+                                <div class="confirm-block">
+                                    <form method="post" th:object="${sendMoneyLocalFormPin}"
+                                          th:action="@{/send-money/local}">
+                                        <div class="mb-4">
+                                            <div class="mb-2"><span>Name</span> <span class="float-right">Babajide Balogun</span>
+                                            </div>
+                                            <div class="mb-2"><span>Bank</span> <span
+                                                    class="float-right">Access Bank</span></div>
+                                            <div class="mb-2"><span>Amount</span> <span
+                                                    class="float-right">N50,000</span></div>
+                                            <div class="mb-2"><span>Amount</span> <span
+                                                    class="float-right">N50,000</span></div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="pin" class="confirm-pin">Enter PIN</label>
+                                            <input id="pin" type="password" class=""
+                                                   style="align-items: center; text-align: center; width: 200px"
+                                                   maxlength="4"
+                                                   placeholder="" th:field="*{pin}">
+                                        </div>
+                                        <div class="mb-4">
+                                            <input class="submit-comfirm-money" type="submit" placeholder="Submit">
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!--        THE CONFIRM OTHERS TRANSFER DIV-->
+        <div class="col-md-5 col-sm-12 col-xs-12" th:if="${submittedOthers}">
+            <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
+
+                <div class="confirm-money-title"> <!-- SEND MONEY TITLE-->
+                    Confirm Transaction
+                </div>
+
+                <div class="confirm-money-form"> <!-- SEND TRANSFER MONEY-->
+                    <div class="col-md-12">
+                        <div class="form-confirm-money">
+                            <div class="confirm-money-block">
+                                <div class="confirm-block">
+                                    <form method="post" th:object="${sendMoneyOthersPin}"
+                                          th:action="@{/send-money/others}">
+                                        <div class="mb-4">
+                                            <div class="mb-2"><span>Name</span> <span class="float-right">Babajide Balogun</span>
+                                            </div>
+                                            <div class="mb-2"><span>Bank</span> <span
+                                                    class="float-right">Access Bank</span></div>
+                                            <div class="mb-2"><span>Amount</span> <span
+                                                    class="float-right">N50,000</span></div>
+                                            <div class="mb-2"><span>Amount</span> <span
+                                                    class="float-right">N50,000</span></div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="pin" class="confirm-pin">Enter PIN</label>
+                                            <input id="pin-others" type="password" class=""
+                                                   style="align-items: center; text-align: center; width: 200px"
+                                                   maxlength="4"
+                                                   placeholder="" th:field="*{pin}">
+                                        </div>
+                                        <div class="mb-4">
+                                            <input class="submit-comfirm-money" type="submit" placeholder="Submit">
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script th:inline="javascript">
+    function showLoader() {
+        const loader = document.getElementById('loader');
+        loader.style.display = 'block';
+    }
+
+    function hideLoader() {
+        const loader = document.getElementById('loader');
+        loader.style.display = 'none';
+    }
+</script>
+<script>
+    window.addEventListener('load', hideLoader);
+</script>
+<script th:inline="javascript">
+    //Name Enquiry for Local
+    $(document).ready(function () {
+        $('#account_local').on('input', function () {
+            const accountNumber = $(this).val();
+            console.log("LOCAL ACCOUNT " + accountNumber)
+            if (accountNumber.length === 10) {
+                if (accountNumber.match(/^[0-9]+$/)) {
+                    $.ajax({
+                        type: 'GET',
+                        url: `/name/lookup/local/${accountNumber}`,// URL of the controller method
+                        success: function (response) {
+                            // Update the view with the response data
+                            $('#localName').text(response);
+                            console.log(response);
+                            console.log(response.toString())
+                        },
+                        error: function (error) {
+                            $('#localName').text("Invalid");
+                        }
+                    });
+
+                } else {
+                    $('#localName').text("Invalid");
+                }
+            }
+        });
+    });
+
+
+    //Name Enquiry For Others
+    $(document).ready(function () {
+        $('#account_others').on('input', function () {
+            const beneficiaryAccountNumber = $(this).val();
+            const beneficiaryBankCode = $("#select-bank-others").val();
+            console.log("Bank Code")
+            console.log(beneficiaryAccountNumber + "Bank account num")
+            console.log(beneficiaryBankCode + "Bank Code")
+            if (beneficiaryAccountNumber.length === 10) {
+                if (beneficiaryAccountNumber.match(/^[0-9]+$/)) {
+                    $.ajax({
+                        type: 'GET',
+                        url: `/name/lookup/others/${beneficiaryAccountNumber}/${beneficiaryBankCode}`,// URL of the controller method
+                        success: function (response) {
+                            // Update the view with the response data
+                            $('#othersName').text(response);
+                            console.log(response);
+                            console.log(response.toString())
+                        },
+                        error: function (error) {
+                            $('#othersName').text("Invalid");
+                        }
+                    });
+
+                } else {
+                    $('#othersName').text("Invalid");
+                }
+            }
+        });
+    });
+</script>
+
+<script th:src="@{/js/global.min.js}" type="text/javascript"></script>
+<!--    <script type="text/javascript" th:src="@{/js/Chart.bundle.min.js}"></script>-->
+<script th:src="@{/js/jquery.nice-select.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/custom.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/dlabnav-init.js}" type="text/javascript"></script>
+
+<script th:src="@{/js/select2.full.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/select2-init.js}" type="text/javascript"></script>
+
+<script>
+
+    function toggleSendMoneyLocal() {
+        const contentDiv = document.getElementById("send-money-local");
+        const contentOthers = document.getElementById("send-money-others");
+        if (contentDiv.style.display === "none") {
+            contentDiv.style.display = "block";
+            contentOthers.style.display = "none";
+        } else {
+            contentDiv.style.display = "none";
+            contentOthers.style.display = "none";
+        }
+    }
+
+    function toggleSendMoneyOthers() {
+        const contentDiv = document.getElementById("send-money-others");
+        const contentOthers = document.getElementById("send-money-local");
+        if (contentDiv.style.display === "none") {
+            contentDiv.style.display = "block";
+            contentOthers.style.display = "none";
+        } else {
+            contentDiv.style.display = "none";
+            contentOthers.style.display = "none";
+        }
+    }
+</script>
+</body>
+</html>

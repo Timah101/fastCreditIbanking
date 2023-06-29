@@ -5,6 +5,7 @@ import com.iBanking.iBanking.Forms.Forms;
 import com.iBanking.iBanking.payload.accout.AccountDetailsListResponsePayload;
 import com.iBanking.iBanking.payload.accout.AccountDetailsRequestPayload;
 import com.iBanking.iBanking.payload.accout.AccountDetailsResponsePayload;
+import com.iBanking.iBanking.payload.accout.AccountList;
 import com.iBanking.iBanking.payload.generics.DecryptRequestPayload;
 import com.iBanking.iBanking.payload.generics.EncryptResponsePayload;
 import com.iBanking.iBanking.payload.generics.MobileNumberRequestPayload;
@@ -15,6 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.iBanking.iBanking.utils.ApiPaths.*;
 import static com.iBanking.iBanking.utils.AuthenticationApi.decryptPayload;
@@ -34,7 +38,7 @@ public class AccountServiceImpl implements AccountService {
         AccountDetailsResponsePayload accountDetailsResponse;
         AccountDetailsRequestPayload accountDetailsRequestPayload = new AccountDetailsRequestPayload();
         accountDetailsRequestPayload.setMobileNumber(loginForm.getMobileNumber());
-        accountDetailsRequestPayload.setAccountNumber("1000112017");
+        accountDetailsRequestPayload.setAccountNumber(accountNumber);
         accountDetailsRequestPayload.setDeviceId("dv123456");
         String requestPayload = gson.toJson(accountDetailsRequestPayload);
 
@@ -65,6 +69,7 @@ public class AccountServiceImpl implements AccountService {
         //LOG REQUEST RESPONSE
         log.info("ACCOUNT DETAILS REQUEST PAYLOAD : {}", requestPayload);
         log.info("ACCOUNT DETAILS RESPONSE PAYLOAD : {}", gson.toJson(accountDetailsResponse));
+        session.setAttribute("nameEnquiryLocalResponse", accountDetailsResponse);
         return accountDetailsResponse;
     }
 
@@ -82,7 +87,7 @@ public class AccountServiceImpl implements AccountService {
 
         //Call the Encrypt API
         EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayloadJson);
-        log.info("ACCOUNT DETAILS LIST RESPONSE FOR ACCOUNT DETAILS LIST {}", encryptResponsePayload);
+        log.info("ACCOUNT DETAILS LIST REQUEST PAYLOAD : {}", requestPayloadJson);
 
         //CALL THE ACCOUNT DETAILS LIST ENDPOINT
         String responseString = gson.toJson(encryptResponsePayload);
@@ -93,9 +98,20 @@ public class AccountServiceImpl implements AccountService {
                 .header("Authorization", "Bearer " + accessToken)
                 .body(responseString).asString();
         String requestBody = response.getBody();
-
-        if (response.getStatus() != 200) {
+        log.info("ACCOUNT DETAILS RESPONSE STATUS : {}", response.getStatus());
+        log.info("ACCOUNT DETAILS RESPONSE BODY : {}", response.getBody());
+        if (response.getStatus() != 200 || response.getBody().isEmpty()) {
             accountBalanceResponse = new AccountDetailsListResponsePayload();
+
+            AccountList balance = new AccountList();
+            List<AccountList> bal = new ArrayList<>();
+            balance.setAvailableBalance("...");
+            balance.setLedgerBalance("...");
+            balance.setAccountNumber("...");
+            bal.add(balance);
+            accountBalanceResponse.setAccountList(bal);
+            accountBalanceResponse.setResponseCode("99");
+            session.setAttribute("accountBalanceResponse", accountBalanceResponse);
             log.info(" ERROR WHILE GETTING ACCOUNT DETAILS LIST {}", response.getStatus());
             return accountBalanceResponse;
         }
@@ -106,7 +122,7 @@ public class AccountServiceImpl implements AccountService {
         accountBalanceResponse = decryptPayload(decryptRequestPayload, AccountDetailsListResponsePayload.class);
 
         //LOG REQUEST RESPONSE
-        log.info("ACCOUNT DETAILS LIST REQUEST PAYLOAD : {}", requestPayloadJson);
+
         log.info("ACCOUNT DETAILS LIST RESPONSE PAYLOAD : {}", gson.toJson(accountBalanceResponse));
         session.setAttribute("accountBalanceResponse", accountBalanceResponse);
         return accountBalanceResponse;

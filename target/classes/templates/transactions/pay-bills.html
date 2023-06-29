@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragments :: header}">
+
+    <title>Pay Bills</title>
+</head>
+<body>
+
+
+<header th:insert="~{dashboard :: headerfast}"></header>
+<div th:insert="~{dashboard :: sidebarfast}"></div>
+
+<div class="main-send-money">
+    <div th:if="${errorMessage}" class="alert-fast" role="alert">
+        <span th:text="${errorMessage}">Error message</span>
+    </div>
+
+    <div class="row no-gutters">
+        <!--        THE MODULE/TOGGLE DIV-->
+        <div class="col-md-2 col-sm-12 col-xs-12">
+            <div class="send-money-module">
+                <div class="send-money-title">Cable Tv</div>
+                <div id="send-money-min" class="send-money-mini">
+                    <a class="" onclick="toggleGotv()">
+                    <span class="send-money-span">
+                    GoTv</span>
+                        <span class="send-money-mini-svg"> <svg viewBox="0 0 129 129" version="1.1"
+                                                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                            <g>
+                                <path fill="#fff"
+                                      d="m40.4,121.3c-0.8,0.8-1.8,1.2-2.9,1.2s-2.1-0.4-2.9-1.2c-1.6-1.6-1.6-4.2 0-5.8l51-51-51-51c-1.6-1.6-1.6-4.2 0-5.8 1.6-1.6 4.2-1.6 5.8,0l53.9,53.9c1.6,1.6 1.6,4.2 0,5.8l-53.9,53.9z"></path>
+                            </g>
+                        </svg> </span>
+                    </a>
+                </div>
+                <div id="send-money-min-1" class="send-money-mini">
+                    <a class="" onclick="toggleDstv()">
+                    <span class="send-money-span">
+                    DsTv</span>
+                        <span class="send-money-mini-svg"> <svg viewBox="0 0 129 129" version="1.1"
+                                                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                            <g>
+                                <path fill="#fff"
+                                      d="m40.4,121.3c-0.8,0.8-1.8,1.2-2.9,1.2s-2.1-0.4-2.9-1.2c-1.6-1.6-1.6-4.2 0-5.8l51-51-51-51c-1.6-1.6-1.6-4.2 0-5.8 1.6-1.6 4.2-1.6 5.8,0l53.9,53.9c1.6,1.6 1.6,4.2 0,5.8l-53.9,53.9z"></path>
+                            </g>
+                        </svg> </span>
+                    </a>
+                </div>
+
+
+                <div class="send-money-module">
+                    <div class="receive-money-title">Electricity</div>
+                    <div id="receive-money-min-2" class="send-money-mini">
+                        <a class="" onclick="toggleSendMoneyDiv2()">
+                    <span class="send-money-span">
+                   Eko Electric</span>
+                            <span class="send-money-mini-svg"> <svg viewBox="0 0 129 129" version="1.1"
+                                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                    xmlns="http://www.w3.org/2000/svg">
+                            <g>
+                                <path fill="#fff"
+                                      d="m40.4,121.3c-0.8,0.8-1.8,1.2-2.9,1.2s-2.1-0.4-2.9-1.2c-1.6-1.6-1.6-4.2 0-5.8l51-51-51-51c-1.6-1.6-1.6-4.2 0-5.8 1.6-1.6 4.2-1.6 5.8,0l53.9,53.9c1.6,1.6 1.6,4.2 0,5.8l-53.9,53.9z"></path>
+                            </g>
+                        </svg> </span>
+                        </a>
+                    </div>
+                    <div id="receive-money-min-1" class="send-money-mini">
+                        <a class="" onclick="toggleSendMoneyDiv2()">
+                    <span class="send-money-span">
+                    Receive Money via Card</span>
+                            <span class="send-money-mini-svg"> <svg viewBox="0 0 129 129" version="1.1"
+                                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                    xmlns="http://www.w3.org/2000/svg">
+                            <g>
+                                <path fill="#fff"
+                                      d="m40.4,121.3c-0.8,0.8-1.8,1.2-2.9,1.2s-2.1-0.4-2.9-1.2c-1.6-1.6-1.6-4.2 0-5.8l51-51-51-51c-1.6-1.6-1.6-4.2 0-5.8 1.6-1.6 4.2-1.6 5.8,0l53.9,53.9c1.6,1.6 1.6,4.2 0,5.8l-53.9,53.9z"></path>
+                            </g>
+                        </svg> </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--        THE GOTV DIV-->
+        <div id="send-money-local" class="col-md-5 col-sm-12 col-xs-12" style="display: none">
+
+            <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
+
+                <div class="transfer-money-title"> <!-- SEND MONEY TITLE-->
+                    Gotv
+                </div>
+
+                <div class="transfer-money-form"> <!-- SEND TRANSFER MONEY-->
+
+                    <div class="col-md-12">
+                        <div class="form-transfer-money">
+                            <div class="transfer-money-block">
+                                <div class="payment-block">
+                                    <form method="post" th:object="${gotvForm}"
+                                          th:action="@{/gotv-form}">
+
+                                        <div class="mb-4">
+                                            <label for="select-account" class="label-span">Select Account</label>
+                                            <select id="select-account" class="form-control-send-money mb-3"
+                                                    th:field="*{debitAccount}">
+                                                <option disabled hidden selected value="0"> -- Select Account --
+                                                </option>
+                                                <option style="background-color: #D1D0CE"
+                                                        th:each="accountBalance : ${accountBalanceResponse}"
+                                                        th:text="${accountBalance.getAccountNumber()}"
+                                                        th:value="${accountBalance.getAccountNumber()}"></option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <label for="my-select" class="label-span">Select Gotv Plan</label>
+                                            <select id="my-select" class="form-control-send-money mb-3"
+                                                    th:field="*{dataPlans}" onchange="updateInputValueGotv()">
+                                                <option disabled selected value="0"> -- Select Gotv Plans --
+                                                </option>
+                                                <option style="background-color: #D1D0CE"
+                                                        th:each="gotv : ${gotvBillerPlan}"
+                                                        th:text="${gotv.getBouquet() + ' ' + gotv.getMonthlyAmount()}"
+                                                        th:value="${gotv.getBillerId()+','+gotv.getMonthlyAmount()}"></option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <label for="inputField" class="label-span">Amount</label>
+                                            <input id="inputField" class="form-control-send-money" placeholder=""
+                                                   readonly
+                                                   th:value="${selectedOptionGotv}" th:field="*{amount}">
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="account_local" class="label-span">SmartCard Number</label> <span
+                                                id="localName" class="float-right"></span>
+                                            <input id="account_local" class="form-control-send-money" maxlength="10"
+                                                   placeholder="" th:field="*{smartCardNumber}">
+                                        </div>
+                                        <div class="mb-4">
+                                            <input class="submit-send-money" type="submit" placeholder="Proceed">
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+        </div>
+
+
+        <!--        THE DSTV DIV-->
+        <div id="send-money-others" class="col-md-5 col-sm-12 col-xs-12" style="display: none">
+
+            <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
+
+                <div class="transfer-money-title"> <!-- SEND MONEY TITLE-->
+                    Dstv
+                </div>
+
+
+                <div class="transfer-money-form"> <!-- SEND TRANSFER MONEY-->
+
+                    <div class="col-md-12">
+                        <div class="form-transfer-money">
+                            <div class="transfer-money-block">
+                                <div class="payment-block">
+                                    <form method="post" th:object="${dstvForm}"
+                                          th:action="@{/dstv-form}">
+
+                                        <div class="mb-4">
+                                            <label for="select-account" class="label-span">Select Account</label>
+                                            <select id="select-account-others" class="form-control-send-money mb-3"
+                                                    th:field="*{debitAccount}">
+                                                <option disabled selected value="0"> -- Select Account --
+                                                </option>
+                                                <option style="background-color: #D1D0CE"
+                                                        th:each="accountBalance : ${accountBalanceResponse}"
+                                                        th:text="${accountBalance.getAccountNumber()}"
+                                                        th:value="${accountBalance.getAccountNumber()}"></option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="my-select-2" class="label-span">Select Dstv Plan</label>
+                                            <select id="my-select-2" class="form-control-send-money mb-3"
+                                                    onchange="updateInputValueDstv()"
+                                                    th:field="*{dataPlans}">
+                                                <option disabled selected value="0"> -- Select DstV Plans --
+                                                </option>
+                                                <option style="background-color: #D1D0CE"
+                                                        th:each="dstv : ${dstvBillerPlan}"
+                                                        th:text="${dstv.getBouquet() + ' ' + dstv.getMonthlyAmount()}"
+                                                        th:value="${dstv.getBillerId() + ',' + dstv.getMonthlyAmount()}"></option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <label for="amount-others" class="label-span">Amount</label>
+                                            <input id="amount-others" class="form-control-send-money" placeholder=""
+                                                   readonly th:value="${selectedOptionDstv}"
+                                                   th:field="*{amount}">
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="account_others" class="label-span">SmartCard Number</label>
+                                            <span id="otherName" class="float-right"></span>
+                                            <input id="account_others" class="form-control-send-money" maxlength="10"
+                                                   placeholder="" th:field="*{smartCardNumber}">
+                                        </div>
+                                        <div class="mb-4">
+                                            <input class="submit-send-money" type="submit" placeholder="Proceed">
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+        </div>
+
+
+        <!--        THE CONFIRM GOTV DIV-->
+        <div class="col-md-5 col-sm-12 col-xs-12" th:if="${submitted}">
+            <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
+
+                <div class="confirm-money-title"> <!-- SEND MONEY TITLE-->
+                    Confirm Transaction
+                </div>
+
+                <div class="confirm-money-form"> <!-- SEND TRANSFER MONEY-->
+                    <div class="col-md-12">
+                        <div class="form-confirm-money">
+                            <div class="confirm-money-block">
+                                <div class="confirm-block">
+                                    <form method="post" th:object="${gotvFormPin}"
+                                          th:action="@{/gotv}">
+                                        <div class="mb-4">
+                                            <div class="mb-2"><span>Name</span> <span class="float-right">Babajide Balogun</span>
+                                            </div>
+                                            <div class="mb-2"><span>Bank</span> <span
+                                                    class="float-right">Access Bank</span></div>
+                                            <div class="mb-2"><span>Amount</span> <span
+                                                    class="float-right">N50,000</span></div>
+                                            <div class="mb-2"><span>Amount</span> <span
+                                                    class="float-right">N50,000</span></div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="pin" class="confirm-pin">Enter PIN</label>
+                                            <input id="pin" type="password" class=""
+                                                   style="align-items: center; text-align: center; width: 200px"
+                                                   maxlength="4"
+                                                   placeholder="" th:field="*{pin}">
+                                        </div>
+                                        <div class="mb-4">
+                                            <input class="submit-comfirm-money" type="submit" placeholder="Submit">
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!--        THE CONFIRM OTHERS TRANSFER DIV-->
+        <div class="col-md-5 col-sm-12 col-xs-12" th:if="${submitDstv}">
+            <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
+
+                <div class="confirm-money-title"> <!-- SEND MONEY TITLE-->
+                    Confirm Transaction
+                </div>
+
+                <div class="confirm-money-form"> <!-- SEND TRANSFER MONEY-->
+                    <div class="col-md-12">
+                        <div class="form-confirm-money">
+                            <div class="confirm-money-block">
+                                <div class="confirm-block">
+                                    <form method="post" th:object="${dstvFormPin}"
+                                          th:action="@{/dstv}">
+                                        <div class="mb-4">
+                                            <div class="mb-2"><span>Name</span> <span class="float-right">Babajide Balogun</span>
+                                            </div>
+                                            <div class="mb-2"><span>Bank</span> <span
+                                                    class="float-right">Access Bank</span></div>
+                                            <div class="mb-2"><span>Amount</span> <span
+                                                    class="float-right">N50,000</span></div>
+                                            <div class="mb-2"><span>Amount</span> <span
+                                                    class="float-right">N50,000</span></div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="pin" class="confirm-pin">Enter PIN</label>
+                                            <input id="pin-others" type="password" class=""
+                                                   style="align-items: center; text-align: center; width: 200px"
+                                                   maxlength="4"
+                                                   placeholder="" th:field="*{pin}">
+                                        </div>
+                                        <div class="mb-4">
+                                            <input class="submit-comfirm-money" type="submit" placeholder="Submit">
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script th:inline="javascript">
+    function showLoader() {
+        const loader = document.getElementById('loader');
+        loader.style.display = 'block';
+    }
+
+    function hideLoader() {
+        const loader = document.getElementById('loader');
+        loader.style.display = 'none';
+    }
+</script>
+<script>
+    window.addEventListener('load', hideLoader);
+
+
+    //UPDATE AMOUNT FIELD FOR GOTV
+    function updateInputValueGotv() {
+        const selectedOptionArray = document.getElementById("my-select").value;
+        console.log(selectedOptionArray + " the array to be split")
+        const selectedOptionArraySplit = selectedOptionArray.split(",");
+        console.log(selectedOptionArraySplit)
+        if (typeof selectedOptionArraySplit === "string" && selectedOptionArraySplit.trim().length === 0) {
+            const selectedOption = "empty";
+            document.getElementById("inputField").value = selectedOption;
+            console.log(selectedOption)
+        } else {
+            // const selectedOption = document.getElementById("selectOption").value;
+            const selectedOption = selectedOptionArraySplit[1];
+            document.getElementById("inputField").value = selectedOption;
+            console.log(selectedOption)
+        }
+    }
+
+
+    //UPDATE AMOUNT FIELD FOR DSTV
+    function updateInputValueDstv() {
+        const selectedOptionArray = document.getElementById("my-select-2").value;
+        console.log(selectedOptionArray + " the array to be split")
+        const selectedOptionArraySplit = selectedOptionArray.split(",");
+        console.log(selectedOptionArraySplit)
+        if (typeof selectedOptionArraySplit === "string" && selectedOptionArraySplit.trim().length === 0) {
+            const selectedOption = "empty";
+            document.getElementById("amount-others").value = selectedOption;
+            console.log(selectedOption)
+        } else {
+            // const selectedOption = document.getElementById("selectOption").value;
+            const selectedOption = selectedOptionArraySplit[1];
+            document.getElementById("amount-others").value = selectedOption;
+            console.log(selectedOption)
+        }
+    }
+</script>
+<script th:inline="javascript">
+    //Name Enquiry for GOTV
+    $(document).ready(function () {
+        $('#account_local').on('input', function () {
+            const cardNumber = $(this).val();
+            console.log("GOTV " + cardNumber)
+            if (cardNumber.length === 10) {
+                if (cardNumber.match(/^[0-9]+$/)) {
+                    $.ajax({
+                        type: 'GET',
+                        url: `/validate/gotv/${cardNumber}`,// URL of the controller method
+                        success: function (response) {
+                            // Update the view with the response data
+                            $('#localName').text(response);
+                            console.log(response);
+                            console.log(response.toString())
+                        },
+                        error: function (error) {
+                            $('#localName').text("Invalid");
+                        }
+                    });
+
+                } else {
+                    $('#localName').text("Invalid");
+                }
+            }
+        });
+    });
+
+
+    //Name Enquiry For DSTV
+    $(document).ready(function () {
+        $('#account_others').on('input', function () {
+            const cardNumber = $(this).val();
+            console.log(cardNumber + " DSTV")
+            if (cardNumber.length === 10) {
+                if (cardNumber.match(/^[0-9]+$/)) {
+                    $.ajax({
+                        type: 'GET',
+                        url: `/validate/dstv/${cardNumber}`,// URL of the controller method
+                        success: function (response) {
+                            // Update the view with the response data
+                            $('#otherName').text(response);
+                            console.log(response);
+                            console.log(response.toString())
+                        },
+                        error: function (error) {
+                            $('#otherName').text("Invalid");
+                        }
+                    });
+
+                } else {
+                    $('#othersName').text("Invalid");
+                }
+            }
+        });
+    });
+</script>
+<script>
+
+    function toggleGotv() {
+        const contentDiv = document.getElementById("send-money-local");
+        const contentOthers = document.getElementById("send-money-others");
+        if (contentDiv.style.display === "none") {
+            contentDiv.style.display = "block";
+            contentOthers.style.display = "none";
+        } else {
+            contentDiv.style.display = "none";
+            contentOthers.style.display = "none";
+        }
+    }
+
+    function toggleDstv() {
+        const contentDiv = document.getElementById("send-money-others");
+        const contentOthers = document.getElementById("send-money-local");
+        if (contentDiv.style.display === "none") {
+            contentDiv.style.display = "block";
+            contentOthers.style.display = "none";
+        } else {
+            contentDiv.style.display = "none";
+            contentOthers.style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>

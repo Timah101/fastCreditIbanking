@@ -42,7 +42,7 @@ public class AuthenticationApi {
     public static EncryptResponsePayload encryptPayload(String requestPayloads) throws UnirestException {
         //        HttpSession session
         //        String accessToken = (String) session.getAttribute("accessToken");
-        log.info("ENCRYPTION REQUEST {}", requestPayloads);
+//        log.info("ENCRYPTION REQUEST {}", requestPayloads);
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + ENCRYPT_PAYLOAD)
                 .header("accept", "application/json")
                 .header("Content-Type", "application/json")
@@ -50,7 +50,7 @@ public class AuthenticationApi {
                 .body(requestPayloads).asString();
         String requestBody = jsonResponse.getBody();
         EncryptResponsePayload encryptResponsePayload = gson.fromJson(requestBody, EncryptResponsePayload.class);
-        log.info("ENCRYPTION RESPONSE FROM ENCRYPT METHOD {}", encryptResponsePayload);
+//        log.info("ENCRYPTION RESPONSE FROM ENCRYPT METHOD {}", encryptResponsePayload);
         return encryptResponsePayload;
 
     }
@@ -59,7 +59,7 @@ public class AuthenticationApi {
 //        request.setResponse("oxjnc/iwXauEUn8rKAIrvgbATWArzBo/HyhOcSNgws65Os0YKxM4m/eWeUHLg5h/");
 
         String requestPayload = gson.toJson(request);
-        log.info("DECRYPT REQUEST PAYLOAD INSIDE HERE {}", request);
+//        log.info("DECRYPT REQUEST PAYLOAD INSIDE HERE {}", request);
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + DECRYPT_PAYLOAD)
                 .header("accept", "application/json")
                 .header("Content-Type", "application/json")
@@ -70,7 +70,7 @@ public class AuthenticationApi {
 
         AccountDetailsResponsePayload configurations;
         gson.fromJson(requestBody, responseType);
-        log.info("DECRYPTED RESPONSE INSIDE FROM DECRYPT METHOD {}", gson.fromJson(requestBody, responseType));
+//        log.info("DECRYPTED RESPONSE INSIDE FROM DECRYPT METHOD {}", gson.fromJson(requestBody, responseType));
         return gson.fromJson(requestBody, responseType);
     }
 

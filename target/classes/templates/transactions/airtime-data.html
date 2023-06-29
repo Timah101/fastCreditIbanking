@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragments :: header}">
+
+    <title>Create Account</title>
+</head>
+<body>
+
+<div class="loader" id="loader">
+    <div class="loader-inner"></div>
+</div>
+<header th:insert="~{dashboard :: headerfast}"></header>
+<div th:insert="~{dashboard :: sidebarfast}"></div>
+
+<div class="main-send-money">
+    <div class="row no-gutters">
+
+        <div id="errorMessage" th:if="${errorMessage}" class="alert-fast" role="alert" style="width: 400px">
+            <span th:text="${errorMessage}">Error message</span>
+        </div>
+
+        <!--        THE MODULE/TOGGLE DIV-->
+        <div class="col-md-2 col-sm-12 col-xs-12">
+            <div class="send-money-module">
+                <div class="send-money-title">Buy Airtime/Data</div>
+                <div id="send-money-min" class="send-money-mini">
+                    <a class="" onclick="toggleAirtime()">
+                    <span class="send-money-span">
+                    Airtime Top Up</span>
+                        <span class="send-money-mini-svg"> <svg viewBox="0 0 129 129" version="1.1"
+                                                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                            <g>
+                                <path fill="#fff"
+                                      d="m40.4,121.3c-0.8,0.8-1.8,1.2-2.9,1.2s-2.1-0.4-2.9-1.2c-1.6-1.6-1.6-4.2 0-5.8l51-51-51-51c-1.6-1.6-1.6-4.2 0-5.8 1.6-1.6 4.2-1.6 5.8,0l53.9,53.9c1.6,1.6 1.6,4.2 0,5.8l-53.9,53.9z"></path>
+                            </g>
+                        </svg> </span>
+                    </a>
+                </div>
+                <div id="send-money-min-1" class="send-money-mini">
+                    <a class="" onclick="toggleData()">
+                    <span class="send-money-span">
+                    Data Top Up</span>
+                        <span class="send-money-mini-svg"> <svg viewBox="0 0 129 129" version="1.1"
+                                                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                            <g>
+                                <path fill="#fff"
+                                      d="m40.4,121.3c-0.8,0.8-1.8,1.2-2.9,1.2s-2.1-0.4-2.9-1.2c-1.6-1.6-1.6-4.2 0-5.8l51-51-51-51c-1.6-1.6-1.6-4.2 0-5.8 1.6-1.6 4.2-1.6 5.8,0l53.9,53.9c1.6,1.6 1.6,4.2 0,5.8l-53.9,53.9z"></path>
+                            </g>
+                        </svg> </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        <!--        THE AIRTIME DIV-->
+        <div id="airtime" class="col-md-5 col-sm-12 col-xs-12" style="display: none">
+
+            <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
+
+                <div class="transfer-money-title"> <!-- SEND MONEY TITLE-->
+                    Airtime Top Up
+                </div>
+
+
+                <div class="transfer-money-form"> <!-- SEND TRANSFER MONEY-->
+
+                    <div class="col-md-12">
+                        <div class="form-transfer-money">
+                            <div class="transfer-money-block">
+                                <div class="payment-block">
+                                    <form method="post" th:object="${airtimeForm}" th:action="@{/airtime-form}">
+                                        <div class="mb-4">
+                                            <label for="select-account" class="label-span">Select Account</label>
+                                            <select id="select-account" class="form-control-send-money mb-3"
+                                                    th:field="*{debitAccount}">
+                                                <option disabled hidden selected value="0"> -- Select Account --
+                                                </option>
+                                                <option style="background-color: #D1D0CE"
+                                                        th:each="accountBalance : ${accountBalanceResponse}"
+                                                        th:text="${accountBalance.getAccountNumber()}"
+                                                        th:value="${accountBalance.getAccountNumber()}"></option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <label for="account_local" class="label-span">Mobile Number</label> <span
+                                                id="localName" class="float-right"></span>
+                                            <input id="account_local" class="form-control-send-money" maxlength="10"
+                                                   placeholder="" th:field="*{mobileNumber}">
+                                        </div>
+                                        <div class="airtime-data-img-container mb-4">
+                                            <img class="airtime_icon-fast" onclick="updateInputValue('MTN')"
+                                                 th:src="@{/images/mtn.png}" width="60" id="mtn" tabindex="0">
+                                            <img class="airtime_icon-fast" onclick="updateInputValue('9Mobile')"
+                                                 th:src="@{/images/9mobile.png}" width="60" id="9mobile" tabindex="0">
+                                            <img class="airtime_icon-fast" onclick="updateInputValue('Airtel')"
+                                                 th:src="@{/images/airtel.png}" width="60" id="airtel" tabindex="0">
+                                            <img class="airtime_icon-fast" onclick="updateInputValue('Etisalat')"
+                                                 th:src="@{/images/glo.png}" width="60" id="glo" tabindex="0">
+                                            <input id="telcoId" th:field="*{telco}" type="hidden"/>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="amount" class="label-span">Amount</label>
+                                            <input id="amount" class="form-control-send-money" placeholder=""
+                                                   th:field="*{amount}">
+                                        </div>
+                                        <div class="mb-4">
+                                            <input class="submit-send-money" type="submit" placeholder="Proceed">
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+        </div>
+
+        <!--        THE DATA DIV-->
+        <div id="data" class="col-md-5 col-sm-12 col-xs-12" style="display: none">
+
+            <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
+
+                <div class="transfer-money-title"> <!-- SEND MONEY TITLE-->
+                    Data Top Up
+                </div>
+
+
+                <div class="transfer-money-form"> <!-- DATA TOP UP-->
+
+                    <div class="col-md-12">
+                        <div class="form-transfer-money">
+                            <div class="transfer-money-block">
+                                <div class="payment-block">
+                                    <form method="post" th:object="${dataForm}" th:action="@{/data-form}">
+                                        <div class="mb-4">
+                                            <label for="select-account" class="label-span">Select Account</label>
+                                            <select id="select-account-1" class="form-control-send-money mb-3"
+                                                    th:field="*{debitAccount}">
+                                                <option disabled selected value="0"> -- Select Account --
+                                                </option>
+                                                <option style="background-color: #D1D0CE"
+                                                        th:each="accountBalance : ${accountBalanceResponse}"
+                                                        th:text="${accountBalance.getAccountNumber()}"
+                                                        th:value="${accountBalance.getAccountNumber()}"></option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <label for="account_local1" class="label-span">Mobile Number</label>
+                                            <input id="account_local1" class="form-control-send-money" maxlength="10"
+                                                   placeholder="" th:field="*{mobileNumber}">
+                                        </div>
+                                        <div class="airtime-data-img-container mb-4 ">
+                                            <img class="airtime_icon-fast telco" data-network="MTN"
+                                                 onclick="updateInputValueData('MTN')"
+                                                 th:src="@{/images/mtn.png}" width="60" id="mtn1" tabindex="0">
+                                            <img class="airtime_icon-fast telco" data-network="9Mobile"
+                                                 onclick="updateInputValueData('9Mobile')"
+                                                 th:src="@{/images/9mobile.png}" width="60" id="9mobile1" tabindex="0">
+                                            <img class="airtime_icon-fast telco" data-network="Airtel"
+                                                 onclick="updateInputValueData('Airtel')"
+                                                 th:src="@{/images/airtel.png}" width="60" id="airtel1" tabindex="0">
+                                            <img class="airtime_icon-fast telco" data-network="Etisalat"
+                                                 onclick="updateInputValueData('Etisalat')"
+                                                 th:src="@{/images/glo.png}" width="60" id="glo1" tabindex="0">
+                                            <input id="telcoIdData" th:field="*{telco}" type="hidden"/>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="my-select" class="label-span">Select Data Plan</label>
+                                            <select id="my-select" class="form-control-send-money mb-3"
+                                                    th:field="*{dataPlans}">
+                                                <option disabled selected value="0"> -- Select Data Plans --
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="amount1" class="label-span">Amount</label>
+                                            <input id="amount1" class="form-control-send-money" placeholder=""
+                                                   th:field="*{amount}">
+                                        </div>
+                                        <div class="mb-4">
+                                            <input class="submit-send-money" type="submit" placeholder="Proceed">
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+        </div>
+
+
+        <!--        THE CONFIRM TRANSFER AIRTIME-->
+        <div class="col-md-5 col-sm-12 col-xs-12" th:if="${submitted}">
+            <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
+
+                <div class="confirm-money-title"> <!-- -->
+                    Confirm Transaction
+                </div>
+
+                <div class="confirm-money-form"> <!-- -->
+                    <div class="col-md-12">
+                        <div class="form-confirm-money">
+                            <div class="confirm-money-block">
+                                <div class="confirm-block">
+                                    <form method="post" th:object="${airtimeFormPin}" th:action="@{/airtime}">
+                                        <div class="mb-4">
+                                            <div class="mb-2"><span>Name</span> <span class="float-right">Babajide Balogun</span>
+                                            </div>
+                                            <div class="mb-2"><span>Bank</span> <span
+                                                    class="float-right">Access Bank</span></div>
+                                            <div class="mb-2"><span>Amount</span> <span
+                                                    class="float-right">N50,000</span></div>
+                                            <div class="mb-2"><span>Amount</span> <span
+                                                    class="float-right">N50,000</span></div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="pin" class="confirm-pin">Enter PIN</label>
+                                            <input id="pin" type="password" class="" maxlength="4"
+                                                   style="align-items: center; text-align: center; width: 200px"
+                                                   placeholder="" th:field="*{pin}">
+                                        </div>
+                                        <div class="mb-4">
+                                            <input class="submit-comfirm-money" type="submit" placeholder="Submit">
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!--        THE CONFIRM TRANSFER DATA-->
+        <div class="col-md-5 col-sm-12 col-xs-12" th:if="${submitData}">
+            <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
+
+                <div class="confirm-money-title"> <!-- -->
+                    Confirm Transaction
+                </div>
+
+                <div class="confirm-money-form"> <!-- -->
+                    <div class="col-md-12">
+                        <div class="form-confirm-money">
+                            <div class="confirm-money-block">
+                                <div class="confirm-block">
+                                    <form method="post" th:object="${dataFormPin}" th:action="@{/data}">
+                                        <div class="mb-4">
+                                            <div class="mb-2"><span>Name</span> <span class="float-right">Babajide Balogun</span>
+                                            </div>
+                                            <div class="mb-2"><span>Bank</span> <span
+                                                    class="float-right">Access Bank</span></div>
+                                            <div class="mb-2"><span>Amount</span> <span
+                                                    class="float-right">N50,000</span></div>
+                                            <div class="mb-2"><span>Amount</span> <span
+                                                    class="float-right">N50,000</span></div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="pin-data" class="confirm-pin">Enter PIN</label>
+                                            <input id="pin-data" type="password" class="" maxlength="4"
+                                                   style="align-items: center; text-align: center; width: 200px"
+                                                   placeholder="" th:field="*{pin}">
+                                        </div>
+                                        <div class="mb-4">
+                                            <input class="submit-comfirm-money" type="submit" placeholder="Submit">
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script th:inline="javascript">
+    function showLoader() {
+        const loader = document.getElementById('loader');
+        loader.style.display = 'block';
+    }
+
+    function hideLoader() {
+        const loader = document.getElementById('loader');
+        loader.style.display = 'none';
+    }
+</script>
+<script>
+    window.addEventListener('load', hideLoader);
+</script>
+<!--// THIS JS IS USED TO RENDER THE DATA PLANS VIA AN AJAX CALL TO THE CONTROLLER-->
+<script th:inline="javascript">
+    $(document).ready(function () {
+        $(document).on('click', ".telco", function () {
+            const telco = $(this).attr("data-network");
+            console.log("TELCO FOR DATA PLANS " + telco)
+            $.ajax({
+                type: 'GET',
+                url: `/data/${telco}`,// URL of the controller method
+                success: function (response) {
+                    const responseJson = JSON.parse(response);
+                    const test = responseJson;
+                    console.log(response)
+                    //Update the view with the response data
+                    let options = "";
+                    if (responseJson.responseCode === "00") {
+                        responseJson.dataPlans.forEach(function (item) {
+                            options += `<option value="${item.id}">${item.planDescription + ' ' + item.amount + ' ' + item.dataPeriod}</option>`;
+                        })
+                        $("#my-select").html(options)
+                    }
+
+                }
+            });
+        });
+    });
+
+
+    const errorMessageElement = document.getElementById('errorMessage');
+    /* Hide the error message after 10 seconds */
+    setTimeout(function () {
+        errorMessageElement.style.display = 'none';
+        errorMessageElement.style.width = '400px';
+    }, 10000); // 10 seconds in milliseconds
+</script>
+
+<script>
+
+    function toggleAirtime() {
+        const contentDiv = document.getElementById("airtime");
+        const contentData = document.getElementById("data");
+        if (contentDiv.style.display === "none") {
+            contentDiv.style.display = "block";
+            contentData.style.display = "none";
+        } else {
+            contentDiv.style.display = "none";
+            contentData.style.display = "none";
+        }
+    }
+
+    function toggleData() {
+        const contentDiv = document.getElementById("data");
+        const contentAirtime = document.getElementById("airtime");
+        if (contentDiv.style.display === "none") {
+            contentDiv.style.display = "block";
+            contentAirtime.style.display = "none";
+        } else {
+            contentDiv.style.display = "none";
+            contentAirtime.style.display = "none";
+        }
+    }
+
+    function updateInputValue(val) {
+        document.getElementById("telcoId").value = val;
+        // document.getElementById("telcoIdData").value = val;
+        console.log(val + " telco")
+    }
+
+    //THIS FUNCTION IS USED TO GET VALUE OF THE SELECTED TELCO FOR DATA
+    function updateInputValueData(val) {
+        document.getElementById("telcoIdData").value = val;
+        console.log(val + " telco")
+    }
+</script>
+</body>
+</html>

@@ -135,11 +135,11 @@
     }
 
     .transfer-money-title {
-        font-size: 25px;
+        font-size: 15px;
         margin-bottom: 0.5rem;
         font-weight: bold;
         color: #029247;
-        width: 200px;
+        width: 250px;
         text-transform: capitalize;
         margin-left: auto;
         margin-right: auto;
@@ -283,7 +283,7 @@
 
     .main-send-money {
         left: 125px;
-        background-color: yellow;
+        background-color: #fff;
         height: calc(100% - 30px);
         position: fixed;
         top: 105px;

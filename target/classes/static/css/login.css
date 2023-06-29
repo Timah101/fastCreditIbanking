@@ -42,8 +42,8 @@
 }
 
 .airtime_icon-fast {
-    margin-right: 15px;
-    max-width: 23%;
+    margin-right: 25px;
+    max-width: 15%;
     border-radius: 5px;
     cursor: pointer;
     transition: all 0.4s ease-in-out;
@@ -302,7 +302,8 @@ input:checked + .slider:before {
     border-bottom: 1px solid #029247;
     padding: 10px;
 }
-.airtime-title svg{
+
+.airtime-title svg {
     height: 40px;
 }
 
@@ -490,6 +491,39 @@ header {
     margin-bottom: 5px;
 }
 
+.loader {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: 9999;
+}
+
+.loader-inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 6px solid #f3f3f3;
+    border-top-color: #029247;
+    animation: loader-rotation 1s linear infinite;
+}
+
+@keyframes loader-rotation {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
 @media (min-width: 900px) {
     .content-dashboard {
         /*margin-left: 200px; !* Adjust this value to match the sidebar width *!*/
@@ -510,7 +544,7 @@ header {
     }
 
     .airtime-content {
-        display: none;
+        /*display: none;*/
         background-color: #fff;
         height: calc(100% - 60px);
         position: fixed;
@@ -567,7 +601,8 @@ header {
 
     }
 }
-.buy-airtime-form{
+
+.buy-airtime-form {
     margin-left: 2px;
     margin-bottom: 2px;
 }
@@ -611,37 +646,44 @@ header {
     margin-right: auto;
     font-family: "Lato Black", sans-serif;
 }
-.label-create{
+
+.label-create {
     float: left;
 }
-.create-left{
+
+.create-left {
     margin-left: -185px;
     color: black;
     font-size: 16px;
 }
-.border-rectangle{
+
+.border-rectangle {
     background: #023018;
     height: 4px;
     width: 2.5rem;
     border-color: #023018;
     margin-bottom: 0.75rem;
 }
-.input-align{
+
+.input-align {
     text-align: center;
 }
-.register-left{
+
+.register-left {
     display: flex;
     margin-left: -2px;
     color: black;
     font-size: 18px;
     font-weight: bold;
 }
-.register-left-2{
+
+.register-left-2 {
     margin-left: -100px;
     color: black;
     font-size: 16px;
     font-weight: bold;
 }
+
 .card-title-open-account {
 
     font-weight: bold;
@@ -653,6 +695,7 @@ header {
     font-family: "Lato Black", sans-serif;
     font-size: 17px;
 }
+
 /*.alert-danger-fast {*/
 /*    border-color: #fee6ea;*/
 /*    color: #f72b50;*/
@@ -671,20 +714,25 @@ header {
     /*color: #fff;*/
     /*background-color: #fee6ea;*/
 }
-.if-error{
+
+.if-error {
     width: 400px;
     height: 100px;
 }
-.login-params{
+
+.login-params {
     margin-left: 15px;
 }
-.login-params-password-forgot{
+
+.login-params-password-forgot {
     margin-left: 140px;
 }
-.create-account{
+
+.create-account {
     width: 500px;
 }
-.card-fast-login{
+
+.card-fast-login {
     width: 400px;
     background-position: center;
     background-color: white;
@@ -785,7 +833,7 @@ header {
     }
 
     .airtime-content {
-        display: none;
+        /*display: none;*/
         background-color: #fff;
         height: calc(100% - 60px);
         position: fixed;
@@ -793,7 +841,6 @@ header {
         overflow-y: auto;
         align-items: center;
     }
-
 
 
     .pay-bills-content {

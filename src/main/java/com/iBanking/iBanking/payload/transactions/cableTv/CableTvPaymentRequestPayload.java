@@ -1,17 +1,20 @@
 package com.iBanking.iBanking.payload.transactions.cableTv;
 
+import com.iBanking.iBanking.utils.Generics;
 import lombok.Data;
 
 @Data
 public class CableTvPaymentRequestPayload {
 
-    private String requestId;
+    private String requestId = Generics.generateRequestId();
     private String billerId;
-    private String meterNumber;
+    private String smartCard;
     private String mobileNumber;
     private String debitAccount;
     private String amount;
-    private String address;
+    private String productId;
+    private String invoicePeriod;
     private String customerName;
-    private String token;
+    private String pin;
+    private String token = "tyrueieoe";
 }

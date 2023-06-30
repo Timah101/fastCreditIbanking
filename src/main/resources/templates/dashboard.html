@@ -39,7 +39,7 @@
 <div class="sidebar" th:fragment="sidebarfast">
     <ul>
         <li>
-            <a th:href="@{/dashboard}">
+            <a th:href="@{/dashboard}" onclick="showLoader()">
                 <span class="icon-fast">
 <!--                    <span>-->
                          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15"><path
@@ -178,15 +178,19 @@
 
     <!--    I COMMENTED HERE -->
     <div class="row">
-        <div class="col-md-6 col-sm-12 col-lg-6 col-xl-4 col-xs-12" id="card-fast" th:each="accountBalance : ${accountBalanceResponse}">
+        <div class="col-md-6 col-sm-12 col-lg-6 col-xl-4 col-xs-12" id="card-fast"
+             th:each="accountBalance : ${accountBalanceResponse}">
             <div class="card-fast">
                 <div class="balance">
                     <div class="show-bal">
-                        <span style="float: left" th:text="*{'N ' +accountBalance.getAvailableBalance}">N0.00</span> <span
-                            style="float: right; color: #029247; font-weight: bolder" th:text="${'Tier ' + customerDetails.getKycTier()}"></span>
+                        <span style="float: left" th:text="*{'N ' +accountBalance.getAvailableBalance}">N0.00</span>
+                        <span
+                                style="float: right; color: #029247; font-weight: bolder"
+                                th:text="${'Tier ' + customerDetails.getKycTier()}"></span>
                     </div>
                     <div class="show-card">
-                        <span style="color: #029247; font-stretch: expanded;" th:text="${accountBalance.getAccountNumber}"></span>
+                        <span style="color: #029247; font-stretch: expanded;"
+                              th:text="${accountBalance.getAccountNumber}"></span>
                     </div>
                     <div class="show-name">
                                 <span style="font-weight: bolder"
@@ -552,401 +556,27 @@
 </div>
 
 
-<script th:inline="javascript">
-    function showLoader() {
-        const loader = document.getElementById('loader');
-        loader.style.display = 'block';
-    }
-
-    function hideLoader() {
-        const loader = document.getElementById('loader');
-        loader.style.display = 'none';
-    }
-</script>
+<!--SHOW AND HIDE LOADERS-->
 <script>
-    window.addEventListener('load', hideLoader);
-</script>
-
-
-<script th:inline="javascript">
-    function showLoader() {
+    document.addEventListener('DOMContentLoaded', function () {
         const loader = document.getElementById('loader');
-        loader.style.display = 'block';
-    }
 
-    function hideLoader() {
-        const loader = document.getElementById('loader');
-        loader.style.display = 'none';
-    }
-</script>
-<script>
-    window.addEventListener('load', hideLoader);
-</script>
+        function showLoader() {
+            loader.style.display = 'block'; // Show the loader
+        }
 
-<script th:inline="javascript">
-    $(document).ready(function () {
-        $('#account_local').on('input', function () {
-            const accountNumber = $(this).val();
-            console.log("LOCAL ACCOUNT " + accountNumber)
-            if (accountNumber.length === 10) {
-                if (accountNumber.match(/^[0-9]+$/)) {
-                    $.ajax({
-                        type: 'GET',
-                        url: `/name/lookup/local/${accountNumber}`,// URL of the controller method
-                        success: function (response) {
-                            // Update the view with the response data
-                            $('#localName').text(response);
-                            console.log(response);
-                            console.log(response.toString())
-                        },
-                        error: function (error) {
-                            $('#localName').text("Invalid");
-                        }
-                    });
+        function hideLoader() {
+            loader.style.display = 'none'; // Hide the loader
+        }
 
-                } else {
-                    $('#localName').text("Invalid");
-                }
-            }
-        });
+        const links = document.getElementsByTagName('a');
+        for (let i = 0; i < links.length; i++) {
+            links[i].addEventListener('click', showLoader); // Show the loader when a link is clicked
+        }
+
+        window.addEventListener('load', hideLoader); // Hide the loader when the page finishes loading
     });
-
-
-    //Name Enquiry For Others
-    $(document).ready(function () {
-        $('#account_others').on('input', function () {
-            const beneficiaryAccountNumber = $(this).val();
-            const beneficiaryBankCode = $("#select-bank-others").val();
-            console.log("Bank Code")
-            console.log(beneficiaryAccountNumber + "Bank account num")
-            console.log(beneficiaryBankCode + "Bank Code")
-            if (beneficiaryAccountNumber.length === 10) {
-                if (beneficiaryAccountNumber.match(/^[0-9]+$/)) {
-                    $.ajax({
-                        type: 'GET',
-                        url: `/name/lookup/others/${beneficiaryAccountNumber}/${beneficiaryBankCode}`,// URL of the controller method
-                        success: function (response) {
-                            // Update the view with the response data
-                            $('#othersName').text(response);
-                            console.log(response);
-                            console.log(response.toString())
-                        },
-                        error: function (error) {
-                            $('#othersName').text("Invalid");
-                        }
-                    });
-
-                } else {
-                    $('#othersName').text("Invalid");
-                }
-            }
-        });
-    });
-
-
-    const errorMessageElement = document.getElementById('errorMessage');
-
-    /* Hide the error message after 10 seconds */
-    setTimeout(function () {
-        errorMessageElement.style.display = 'none';
-        errorMessageElement.style.width = '400px';
-    }, 10000); // 10 seconds in milliseconds
-</script>
-<script>
-
-    function toggleAirtime() {
-        const contentDiv = document.getElementById("airtime");
-        const contentData = document.getElementById("data");
-        if (contentDiv.style.display === "none") {
-            contentDiv.style.display = "block";
-            contentData.style.display = "none";
-        } else {
-            contentDiv.style.display = "none";
-            contentData.style.display = "none";
-        }
-    }
-
-    function toggleData() {
-        const contentDiv = document.getElementById("data");
-        const contentAirtime = document.getElementById("airtime");
-        if (contentDiv.style.display === "none") {
-            contentDiv.style.display = "block";
-            contentAirtime.style.display = "none";
-        } else {
-            contentDiv.style.display = "none";
-            contentAirtime.style.display = "none";
-        }
-    }
-
-    function toggleSendMoneyLocal() {
-        const contentDiv = document.getElementById("send-money-local");
-        const contentOthers = document.getElementById("send-money-others");
-        if (contentDiv.style.display === "none") {
-            contentDiv.style.display = "block";
-            contentOthers.style.display = "none";
-        } else {
-            contentDiv.style.display = "none";
-            contentOthers.style.display = "none";
-        }
-    }
-
-    function toggleSendMoneyOthers() {
-        const contentDiv = document.getElementById("send-money-others");
-        const contentOthers = document.getElementById("send-money-local");
-        if (contentDiv.style.display === "none") {
-            contentDiv.style.display = "block";
-            contentOthers.style.display = "none";
-        } else {
-            contentDiv.style.display = "none";
-            contentOthers.style.display = "none";
-        }
-    }
-
-    // Add an event listener to prevent page reload on link clicks
-    // document.addEventListener("DOMContentLoaded", function () {
-    //     const links = document.querySelectorAll(".sidebar a");
-    //     links.forEach(function (link) {
-    //         link.addEventListener("click", function (event) {
-    //             event.preventDefault();
-    //             const targetPage = this.getAttribute("href");
-    //             showLoader(); // Show the loader
-    //             loadPage(targetPage);
-    //         });
-    //     });
-    //     // Load the dashboard target page on page load
-    //     const dashboardPage = "dashboard-2.html"; // Replace with the actual URL of the dashboard target page
-    //     loadPage(dashboardPage);
-    // });
-    //
-    // function showLoader() {
-    //     document.getElementById("loader").style.display = "block";
-    // }
-    //
-    // function hideLoader() {
-    //     document.getElementById("loader").style.display = "none";
-    // }
-    //
-    // function loadPage(page) {
-    //     // Use your preferred method to load the page content
-    //     // For example, you can use AJAX to fetch the content and update the "content" div
-    //     // Here's a simplified example:
-    //     const xhr = new XMLHttpRequest();
-    //     xhr.open("GET", page, true);
-    //     xhr.onreadystatechange = function () {
-    //         if (xhr.readyState === 4 && xhr.status === 200) {
-    //             document.querySelector(".content").innerHTML = xhr.responseText;
-    //             console.log("xhr status " + xhr.status)
-    //             // saveSidebarState(true);
-    //             hideLoader(); // Hide the loader
-    //         }
-    //     };
-    //     xhr.send();
-    // }
-
-    // function saveSidebarState(visible) {
-    //     // Use cookies or local storage to save the sidebar state
-    //     localStorage.setItem('sidebarVisible', visible);
-    // }
-
-    // function isSidebarVisible() {
-    //     // Retrieve the sidebar state from cookies or local storage
-    //     return localStorage.getItem('sidebarVisible') === 'true';
-    // }
-
-    // Check the initial sidebar state when the page loads
-    // if (isSidebarVisible()) {
-    //     document.querySelector('.sidebar').style.display = 'block';
-    // } else {
-    //     document.querySelector('.sidebar').style.display = 'none';
-    // }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        const toggleIcon = document.querySelector(".toggle-icon");
-        const sidebar = document.querySelector(".sidebar");
-        toggleIcon.addEventListener("click", function () {
-            sidebar.classList.toggle("collapsed");
-        });
-    });
-
-    function toggleAirtimeDiv() {
-        const contentDiv = document.getElementById("airtime-content");
-        const mainContent = document.getElementById("content-dashboard")
-        const sendMoneyContent = document.getElementById("send-money-content")
-        const sendMoneyContent2 = document.getElementById("send-money-content-2")
-        const payBillsDiv = document.getElementById("pay-bills-content")
-        if (contentDiv.style.display === "none") {
-            contentDiv.style.display = "block";
-            mainContent.style.display = "none";
-
-
-            sendMoneyContent.style.display = "none";
-            payBillsDiv.style.display = "none";
-            sendMoneyContent2.style.display = "none";
-        } else {
-            contentDiv.style.display = "none";
-            mainContent.style.display = "block";
-
-            sendMoneyContent.style.display = "none";
-            payBillsDiv.style.display = "none";
-            sendMoneyContent2.style.display = "none";
-        }
-    }
-
-    function toggleBuyAirtime(contentId) {
-        const contentDataDiv = document.getElementById("buy-data-form");
-        const contentAirtimeDiv = document.getElementById(contentId);
-
-        if (contentAirtimeDiv.style.display === "none") {
-            contentAirtimeDiv.style.display = "block"
-            contentDataDiv.style.display = "none"
-
-        } else {
-            contentAirtimeDiv.style.display = "none"
-            contentDataDiv.style.display = "none"
-
-        }
-
-    }
-
-    window.addEventListener("load", function () {
-        var content = document.getElementById("buy-airtime-form");
-        var storedDisplay = sessionStorage.getItem("module-one-display");
-        console.log("VISIBILITY STATUS IN THE EVENT r : " + storedDisplay)
-        console.log("CONTENT STATUS IN THE EVENT LISTENER : " + content)
-        if (storedDisplay === "block") {
-            content.style.display = "block";
-        } else {
-            content.style.display = "none";
-        }
-
-    });
-    window.addEventListener("beforeunload", function () {
-        var content = document.getElementById("buy-airtime-form");
-        sessionStorage.setItem("module-one-display", content.style.display);
-    });
-
-    function toggleBuyData() {
-        const contentDataDiv = document.getElementById("buy-data-form");
-        const contentAirtimeDiv = document.getElementById("buy-airtime-form")
-
-        if (contentDataDiv.style.display === "none") {
-            contentDataDiv.style.display = "block"
-            contentAirtimeDiv.style.display = "none"
-        } else {
-            contentDataDiv.style.display = "none"
-            contentAirtimeDiv.style.display = "none"
-        }
-
-    }
-
-    function toggleSendMoneyDiv() {
-        // const contentDiv = document.getElementById("send-money-content");
-        const mainContent = document.getElementById("content-dashboard")
-        // const airtimeContent = document.getElementById("airtime-content")
-        // const payBillsDiv = document.getElementById("pay-bills-content")
-        if (mainContent.style.display === "none") {
-            // contentDiv.style.display = "block";
-            mainContent.style.display = "block";
-            // airtimeContent.style.display = "none";
-            // payBillsDiv.style.display = "none";
-        } else {
-            // contentDiv.style.display = "none";
-            mainContent.style.display = "none";
-            // airtimeContent.style.display = "none";
-            // payBillsDiv.style.display = "none";
-        }
-    }
-
-
-    function togglePayBillsDiv() {
-        const contentDiv = document.getElementById("pay-bills-content");
-        const mainContent = document.getElementById("content-dashboard")
-        const airtimeContent = document.getElementById("airtime-content")
-        const sendMoneyContent = document.getElementById("send-money-content")
-        const sendMoneyContent2 = document.getElementById("send-money-content-2")
-
-        if (contentDiv.style.display === "none") {
-            contentDiv.style.display = "block";
-            mainContent.style.display = "none";
-            airtimeContent.style.display = "none";
-            sendMoneyContent.style.display = "none";
-            sendMoneyContent2.style.display = "none";
-        } else {
-            contentDiv.style.display = "none";
-            mainContent.style.display = "block";
-            airtimeContent.style.display = "none";
-            sendMoneyContent.style.display = "none";
-            sendMoneyContent2.style.display = "none";
-        }
-    }
-
-    function toggleDashboardDiv() {
-        const contentDiv = document.getElementById("content-dashboard");
-        // const airtimeContent = document.getElementById("airtime-content")
-        // const sendMoneyContent = document.getElementById("send-money-content")
-        // const sendMoneyContent2 = document.getElementById("send-money-content-2")
-        // const payBillsDiv = document.getElementById("pay-bills-content")
-        if (contentDiv.style.display === "none") {
-            contentDiv.style.display = "block";
-            // airtimeContent.style.display = "none";
-            // sendMoneyContent.style.display = "none";
-            // sendMoneyContent2.style.display = "none";
-            // payBillsDiv.style.display = "none";
-        } else {
-            contentDiv.style.display = "none";
-            // airtimeContent.style.display = "none";
-            // sendMoneyContent.style.display = "none";
-            // payBillsDiv.style.display = "none";
-            // sendMoneyContent2.style.display = "none";
-        }
-    }
-
-
-    //Chane background color when clicked
-    const sendMoney = document.querySelectorAll('.send-money-mini');
-    sendMoney.forEach(function (box) {
-        box.addEventListener('click', function () {
-            // Remove 'selected' class from all boxes
-            sendMoney.forEach(function (box) {
-                box.classList.remove('send-money-clicked');
-            });
-
-            // Add 'selected' class to the clicked box
-            box.classList.add('send-money-clicked');
-        });
-    });
-
-
-    window.addEventListener("load", function () {
-        var myDiv = document.getElementById("content-dashboard");
-        myDiv.classList.add("loaded");
-        var myDiv2 = document.getElementById("airtime-content");
-        myDiv2.classList.add("loaded");
-        var myDiv3 = document.getElementById("card-fast");
-        myDiv2.classList.add("loaded");
-    });
-
-    // THIS FUNCTION IS USED TO GET VALUE OF THE SELECTED TELCO FOR AIRTIME TOP UP
-    function updateInputValue(val) {
-        document.getElementById("telcoId").value = val;
-        // document.getElementById("telcoIdData").value = val;
-        console.log(val + " telco")
-    }
-
-    function updateInputValueData(val) {
-        document.getElementById("telcoIdData").value = val;
-        console.log(val + " telco")
-    }
 </script>
 
-
-<script th:src="@{/js/global.min.js}" type="text/javascript"></script>
-<!--    <script type="text/javascript" th:src="@{/js/Chart.bundle.min.js}"></script>-->
-<script th:src="@{/js/jquery.nice-select.min.js}" type="text/javascript"></script>
-<script th:src="@{/js/custom.min.js}" type="text/javascript"></script>
-<script th:src="@{/js/dlabnav-init.js}" type="text/javascript"></script>
-
-<script th:src="@{/js/select2.full.min.js}" type="text/javascript"></script>
-<script th:src="@{/js/select2-init.js}" type="text/javascript"></script>
 </body>
 </html>

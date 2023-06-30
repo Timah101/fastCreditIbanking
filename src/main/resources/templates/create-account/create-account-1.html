@@ -12,7 +12,7 @@
 
             <div class="card-body">
                 <div class="basic-form">
-                    <form>
+                    <form method="post" th:object="${createAccountForm1}" th:action="@{/open-account}">
                         <div class="mb-2 create-left">
                             <a><img th:src="@{/images/logo.svg}" alt="Fast Credit" width="130" height="90"></a>
                         </div>
@@ -28,11 +28,12 @@
                             <label for="email" class="label-create"> Email</label>
                             <input id="email" type="text" class="form-control" placeholder="">
                         </div>
+                        <div class="text-center mb-4">
+                            <button class="btn-block btn-login">Proceed</button>
+                        </div>
                     </form>
 
-                    <div class="text-center mb-4">
-                        <button class="btn-block btn-login">Proceed</button>
-                    </div>
+
                 </div>
             </div>
         </div>

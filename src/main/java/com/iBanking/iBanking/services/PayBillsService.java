@@ -13,5 +13,5 @@ public interface PayBillsService {
 
     ValidateCableTvResponsePayload validateCableTv(HttpSession session, String biller, String cardNumber) throws UnirestException;
 
-    CableTvPaymentResponse cableTvPayment(HttpSession session) throws UnirestException;
+    CableTvPaymentResponse cableTvPayment(HttpSession session, String biller) throws UnirestException;
 }

@@ -31,15 +31,16 @@ public class CustomerServiceImpl implements CustomerService {
     //GET CUSTOMER DETAILS
     @Override
     public CustomerDetailsResponsePayload getCustomerDetails(HttpSession session) throws UnirestException {
-        String accessToken = (String) session.getAttribute("accessToken");
+        String accessToken = getAccessToken();
+        session.setAttribute("accessTokenCustomer", accessToken);
         CustomerDetailsResponsePayload customerDetailsResponse;
         CustomerDetailsRequestPayload customerDetailsRequestPayload = new CustomerDetailsRequestPayload();
         Forms loginForm = (Forms) session.getAttribute("loginForm");
         Forms registerForm = (Forms) session.getAttribute("registerForm1");
         String mobileNumber = "";
-        if(loginForm == null){
+        if (loginForm == null) {
             mobileNumber = registerForm.getMobileNumber();
-        }else{
+        } else {
             mobileNumber = loginForm.getMobileNumber();
         }
 
@@ -48,11 +49,11 @@ public class CustomerServiceImpl implements CustomerService {
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
         EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayload);
-        log.info("ENCRYPTION RESPONSE {}", encryptResponsePayload);
+        log.info("CUSTOMER DETAILS REQUEST PAYLOAD : {}", requestPayload);
 
         //CALL THE CUSTOMER DETAILS ENDPOINT
         String requestPayloadJson = gson.toJson(encryptResponsePayload);
-        log.info("CUSTOMER DETAILS PAYLOAD D {}", requestPayloadJson);
+
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + CUSTOMER_DETAILS)
                 .header("accept", "application/json")
                 .header("Content-Type", "application/json")
@@ -61,8 +62,9 @@ public class CustomerServiceImpl implements CustomerService {
         String requestBody = jsonResponse.getBody();
         if (jsonResponse.getStatus() != 200) {
             customerDetailsResponse = new CustomerDetailsResponsePayload();
-//            customerDetailsResponse.setResponseCode("500");
-//            customerDetailsResponse.setResponseMessage("Error Occured");
+            customerDetailsResponse.setResponseCode("99");
+            customerDetailsResponse.setRegistered("99");
+            customerDetailsResponse.setResponseMessage("99");
             log.info(" ERROR WHILE GETTING CUSTOMER DETAILS {}", jsonResponse.getStatus());
             return customerDetailsResponse;
         }
@@ -73,7 +75,7 @@ public class CustomerServiceImpl implements CustomerService {
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
         customerDetailsResponse = decryptPayload(decryptRequestPayload, CustomerDetailsResponsePayload.class);
         //LOG REQUEST AND RESPONSE
-        log.info("CUSTOMER DETAILS REQUEST PAYLOAD : {}", requestPayload);
+
         log.info("CUSTOMER DETAILS RESPONSE PAYLOAD : {}", gson.toJson(customerDetailsResponse));
         session.setAttribute("customerDetailsResponse", customerDetailsResponse);
         return customerDetailsResponse;
@@ -81,7 +83,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public RegisterCustomerResponsePayload registerCustomer(HttpSession session) throws UnirestException {
-        String accessToken = (String) session.getAttribute("accessToken");
+        String accessToken = (String) session.getAttribute("accessTokenCustomer");
         RegisterCustomerResponsePayload registerCustomer;
         RegisterCustomerRequestPayload requestPayload = new RegisterCustomerRequestPayload();
         Forms registerForm1 = (Forms) session.getAttribute("registerForm1");

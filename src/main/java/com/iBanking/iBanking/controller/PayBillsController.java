@@ -78,8 +78,8 @@ public class PayBillsController {
     @PostMapping("/gotv")
     public String processGotv(Model model, Forms gotvFormPin, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
         session.setAttribute("gotvFormPin", gotvFormPin);
-
-        payBillsService.cableTvPayment(session);
+        String biller = "GOTV";
+        payBillsService.cableTvPayment(session, biller);
         CableTvPaymentResponse cableTvPaymentResponse = (CableTvPaymentResponse) session.getAttribute("cableTvPaymentResponse");
         if (cableTvPaymentResponse.getResponseCode().equals("00")) {
             return "redirect:/pay-bills";
@@ -151,7 +151,8 @@ public class PayBillsController {
     @PostMapping("/dstv")
     public String processDstv(Model model, Forms dstvFormPin, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
         session.setAttribute("dstvFormPin", dstvFormPin);
-        payBillsService.cableTvPayment(session);
+        String biller = "DSTV";
+        payBillsService.cableTvPayment(session, biller);
         CableTvPaymentResponse cableTvPaymentResponse = (CableTvPaymentResponse) session.getAttribute("cableTvPaymentResponse");
         if (cableTvPaymentResponse.getResponseCode().equals("00")) {
             return "redirect:/pay-bills";

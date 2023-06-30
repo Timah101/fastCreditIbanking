@@ -17,7 +17,7 @@
                 </div>
                 <div class="card-body">
                     <div class="basic-form">
-                        <form>
+                        <form method="post" th:object="${createAccountForm2}" th:action="@{/open-account-2}">
                             <div class="row mb-4">
                                 <div class="col-sm-6">
                                     <label for="title"> Title</label>

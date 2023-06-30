@@ -127,7 +127,7 @@
                                                 <option style="background-color: #D1D0CE"
                                                         th:each="gotv : ${gotvBillerPlan}"
                                                         th:text="${gotv.getBouquet() + ' ' + gotv.getMonthlyAmount()}"
-                                                        th:value="${gotv.getBillerId()+','+gotv.getMonthlyAmount()}"></option>
+                                                        th:value="${gotv.getBillerId()+','+gotv.getMonthlyAmount()+','+gotv.getProductId()}"></option>
                                             </select>
                                         </div>
 
@@ -203,7 +203,7 @@
                                                 <option style="background-color: #D1D0CE"
                                                         th:each="dstv : ${dstvBillerPlan}"
                                                         th:text="${dstv.getBouquet() + ' ' + dstv.getMonthlyAmount()}"
-                                                        th:value="${dstv.getBillerId() + ',' + dstv.getMonthlyAmount()}"></option>
+                                                        th:value="${dstv.getBillerId() + ',' + dstv.getMonthlyAmount() + ',' + dstv.getProductId()}"></option>
                                             </select>
                                         </div>
 

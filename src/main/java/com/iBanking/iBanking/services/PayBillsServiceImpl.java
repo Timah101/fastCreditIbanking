@@ -1,6 +1,7 @@
 package com.iBanking.iBanking.services;
 
 import com.google.gson.Gson;
+import com.iBanking.iBanking.Forms.Forms;
 import com.iBanking.iBanking.payload.generics.DecryptRequestPayload;
 import com.iBanking.iBanking.payload.generics.EncryptResponsePayload;
 import com.iBanking.iBanking.payload.transactions.cableTv.*;
@@ -69,7 +70,7 @@ public class PayBillsServiceImpl implements PayBillsService {
         ValidateCableTvRequestPayload requestPayload = new ValidateCableTvRequestPayload();
 
         requestPayload.setBiller(biller);
-        requestPayload.setCardNumber(cardNumber);
+        requestPayload.setCustomerNo(cardNumber);
 
         String requestPayloadJson = gson.toJson(requestPayload);
 
@@ -104,11 +105,44 @@ public class PayBillsServiceImpl implements PayBillsService {
     }
 
     @Override
-    public CableTvPaymentResponse cableTvPayment(HttpSession session) throws UnirestException {
+    public CableTvPaymentResponse cableTvPayment(HttpSession session, String biller) throws UnirestException {
         String accessToken = (String) session.getAttribute("accessToken");
         CableTvPaymentResponse cableTvPayment = new CableTvPaymentResponse();
         CableTvPaymentRequestPayload requestPayload = new CableTvPaymentRequestPayload();
 
+        Forms form;
+        Forms formPin;
+        String billerId;
+        ValidateCableTvResponsePayload customerName;
+        if (biller.equalsIgnoreCase("GOTV")) {
+            form = (Forms) session.getAttribute("gotvForm");
+            formPin = (Forms) session.getAttribute("gotvFormPin");
+            customerName = (ValidateCableTvResponsePayload) session.getAttribute("validateCableTvResponse");
+            billerId = form.getDataPlans();
+        } else if (biller.equalsIgnoreCase("DSTV")) {
+            form = (Forms) session.getAttribute("dstvForm");
+            formPin = (Forms) session.getAttribute("dstvFormPin");
+            customerName = (ValidateCableTvResponsePayload) session.getAttribute("validateCableTvResponse");
+            billerId = form.getDataPlans();
+        } else {
+            form = new Forms();
+            formPin = new Forms();
+            billerId = "";
+            customerName = new ValidateCableTvResponsePayload();
+        }
+        String billerIdSplitted = "";
+        if (!billerId.isEmpty()) {
+            String[] billerIdSplit = billerId.split(",");
+            billerIdSplitted = billerIdSplit[2];
+        }
+
+        requestPayload.setBillerId(billerIdSplitted);
+        requestPayload.setMobileNumber(form.getMobileNumber());
+        requestPayload.setSmartCard(form.getSmartCardNumber());
+        requestPayload.setDebitAccount(form.getDebitAccount());
+        requestPayload.setAmount(form.getAmount());
+        requestPayload.setCustomerName(String.valueOf(customerName));
+        requestPayload.setPin(formPin.getPin());
 
         String requestPayloadJson = gson.toJson(requestPayload);
 
@@ -128,7 +162,7 @@ public class PayBillsServiceImpl implements PayBillsService {
         if (jsonResponse.getStatus() != 200) {
 //            cableTvPayment = new CableTvPaymentResponse();
             cableTvPayment.setResponseCode("00");
-            cableTvPayment.setResponseMessage("Get Bills Payment Payload Tomorrow");
+            cableTvPayment.setResponseMessage("error");
             session.setAttribute("cableTvPaymentResponse", cableTvPayment);
             log.info(" ERROR WHILE CABLE PAYMENT   {}", jsonResponse.getStatus());
             return cableTvPayment;
@@ -140,8 +174,6 @@ public class PayBillsServiceImpl implements PayBillsService {
         cableTvPayment = decryptPayload(decryptRequestPayload, CableTvPaymentResponse.class);
         //LOG REQUEST AND RESPONSE
 
-        cableTvPayment.setResponseCode("00");
-        cableTvPayment.setResponseMessage("Get Bills Payment Payload Tomorrow");
 
         log.info("CABLE PAYMENT RESPONSE PAYLOAD : {}", gson.toJson(cableTvPayment));
         session.setAttribute("cableTvPaymentResponse", cableTvPayment);

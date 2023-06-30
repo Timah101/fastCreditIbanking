@@ -43,6 +43,7 @@ public class AuthenticationApi {
         //        HttpSession session
         //        String accessToken = (String) session.getAttribute("accessToken");
 //        log.info("ENCRYPTION REQUEST {}", requestPayloads);
+
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + ENCRYPT_PAYLOAD)
                 .header("accept", "application/json")
                 .header("Content-Type", "application/json")

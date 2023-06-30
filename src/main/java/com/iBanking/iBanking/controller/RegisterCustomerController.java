@@ -39,11 +39,11 @@ public class RegisterCustomerController {
         //CHECK IF CUSTOMER EXISTING FIRST
         CustomerDetailsResponsePayload customerDetails = customerService.getCustomerDetails(session);
         Forms registerForm11 = (Forms) session.getAttribute("registerForm1");
-        if(customerDetails.getResponseCode().equals("03")){
+        if (customerDetails.getResponseCode().equals("03")) {
             String customErrorMessage = customerDetails.getResponseMessage();
             redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
             return "redirect:/register";
-        }else{
+        } else {
             if (customerDetails.getRegistered().equals("true")) {
                 String customErrorMessage = "Customer with Mobile Number " + registerForm11.getMobileNumber() + " is already registered, kindly proceed to login ";
                 redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
@@ -85,6 +85,7 @@ public class RegisterCustomerController {
     public String processRegister3(@ModelAttribute Forms registerForm3, HttpSession session, RedirectAttributes redirectAttributes) {
         session.setAttribute("registerForm3", registerForm3);
         try {
+            customerService.registerCustomer(session);
             RegisterCustomerResponsePayload registerCustomerResponse = (RegisterCustomerResponsePayload) session.getAttribute("registerCustomerResponse");
 
             if (registerCustomerResponse.getResponseCode().equals("00")) {

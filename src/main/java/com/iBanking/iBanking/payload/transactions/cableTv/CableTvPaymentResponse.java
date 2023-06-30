@@ -6,4 +6,5 @@ import lombok.Data;
 public class CableTvPaymentResponse {
     private String responseCode;
     private String responseMessage;
+
 }

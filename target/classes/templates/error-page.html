@@ -1,20 +1,35 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Error</title>
+    <title>Error</title>
 </head>
 <body>
-<h1>Error Page</h1>
+<div class="container">
+    <div class="row">
+        <div style="margin-left: auto; margin-right: auto; background: #cee5ce">
+            <div th:if="${#httpServletRequest.getAttribute('javax.servlet.error.status_code')} == 401">
+                <p>The application has been refreshed. Please <a href="/login">login</a> again.</p>
+            </div>
 
-<div th:if="${#httpServletRequest.getAttribute('javax.servlet.error.status_code')} == 401">
-  <p>The application has been refreshed. Please <a href="/login">login</a> again.</p>
+            <div th:if="${#httpServletRequest.getAttribute('javax.servlet.error.status_code')} == 500">
+                <p>The application has been refreshed. Please <a href="/login">login</a> again.</p>
+            </div>
+            <h1>Error</h1>
+            <p th:text="${errorMessage}"></p>
+            <div>
+                <button class="button-fast" th:if="${loggedIn}" onclick="window.location.href='/dashboard'">Go to
+                    Dashboard
+                </button>
+                <button class="button-fast" th:unless="${loggedIn}" onclick="window.location.href='/login'">Go to
+                    Login
+                </button>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 
-<div th:if="${#httpServletRequest.getAttribute('javax.servlet.error.status_code')} == 500">
-  <p>The application has been refreshed. Please <a href="/login">login</a> again.</p>
-</div>
-
-<!-- Add more error handling conditions and messages as needed -->
 
 </body>
 </html>

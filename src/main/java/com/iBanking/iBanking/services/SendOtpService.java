@@ -7,5 +7,5 @@ import javax.servlet.http.HttpSession;
 
 public interface SendOtpService {
 
-    SendOtpResponsePayload sendOtp(HttpSession session) throws UnirestException;
+    SendOtpResponsePayload sendOtp(HttpSession session, String purpose) throws UnirestException;
 }

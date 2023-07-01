@@ -49,7 +49,8 @@ public class RegisterCustomerController {
                 redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
                 return "redirect:/register";
             } else {
-                SendOtpResponsePayload sendOtp = sendOtpService.sendOtp(session);
+                String purpose = "RE";
+                SendOtpResponsePayload sendOtp = sendOtpService.sendOtp(session, purpose);
                 if (sendOtp.getResponseCode().equals("00")) {
                     return "redirect:/register/confirm-otp";
                 } else {

@@ -1,6 +1,7 @@
 package com.iBanking.iBanking.services;
 
 import com.google.gson.Gson;
+import com.iBanking.iBanking.Forms.Forms;
 import com.iBanking.iBanking.payload.generics.DecryptRequestPayload;
 import com.iBanking.iBanking.payload.generics.EncryptResponsePayload;
 import com.iBanking.iBanking.payload.SendOtpPayloadRequest;
@@ -12,9 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+
 import static com.iBanking.iBanking.utils.ApiPaths.*;
-import static com.iBanking.iBanking.utils.AuthenticationApi.decryptPayload;
-import static com.iBanking.iBanking.utils.AuthenticationApi.encryptPayload;
+import static com.iBanking.iBanking.utils.AuthenticationApi.*;
 
 @Slf4j
 @Service
@@ -23,13 +24,22 @@ public class SendOtpServiceImpl implements SendOtpService {
     Gson gson = new Gson();
 
     @Override
-    public SendOtpResponsePayload sendOtp(HttpSession session) throws UnirestException {
-        String accessToken = (String) session.getAttribute("accessToken");
+    public SendOtpResponsePayload sendOtp(HttpSession session, String purpose) throws UnirestException {
+        String accessToken = getAccessToken();
         SendOtpResponsePayload sendOtp;
         SendOtpPayloadRequest requestPayload = new SendOtpPayloadRequest();
-//        Forms loginForm = (Forms) session.getAttribute("loginForm");
-        requestPayload.setMobileNumber("09077927355");
-        requestPayload.setPurpose("RE");
+
+        String mobileNumber;
+        Forms formRegister = (Forms) session.getAttribute("registerForm1");
+        Forms formCreate = (Forms) session.getAttribute("createAccountForm1");
+        System.out.println(formRegister + " : register" + formCreate + " : create");
+        if (formRegister == null) {
+            mobileNumber = formCreate.getMobileNumber();
+        } else {
+            mobileNumber = formRegister.getMobileNumber();
+        }
+        requestPayload.setMobileNumber(mobileNumber);
+        requestPayload.setPurpose(purpose);
 
         String requestPayloadJson = gson.toJson(requestPayload);
 

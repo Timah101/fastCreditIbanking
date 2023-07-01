@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragments :: header}">
+    <title>Create Account</title></head>
+<body style="background: white">
+
+<div class="text-center">
+    <div class="text-center">
+        <div class="card-fast-login">
+
+            <div class="card-body">
+                <div class="basic-form">
+                    <form method="post"  th:action="@{/confirm-otp}" th:object="${confirmOtp}">
+                        <div class="mb-2">
+                            <a><img th:src="@{/images/logo.svg}" alt="Fast Credit" width="150" height="100"></a>
+                        </div>
+                        <div class="register-left">Let's verify your phone number
+                        </div>
+                        <div class="border-rectangle"></div>
+                        <div class="mb-4 register-left" style="font-weight: normal">Please enter the verification code we sent to *********
+                        </div>
+
+                        <div class="mb-4 input-align">
+                            <label for="phone" class="label-create"></label>
+                            <input id="phone" type="password" class="form-control" placeholder="" th:field="*{otp}">
+                        </div>
+                        <div class="text-center mb-4">
+                            <button class="btn-block btn-login" type="submit">Proceed</button>
+                        </div>
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

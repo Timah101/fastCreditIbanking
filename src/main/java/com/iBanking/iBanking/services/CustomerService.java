@@ -1,5 +1,6 @@
 package com.iBanking.iBanking.services;
 
+import com.iBanking.iBanking.payload.customer.CreateCustomerResponsePayload;
 import com.iBanking.iBanking.payload.customer.CustomerDetailsResponsePayload;
 import com.iBanking.iBanking.payload.customer.RegisterCustomerResponsePayload;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -10,4 +11,6 @@ public interface CustomerService {
     CustomerDetailsResponsePayload getCustomerDetails(HttpSession httpSession) throws UnirestException;
 
     RegisterCustomerResponsePayload registerCustomer(HttpSession session) throws UnirestException;
+
+    CreateCustomerResponsePayload createCustomer(HttpSession session) throws UnirestException;
 }

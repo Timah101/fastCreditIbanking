@@ -17,21 +17,23 @@
                 </div>
                 <div class="card-body">
                     <div class="basic-form">
-                        <form method="post" th:object="${createAccountForm3}" th:action="@{/open-account-3}">
+                        <form method="post" th:object="${createAccountForm3}" th:action="@{/open-account-3}" enctype="multipart/form-data">
                             <div class="row mb-4">
                                 <div class="col-sm-6">
                                     <label for="img"> Upload Passport</label>
-                                    <input id="img" type="file" class="form-control" placeholder="" accept="image/png, image/jpeg">
+                                    <input id="img" name="passport" type="file" class="form-control" placeholder=""
+                                           accept="image/*" >
                                 </div>
                                 <div class="col-sm-6 mt-2 mt-sm-0">
                                     <label for="signature"> Upload Signature</label>
-                                    <input id="signature" type="file" class="form-control" accept="image/png, image/jpeg">
+                                    <input id="signature" name="signature" type="file" class="form-control"
+                                           accept="image/*">
                                 </div>
                             </div>
                             <div class="row mb-4">
                                 <div class="col-sm-6">
-                                    <label for="identification"> Upload Identification</label>
-                                    <input id="identification" type="file" class="form-control" accept="image/png, image/jpeg">
+                                    <label for="identification">Identification Type</label>
+                                    <input id="identification" type="text" class="form-control">
                                 </div>
                                 <div class="col-sm-6 mt-2 mt-sm-0">
                                     <label for="id">Identification Number</label>
@@ -41,7 +43,7 @@
                             <div class="row mb-4">
                                 <div class="col-sm-6 mt-2 mt-sm-0">
                                     <label for="other">Upload Utility Bill</label>
-                                    <input id="other" type="file" class="form-control" accept="image/png, image/jpeg">
+                                    <input id="other" type="file" name="utility" class="form-control" accept="image/*">
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="marital">Ippis Number</label>
@@ -58,10 +60,10 @@
                                     <input id="nationality" type="text" class="form-control" placeholder="">
                                 </div>
                             </div>
+                            <div class="text-center mb-4">
+                                <button class="btn-block btn-login">Proceed</button>
+                            </div>
                         </form>
-                        <div class="text-center mb-4">
-                            <button class="btn-block btn-login">Proceed</button>
-                        </div>
                     </div>
                 </div>
             </div>

@@ -2,17 +2,33 @@ package com.iBanking.iBanking.controller;
 
 
 import com.iBanking.iBanking.Forms.Forms;
+import com.iBanking.iBanking.payload.SendOtpResponsePayload;
+import com.iBanking.iBanking.payload.customer.CreateCustomerResponsePayload;
+import com.iBanking.iBanking.services.CustomerService;
+import com.iBanking.iBanking.services.SendOtpService;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.Base64;
 
 @Slf4j
 @Controller
 public class CreateAccountController {
+
+    @Autowired
+    SendOtpService otpService;
+    @Autowired
+    CustomerService customerService;
 
     @GetMapping("/open-account")
     public String showCreateAccount1(Model model) {
@@ -21,8 +37,29 @@ public class CreateAccountController {
     }
 
     @PostMapping("/open-account")
-    public String processCreateAccount1(Model model, Forms createAccountForm1, HttpSession session) {
+    public String processCreateAccount1(Model model, Forms createAccountForm1, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
         session.setAttribute("createAccountForm1", createAccountForm1);
+        String purpose = "AO";
+        final SendOtpResponsePayload sendOtp = otpService.sendOtp(session, purpose);
+        if (sendOtp.getResponseCode().equals("00")) {
+            return "redirect:/confirm-otp";
+        } else {
+            String customErrorMessage = sendOtp.getResponseMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
+            return "redirect:/open-account";
+        }
+
+    }
+
+    @GetMapping("/confirm-otp")
+    public String showConfirmOtp(Model model) {
+        model.addAttribute("confirmOtp", new Forms());
+        return "create-account/create-account-otp";
+    }
+
+    @PostMapping("/confirm-otp")
+    public String processConfirmOtp(Model model, Forms confirmOtp, HttpSession session) {
+        session.setAttribute("confirmOtp", confirmOtp);
 
         return "redirect:/open-account-2";
     }
@@ -47,8 +84,23 @@ public class CreateAccountController {
     }
 
     @PostMapping("/open-account-3")
-    public String processCreateAccount3(Model model, Forms createAccountForm3, HttpSession session) {
+    public String processCreateAccount3(@RequestParam("passport") MultipartFile passport,
+                                        @RequestParam("signature") MultipartFile signature,
+                                        @RequestParam("utility") MultipartFile utility,
+                                        Model model, Forms createAccountForm3, HttpSession session) throws IOException {
         session.setAttribute("createAccountForm3", createAccountForm3);
+
+        try {
+            String passportBase64 = processImageToBase64(passport);
+            String signatureBase64 = processImageToBase64(signature);
+            String utilityBase64 = processImageToBase64(utility);
+            session.setAttribute("passportSession", passportBase64);
+            session.setAttribute("signatureSession", signatureBase64);
+            session.setAttribute("utilitySession", utilityBase64);
+//            log.info("PASSPORT BASE 64 STRING : {}", passportBase64);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return "redirect:/open-account-4";
     }
@@ -60,9 +112,20 @@ public class CreateAccountController {
     }
 
     @PostMapping("/open-account-4")
-    public String processCreateAccount4(Model model, Forms createAccountForm4, HttpSession session) {
+    public String processCreateAccount4(Model model, Forms createAccountForm4, HttpSession session) throws UnirestException {
         session.setAttribute("createAccountForm4", createAccountForm4);
+        final CreateCustomerResponsePayload customer = customerService.createCustomer(session);
+        return "00";
+    }
 
-        return "redirect:/login";
+    private String processImageToBase64(MultipartFile image) throws IOException, IOException {
+        String base64Image = "";
+        if (!image.isEmpty()) {
+            byte[] imageBytes = image.getBytes();
+            // Convert the image bytes to a base64 string
+            base64Image = Base64.getEncoder().encodeToString(imageBytes);
+            return base64Image;
+        }
+        return base64Image;
     }
 }

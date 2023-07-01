@@ -13,6 +13,9 @@
             <div class="card-body">
                 <div class="basic-form">
                     <form method="post" th:object="${createAccountForm1}" th:action="@{/open-account}">
+                        <div th:if="${errorMessage}" class="alert-fast" role="alert">
+                            <span th:text="${errorMessage}">Error message</span>
+                        </div>
                         <div class="mb-2 create-left">
                             <a><img th:src="@{/images/logo.svg}" alt="Fast Credit" width="130" height="90"></a>
                         </div>
@@ -22,18 +25,16 @@
                         </div>
                         <div class="mb-4">
                             <label for="phone" class="label-create"> Phone Number</label>
-                            <input id="phone" type="text" class="form-control" placeholder="">
+                            <input id="phone" type="text" class="form-control" placeholder="" th:field="*{mobileNumber}">
                         </div>
                         <div class="mb-4">
                             <label for="email" class="label-create"> Email</label>
-                            <input id="email" type="text" class="form-control" placeholder="">
+                            <input id="email" type="text" class="form-control" placeholder="" th:field="*{email}">
                         </div>
                         <div class="text-center mb-4">
                             <button class="btn-block btn-login">Proceed</button>
                         </div>
                     </form>
-
-
                 </div>
             </div>
         </div>

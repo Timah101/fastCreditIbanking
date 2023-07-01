@@ -4,41 +4,46 @@ import lombok.Data;
 
 @Data
 public class CreateCustomerWithoutBvnRequestPayload {
-//    {
-//        "mobileNumber": "07089113110",
-//            "lastName": "Ofoleta",
-//            "residenceAddress": "No 10 Adekunle Street Surulere Lagos",
-//            "accountOfficerCode": "210",
-//            "sector": "1000",
-//            "industry": "1",
-//            "bvn": "22141901248",
-//            "officePhoneNumber": "07089113110",
-//            "idType": "Others",
-//            "idNumber": "456789",
-//            "branchCode": "NG0010001",
-//            "maritalStatus": "MARRIED",
-//            "passportPhoto": "base 64 string",
-//            "signatureImage": "Base 64 String",
-//            "requestId": "876543345",
-//            "utilityBill": "Yes",
-//            "utilityBillImage": "Base 64 String",
-//            "title": "MR",
-//            "nationality": "NG",
-//            "residenceState": "LAGOS",
-//            "residenceCity": "Surulere",
-//            "emailAddress": "ab@ac.com",
-//            "spouseName": "Sunrise",
-//            "employmentStatus": "EMPLOYED",
-//            "employerName": "ABC Ltd",
-//            "employerAddress": "Plot 123 Adeola Hopewell Victorai Island",
-//            "employerCity": "Eti-osa",
-//            "occupation": "professional",
-//            "employmentDate": "2043-03-02",
-//            "employmentNumber": "64738",
-//            "loanType": "Fresh Loan",
-//            "kycTier": 3,
-//            "referredBy": "984607",
-//            "otp": "083579",
-//            "deviceId": "dv12345678"
-//    }
+
+    private String mobileNumber;
+    private String firstName;
+    private String lastName;
+    private String otherName;
+    private String residenceAddress;
+    private String accountOfficerCode;
+    private String sector;
+    private String industry;
+    private String dob;
+    private String ippisNumber;
+    private String retirementAge;
+    private String bvn;
+    private String officePhoneNumber;
+    private String idType;
+    private String idNumber;
+    private String branchCode;
+    private String maritalStatus;
+    private String passportPhoto;
+    private String signatureImage;
+    private String requestId;
+    private String utilityBill;
+    private String utilityBillImage;
+    private String title;
+    private String nationality;
+    private String residenceState;
+    private String residenceCity;
+    private String emailAddress;
+    private String spouseName;
+    private String employmentStatus;
+    private String employerName;
+    private String employerAddress;
+    private String employerCity;
+    private String occupation;
+    private String employmentDate;
+    private String employmentNumber;
+    private String loanType = "First Loan";
+    private String kycTier = "3";
+    private String referredBy;
+    private String otp;
+    private String deviceId = "dv12345678";
+
 }

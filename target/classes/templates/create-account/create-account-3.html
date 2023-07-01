@@ -17,51 +17,53 @@
                 </div>
                 <div class="card-body">
                     <div class="basic-form">
-                        <form>
+                        <form method="post" th:object="${createAccountForm3}" th:action="@{/open-account-3}" enctype="multipart/form-data">
                             <div class="row mb-4">
                                 <div class="col-sm-6">
                                     <label for="img"> Upload Passport</label>
-                                    <input id="img" type="file" class="form-control" placeholder="" accept="image/png, image/jpeg">
+                                    <input id="img" name="passport" type="file" class="form-control" placeholder=""
+                                           accept="image/*" >
                                 </div>
                                 <div class="col-sm-6 mt-2 mt-sm-0">
                                     <label for="signature"> Upload Signature</label>
-                                    <input id="signature" type="file" class="form-control" accept="image/png, image/jpeg">
+                                    <input id="signature" name="signature" type="file" class="form-control"
+                                           accept="image/*">
                                 </div>
                             </div>
                             <div class="row mb-4">
                                 <div class="col-sm-6">
-                                    <label for="first-name"> First Name</label>
-                                    <input id="first-name" type="text" class="form-control" placeholder="">
+                                    <label for="identification">Identification Type</label>
+                                    <input id="identification" type="text" class="form-control">
                                 </div>
                                 <div class="col-sm-6 mt-2 mt-sm-0">
-                                    <label for="last-name"> Last Name</label>
-                                    <input id="last-name" type="text" class="form-control" placeholder="">
+                                    <label for="id">Identification Number</label>
+                                    <input id="id" type="text" class="form-control">
                                 </div>
                             </div>
                             <div class="row mb-4">
                                 <div class="col-sm-6 mt-2 mt-sm-0">
-                                    <label for="other"> Other Name</label>
-                                    <input id="other" type="text" class="form-control" placeholder="">
+                                    <label for="other">Upload Utility Bill</label>
+                                    <input id="other" type="file" name="utility" class="form-control" accept="image/*">
                                 </div>
                                 <div class="col-sm-6">
-                                    <label for="marital"> Marital Status</label>
+                                    <label for="marital">Ippis Number</label>
                                     <input id="marital" type="text" class="form-control" placeholder="">
                                 </div>
                             </div>
                             <div class="row mb-4">
                                 <div class="col-sm-6">
-                                    <label for="dob"> Date Of Birth</label>
+                                    <label for="dob"> Residence State</label>
                                     <input id="dob" type="date" class="form-control" placeholder="">
                                 </div>
                                 <div class="col-sm-6">
-                                    <label for="nationality"> Nationality</label>
+                                    <label for="nationality">Resident City </label>
                                     <input id="nationality" type="text" class="form-control" placeholder="">
                                 </div>
                             </div>
+                            <div class="text-center mb-4">
+                                <button class="btn-block btn-login">Proceed</button>
+                            </div>
                         </form>
-                        <div class="text-center mb-4">
-                            <button class="btn-block btn-login">Proceed</button>
-                        </div>
                     </div>
                 </div>
             </div>

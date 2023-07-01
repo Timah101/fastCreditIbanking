@@ -17,11 +17,11 @@
                 </div>
                 <div class="card-body">
                     <div class="basic-form">
-                        <form>
+                        <form method="post" th:object="${createAccountForm2}" th:action="@{/open-account-2}">
                             <div class="row mb-4">
                                 <div class="col-sm-6">
                                     <label for="title"> Title</label>
-                                    <input id="title" type="text" class="form-control" placeholder="">
+                                    <input id="title" type="text" class="form-control" placeholder="" th:field="*{title}">
                                 </div>
                                 <div class="col-sm-6 mt-2 mt-sm-0">
                                     <label for="mobile"> Gender</label>
@@ -31,37 +31,37 @@
                             <div class="row mb-4">
                                 <div class="col-sm-6">
                                     <label for="first-name"> First Name</label>
-                                    <input id="first-name" type="text" class="form-control" placeholder="">
+                                    <input id="first-name" type="text" class="form-control" placeholder="" th:field="*{firstName}">
                                 </div>
                                 <div class="col-sm-6 mt-2 mt-sm-0">
                                     <label for="last-name"> Last Name</label>
-                                    <input id="last-name" type="text" class="form-control" placeholder="">
+                                    <input id="last-name" type="text" class="form-control" placeholder="" th:field="*{lastName}">
                                 </div>
                             </div>
                             <div class="row mb-4">
                                 <div class="col-sm-6 mt-2 mt-sm-0">
                                     <label for="other"> Other Name</label>
-                                    <input id="other" type="text" class="form-control" placeholder="">
+                                    <input id="other" type="text" class="form-control" placeholder="" th:field="*{otherName}">
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="marital"> Marital Status</label>
-                                    <input id="marital" type="text" class="form-control" placeholder="">
+                                    <input id="marital" type="text" class="form-control" placeholder="" th:field="*{maritalStatus}">
                                 </div>
                             </div>
                             <div class="row mb-4">
                                 <div class="col-sm-6">
                                     <label for="dob"> Date Of Birth</label>
-                                    <input id="dob" type="date" class="form-control" placeholder="">
+                                    <input id="dob" type="date" class="form-control" placeholder="" th:field="*{dob}">
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="nationality"> Nationality</label>
-                                    <input id="nationality" type="text" class="form-control" placeholder="">
+                                    <input id="nationality" type="text" class="form-control" placeholder="" th:field="*{nationality}">
                                 </div>
                             </div>
+                            <div class="text-center mb-4">
+                                <button class="btn-block btn-login">Proceed</button>
+                            </div>
                         </form>
-                        <div class="text-center mb-4">
-                            <button class="btn-block btn-login">Proceed</button>
-                        </div>
                     </div>
                 </div>
             </div>

@@ -8,6 +8,8 @@ public class ApiPaths {
     public static final String CUSTOMER_DETAILS = "customerService/details";
 
     public static final String CUSTOMER_REGISTER = "customerService/register";
+
+    public static final String CUSTOMER_CREATE = "customerService/create/individual";
     public static final String CUSTOMER_LOGIN = "customerService/authenticate/user";
 
     public static final String ACCOUNT_DETAILS = "customerService/account/details";

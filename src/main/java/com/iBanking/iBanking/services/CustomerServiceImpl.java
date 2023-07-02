@@ -134,7 +134,6 @@ public class CustomerServiceImpl implements CustomerService {
         CreateCustomerResponsePayload createCustomer;
         CreateCustomerWithoutBvnRequestPayload requestPayload = new CreateCustomerWithoutBvnRequestPayload();
         Forms createForm1 = (Forms) session.getAttribute("createAccountForm1");
-        Forms createOtp = (Forms) session.getAttribute("confirmOtp");
         Forms createForm2 = (Forms) session.getAttribute("createAccountForm2");
         Forms createForm3 = (Forms) session.getAttribute("createAccountForm3");
         Forms createForm4 = (Forms) session.getAttribute("createAccountForm4");
@@ -143,8 +142,19 @@ public class CustomerServiceImpl implements CustomerService {
         String utility = (String) session.getAttribute("utilitySession");
         requestPayload.setMobileNumber(createForm1.getMobileNumber());
         requestPayload.setEmailAddress(createForm1.getEmail());
-        requestPayload.setOtp(createOtp.getOtp());
+        String createOtpLastPage = (String) session.getAttribute("createOtpLastPage");
+        String createOtpFirstPage = (String) session.getAttribute("confirmOtp");
+        String otp;
+        System.out.println(" OTP IN FIRST PAGE : " + createOtpFirstPage);
+        System.out.println(" OTP IN LAST PAGE : " + createOtpLastPage);
+        if (createOtpLastPage.isEmpty()) {
+            otp = createOtpFirstPage;
+        } else {
+            otp = createOtpLastPage;
+        }
+        requestPayload.setOtp(otp);
         requestPayload.setTitle(createForm2.getTitle());
+        requestPayload.setGender(createForm2.getGender());
         requestPayload.setFirstName(createForm2.getFirstName());
         requestPayload.setLastName(createForm2.getLastName());
         requestPayload.setOtherName(createForm2.getOtherName());
@@ -180,8 +190,8 @@ public class CustomerServiceImpl implements CustomerService {
 
         //CALL THE CREATE CUSTOMER ENDPOINT
         String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
-        log.info("CUSTOMER DETAILS PAYLOAD D {}", requestPayloadJson);
-        HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + CUSTOMER_REGISTER)
+        log.info("CREATE CUSTOMER REQUEST PAYLOAD {}", requestPayloadJson);
+        HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + CUSTOMER_CREATE)
                 .header("accept", "application/json")
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + accessToken)
@@ -191,7 +201,7 @@ public class CustomerServiceImpl implements CustomerService {
             createCustomer = new CreateCustomerResponsePayload();
 //            customerDetailsResponse.setResponseCode("500");
 //            customerDetailsResponse.setResponseMessage("Error Occured");
-            log.info(" ERROR WHILE REGISTERING CUSTOMER DETAILS {}", jsonResponse.getStatus());
+            log.info(" ERROR WHILE CREATE CUSTOMER {}", jsonResponse.getStatus());
             return createCustomer;
         }
         // PASS ENCRYPTED RESPONSE FROM CUSTOMER DETAILS TO DECRYPT API
@@ -200,8 +210,8 @@ public class CustomerServiceImpl implements CustomerService {
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
         createCustomer = decryptPayload(decryptRequestPayload, CreateCustomerResponsePayload.class);
         //LOG REQUEST AND RESPONSE
-        log.info("REGISTER CUSTOMER REQUEST PAYLOAD : {}", requestPayload);
-        log.info("REGISTER CUSTOMER RESPONSE PAYLOAD : {}", gson.toJson(createCustomer));
+
+        log.info("CREATE CUSTOMER RESPONSE PAYLOAD : {}", gson.toJson(createCustomer));
         session.setAttribute("registerCustomerResponse", createCustomer);
         return createCustomer;
     }

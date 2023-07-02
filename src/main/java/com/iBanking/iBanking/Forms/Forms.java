@@ -41,6 +41,7 @@ public class Forms {
     private String utilityBill;
     private String utilityBillImage;
     private String title;
+    private String gender;
     private String nationality;
     private String residenceState;
     private String residenceCity;

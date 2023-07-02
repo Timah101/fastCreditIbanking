@@ -17,12 +17,13 @@
                 </div>
                 <div class="card-body">
                     <div class="basic-form">
-                        <form method="post" th:object="${createAccountForm3}" th:action="@{/open-account-3}" enctype="multipart/form-data">
+                        <form method="post" th:object="${createAccountForm3}" th:action="@{/open-account-3}"
+                              enctype="multipart/form-data">
                             <div class="row mb-4">
                                 <div class="col-sm-6">
                                     <label for="img"> Upload Passport</label>
                                     <input id="img" name="passport" type="file" class="form-control" placeholder=""
-                                           accept="image/*" >
+                                           accept="image/*">
                                 </div>
                                 <div class="col-sm-6 mt-2 mt-sm-0">
                                     <label for="signature"> Upload Signature</label>
@@ -33,7 +34,13 @@
                             <div class="row mb-4">
                                 <div class="col-sm-6">
                                     <label for="identification">Identification Type</label>
-                                    <input id="identification" type="text" class="form-control">
+                                    <select id="identification" class="default-select form-control wide mb-3" th:field="*{idType}" required>
+                                        <option value=""> -- select an option -- </option>
+                                        <option value="National ID">NIN</option>
+                                        <option value="Driver's License">Driver's License</option>
+                                        <option value="PVC">Permanent Voter's Card</option>
+                                        <option value="International Passport">International Passport</option>
+                                    </select>
                                 </div>
                                 <div class="col-sm-6 mt-2 mt-sm-0">
                                     <label for="id">Identification Number</label>
@@ -47,17 +54,17 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="marital">Ippis Number</label>
-                                    <input id="marital" type="text" class="form-control" placeholder="">
+                                    <input id="marital" type="text" class="form-control" placeholder="" th:field="*{ippisNumber}" >
                                 </div>
                             </div>
                             <div class="row mb-4">
                                 <div class="col-sm-6">
                                     <label for="dob"> Residence State</label>
-                                    <input id="dob" type="date" class="form-control" placeholder="">
+                                    <input id="dob" type="text" class="form-control" placeholder="" th:field="*{residenceState}" >
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="nationality">Resident City </label>
-                                    <input id="nationality" type="text" class="form-control" placeholder="">
+                                    <input id="nationality" type="text" class="form-control" placeholder="" th:field="*{residenceCity}" >
                                 </div>
                             </div>
                             <div class="text-center mb-4">

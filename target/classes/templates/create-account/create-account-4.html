@@ -6,6 +6,11 @@
     <title>Create Account</title></head>
 <body>
 
+
+<div class="loader" id="loader">
+    <div class="loader-inner"></div>
+</div>
+
 <div class="container-fluid">
 
     <div class="row">
@@ -17,58 +22,82 @@
                 </div>
                 <div class="card-body">
                     <div class="basic-form">
-                        <form id="myForm" method="post" th:object="${createAccountForm4}" th:action="@{/open-account-4}">
+                        <form id="myForm" method="post" th:object="${createAccountForm4}"
+                              th:action="@{/create-account}">
+                            <div id="resultMessage" class="alert-fast" style="display:none; background: red"></div>
                             <div class="row mb-4">
                                 <div class="col-sm-6">
                                     <label for="title"> Employment Status</label>
-                                    <input id="title" type="text" class="form-control" placeholder="">
+                                    <input id="title" type="text" name="employerStatus" class="form-control"
+                                           placeholder="">
                                 </div>
                                 <div class="col-sm-6 mt-2 mt-sm-0">
                                     <label for="mobile"> Employer Name</label>
-                                    <input id="mobile" type="text" class="form-control" placeholder="">
+                                    <input id="mobile" type="text" name="employerName" class="form-control"
+                                           placeholder="">
                                 </div>
                             </div>
                             <div class="row mb-4">
                                 <div class="col-sm-6">
                                     <label for="first-name"> Employer Address</label>
-                                    <input id="first-name" type="text" class="form-control" placeholder="">
+                                    <input id="first-name" type="text" name="employerAddress" class="form-control"
+                                           placeholder="">
                                 </div>
                                 <div class="col-sm-6 mt-2 mt-sm-0">
                                     <label for="last-name"> Employer City</label>
-                                    <input id="last-name" type="text" class="form-control" placeholder="">
+                                    <input id="last-name" type="text" name="employerCity" class="form-control"
+                                           placeholder="">
                                 </div>
                             </div>
                             <div class="row mb-4">
                                 <div class="col-sm-6 mt-2 mt-sm-0">
                                     <label for="other"> Occupation</label>
-                                    <input id="other" type="text" class="form-control" placeholder="">
+                                    <input id="other" type="text" name="occupation" class="form-control" placeholder="">
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="marital"> Employment Date</label>
-                                    <input id="marital" type="text" class="form-control" placeholder="">
+                                    <input id="marital" type="date" name="employmentDate" class="form-control"
+                                           placeholder="">
                                 </div>
                             </div>
                             <div class="row mb-4">
                                 <div class="col-sm-6">
                                     <label for="dob"> Retirement Date</label>
-                                    <input id="dob" type="date" class="form-control" placeholder="">
+                                    <input id="dob" type="date" name="retirementDate" class="form-control"
+                                           placeholder="">
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="nationality"> Referred By</label>
-                                    <input id="nationality" type="text" class="form-control" placeholder="">
+                                    <input id="nationality" type="text" name="referredBy" class="form-control"
+                                           placeholder="">
                                 </div>
+                            </div>
+                            <div id="resultSection" style="display: none;" class="mb-4">
+                                <!--                                <div class="row">-->
+
+                                <!--                                    <div class="col-sm-4">-->
+                                <!--                                        <div id="resultMessage" class="alert-fast"></div>-->
+                                <!--                                    </div>-->
+                                <!--                                    <div class="col-sm-3">-->
+
+                                <!--                                    </div>-->
+                                <!--                                </div>-->
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label for="pin" style="color: white">p</label>
+                                        <button class="btn-block btn-login" id="resendButton">Resend OTP</button>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="pin"> Enter Otp</label>
+                                        <input id="pin" type="text" name="otp" class="form-control otp-pin-input"
+                                               maxlength="6"
+                                               th:field="*{otp}">
+                                    </div>
+                                </div>
+
                             </div>
                             <div class="text-center mb-4">
                                 <button class="btn-block btn-login">Proceed</button>
-                            </div>
-
-                            <div id="resultSection" style="display: none;">
-                                <div class="col-sm-6">
-                                    <label for="pin"> Enter PIN</label>
-                                    <input id="pin" type="text" class="form-control" placeholder="">
-                                </div>
-                                <h2 id="resultMessage"></h2>
-                                <button id="retryButton" style="display: none;">Retry</button>
                             </div>
                         </form>
                     </div>
@@ -87,45 +116,108 @@
 <script>
     $(document).ready(function () {
         $('#myForm').submit(function (event) {
-            event.preventDefault(); // Prevent default form submission
-
+            event.preventDefault();
             const form = $(this);
-
+            showLoader();
             $.ajax({
                 type: 'POST',
                 url: form.attr('action'),
                 data: form.serialize(),
                 success: function (response) {
-                    if(response.message === "00"){
-                        window.location.href = '/success'; // Redirect to success page
-                    }
-                    else {
+                    if (response === "00") {
+                        window.location.href = '/register';
+                    } else if (response === "03") {
+                        hideLoader();
+                        showResendButton();
                         const resultSection = $('#resultSection');
                         const resultMessage = $('#resultMessage');
                         const retryButton = $('#retryButton');
-
-                        resultMessage.text(response.responseText);
+                        showErrorMessage();
+                        resultMessage.text("The OTP  is invalid. Enter a valid OTP");
                         resultSection.show();
                         retryButton.show();
+                    } else {
+                        console.log(response + " the message")
+                        hideLoader();
+                        showErrorMessage();
+                        const resultMessage = $('#resultMessage');
+                        resultMessage.text(response);
                     }
-                    console.log(response  + " register response")
-                    // Handle successful response
-
                 },
                 error: function (xhr) {
-                    // Handle error response
+                    hideLoader();
                     const resultSection = $('#resultSection');
                     const resultMessage = $('#resultMessage');
                     const retryButton = $('#retryButton');
-
                     resultMessage.text(xhr.responseText);
                     resultSection.show();
                     retryButton.show();
                 }
             });
         });
+
+        $('#resendButton').click(function (event) {
+            event.preventDefault(); // Prevent default button click
+
+            // Hide "Resend OTP" button
+            hideResendButton();
+
+            hideErrorMessage();
+
+            // Show loader
+            showLoader();
+
+
+            sendOTP();
+        });
     });
 
+    function showResendButton() {
+        const resendButton = $('#resendButton');
+        resendButton.show();
+    }
+
+    function hideErrorMessage() {
+        const resultMessage = $('#resultMessage')
+        resultMessage.hide();
+    }
+
+    function showErrorMessage() {
+        const resultMessage = $('#resultMessage')
+        resultMessage.show();
+    }
+
+    function hideResendButton() {
+        const resendButton = $('#resendButton');
+        resendButton.hide();
+    }
+
+    function showLoader() {
+        const loader = $('#loader');
+        loader.show();
+    }
+
+    function hideLoader() {
+        const loader = $('#loader');
+        loader.hide();
+    }
+
+
+    //This function resends OTP
+    function sendOTP() {
+        showLoader();
+        $.ajax({
+            type: 'POST',
+            url: '/resend-otp',
+            success: function (response) {
+                // Handle success
+                hideLoader()
+            },
+            error: function (xhr) {
+                // Handle error
+            }
+        });
+    }
 </script>
 
 </body>

@@ -619,6 +619,12 @@ header {
     border-radius: 0.3rem;
 }
 
+.otp-pin-input {
+    align-items: center;
+    text-align: center;
+    width: 200px
+}
+
 .btn-login {
     padding: 0.5rem 1.5rem;
     border-radius: 0.3rem;
@@ -638,7 +644,6 @@ header {
 }
 
 .card-title-create {
-
     font-weight: bold;
     color: black;
     text-transform: capitalize;

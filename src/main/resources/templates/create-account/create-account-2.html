@@ -21,11 +21,24 @@
                             <div class="row mb-4">
                                 <div class="col-sm-6">
                                     <label for="title"> Title</label>
-                                    <input id="title" type="text" class="form-control" placeholder="" th:field="*{title}">
+                                    <select id="title" class="default-select form-control wide mb-3" th:field="*{title}" required>
+                                        <option value=""> -- select an option -- </option>
+                                        <option value="Mr">Mr</option>
+                                        <option value="Mrs">Mrs</option>
+                                        <option value="Miss">Miss</option>
+                                        <option value="Doctor">Doctor</option>
+                                        <option value="Alhaji">Alhaji</option>
+                                        <option value="Alhaja">Alhaja</option>
+                                        <option value="Pastor">Pastor</option>
+                                    </select>
                                 </div>
                                 <div class="col-sm-6 mt-2 mt-sm-0">
-                                    <label for="mobile"> Gender</label>
-                                    <input id="mobile" type="text" class="form-control" placeholder="">
+                                    <label for="gender"> Gender</label>
+                                    <select id="gender" class="default-select form-control wide mb-3" th:field="*{gender}" required>
+                                        <option value=""> -- select an option -- </option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="row mb-4">

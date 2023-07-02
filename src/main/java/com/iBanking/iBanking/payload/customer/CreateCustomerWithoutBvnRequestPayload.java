@@ -8,6 +8,7 @@ public class CreateCustomerWithoutBvnRequestPayload {
     private String mobileNumber;
     private String firstName;
     private String lastName;
+    private String gender;
     private String otherName;
     private String residenceAddress;
     private String accountOfficerCode;

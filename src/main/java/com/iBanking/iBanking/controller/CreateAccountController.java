@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -52,14 +53,17 @@ public class CreateAccountController {
     }
 
     @GetMapping("/confirm-otp")
-    public String showConfirmOtp(Model model) {
+    public String showConfirmOtp(Model model, HttpSession session) {
         model.addAttribute("confirmOtp", new Forms());
+        Forms mobileNumberForm = (Forms) session.getAttribute("createAccountForm1");
+        model.addAttribute("mobileNumberForm", mobileNumberForm);
         return "create-account/create-account-otp";
     }
 
     @PostMapping("/confirm-otp")
-    public String processConfirmOtp(Model model, Forms confirmOtp, HttpSession session) {
-        session.setAttribute("confirmOtp", confirmOtp);
+    public String processConfirmOtp(@RequestParam("otp") String otp,
+                                    Model model, Forms confirmOtp, HttpSession session) {
+        session.setAttribute("confirmOtp", otp);
 
         return "redirect:/open-account-2";
     }
@@ -112,10 +116,35 @@ public class CreateAccountController {
     }
 
     @PostMapping("/open-account-4")
-    public String processCreateAccount4(Model model, Forms createAccountForm4, HttpSession session) throws UnirestException {
-        session.setAttribute("createAccountForm4", createAccountForm4);
-        final CreateCustomerResponsePayload customer = customerService.createCustomer(session);
+    public String processCreateAccount4(Model model, HttpSession session) throws UnirestException {
+//        session.setAttribute("createAccountForm4", createAccountForm4);
+//        final CreateCustomerResponsePayload customer = customerService.createCustomer(session);
         return "00";
+    }
+
+    @PostMapping("/create-account")
+    @ResponseBody
+    public String CreateAccount(@RequestParam("employerStatus") String employerStatus,
+                                @RequestParam("employerName") String employerName,
+                                @RequestParam("employerAddress") String employerAddress,
+                                @RequestParam("employerCity") String employerCity,
+                                @RequestParam("occupation") String occupation,
+                                @RequestParam("employmentDate") String employmentDate,
+                                @RequestParam("retirementDate") String retirementDate,
+                                @RequestParam("referredBy") String referredBy,
+                                @RequestParam("otp") String otp,
+                                Forms createAccountForm4, HttpSession session) throws UnirestException {
+        session.setAttribute("createAccountForm4", createAccountForm4);
+        session.setAttribute("createOtpLastPage", otp);
+        final CreateCustomerResponsePayload customer = customerService.createCustomer(session);
+        if (customer.getResponseCode().equals("00")) {
+            return "00";
+        } else if (customer.getResponseCode().equals("03")) {
+            return customer.getResponseCode();
+        } else {
+            return customer.getResponseMessage();
+        }
+
     }
 
     private String processImageToBase64(MultipartFile image) throws IOException, IOException {
@@ -127,5 +156,14 @@ public class CreateAccountController {
             return base64Image;
         }
         return base64Image;
+    }
+
+    //This is used to resend OTP
+    @PostMapping("/resend-otp")
+    @ResponseBody
+    public String sendOtp(HttpSession session) throws UnirestException {
+        String purpose = "AO";
+        final SendOtpResponsePayload sendOtp = otpService.sendOtp(session, purpose);
+        return sendOtp.getResponseMessage();
     }
 }

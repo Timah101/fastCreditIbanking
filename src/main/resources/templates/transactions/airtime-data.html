@@ -16,7 +16,6 @@
 
 <div class="main-send-money">
     <div class="row no-gutters">
-
         <div id="errorMessage" th:if="${errorMessage}" class="alert-fast" role="alert" style="width: 400px">
             <span th:text="${errorMessage}">Error message</span>
         </div>
@@ -222,7 +221,7 @@
                         <div class="form-confirm-money">
                             <div class="confirm-money-block">
                                 <div class="confirm-block">
-                                    <form method="post" th:object="${airtimeFormPin}" th:action="@{/airtime}">
+                                    <form method="post" id="myForm" th:object="${airtimeFormPin}" th:action="@{/airtime}">
                                         <div class="mb-4">
                                             <div class="mb-2"><span>Name</span> <span class="float-right">Babajide Balogun</span>
                                             </div>
@@ -235,8 +234,8 @@
                                         </div>
                                         <div class="mb-4">
                                             <label for="pin" class="confirm-pin">Enter PIN</label>
-                                            <input id="pin" type="password" class="" maxlength="4"
-                                                   style="align-items: center; text-align: center; width: 200px"
+                                            <input id="pin" type="password" class="otp-pin-input" maxlength="4"
+                                                   style=""
                                                    placeholder="" th:field="*{pin}">
                                         </div>
                                         <div class="mb-4">
@@ -358,6 +357,50 @@
 </script>
 
 <script>
+    $(document).ready(function () {
+        $('#myForm').submit(function (event) {
+            event.preventDefault();
+            const form = $(this);
+            showLoader();
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (response) {
+                    if (response === "00") {
+                        window.location.href = '/register';
+                    } else if (response === "03") {
+                        hideLoader();
+                        showResendButton();
+                        const resultSection = $('#resultSection');
+                        const resultMessage = $('#resultMessage');
+                        const retryButton = $('#retryButton');
+                        showErrorMessage();
+                        resultMessage.text("The OTP  is invalid. Enter a valid OTP");
+                        resultSection.show();
+                        retryButton.show();
+                    } else {
+                        console.log(response + " the message")
+                        hideLoader();
+                        showErrorMessage();
+                        const resultMessage = $('#resultMessage');
+                        resultMessage.text(response);
+                    }
+                },
+                error: function (xhr) {
+                    hideLoader();
+                    const resultSection = $('#resultSection');
+                    const resultMessage = $('#resultMessage');
+                    const retryButton = $('#retryButton');
+                    resultMessage.text(xhr.responseText);
+                    resultSection.show();
+                    retryButton.show();
+                }
+            });
+        });
+
+    });
+
 
     function toggleAirtime() {
         const contentDiv = document.getElementById("airtime");

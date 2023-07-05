@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragments :: header}">
+    <title>Create Account</title></head>
+<body>
+
+<div class="loader" id="loader">
+    <div class="loader-inner"></div>
+</div>
+<header th:insert="~{dashboard :: headerfast}"></header>
+<div th:insert="~{dashboard :: sidebarfast}"></div>
+
+<div class="text-center">
+    <div class="text-center">
+        <div class="card-fast-login">
+
+            <div class="card-body">
+                <div class="basic-form">
+                    <form method="post">
+                        <div th:if="${errorMessage}" class="alert-fast" role="alert">
+                            <span th:text="${errorMessage}">Error message</span>
+                        </div>
+                        <div class="mb-2">
+                            <a><img th:src="@{/images/logo.svg}" alt="Fast Credit" width="150" height="100"></a>
+                        </div>
+
+                        <div class=" register-left">Profile
+                        </div>
+                        <div class="border-rectangle"></div>
+
+                        <div class="mb-4">
+                            <a th:href="@{/reset}" onclick="showLoader()">Password Reset</a>
+                        </div>
+                        <div class="mb-4">
+                            <a th:href="@{/reset}" onclick="showLoader()">Pin Reset</a>
+                        </div>
+                        <div class="mb-4">
+                            <a th:href="@{/reset}" onclick="showLoader()">Security Question Reset</a>
+                        </div>
+                        <div class="mb-4">
+                            <a th:href="@{/login}" onclick="showLoader()">Log Out</a>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const loader = document.getElementById('loader');
+
+        function showLoader() {
+            loader.style.display = 'block'; // Show the loader
+        }
+
+        function hideLoader() {
+            loader.style.display = 'none'; // Hide the loader
+        }
+
+        const links = document.getElementsByTagName('a');
+        for (let i = 0; i < links.length; i++) {
+            links[i].addEventListener('click', showLoader); // Show the loader when a link is clicked
+        }
+
+        window.addEventListener('load', hideLoader); // Hide the loader when the page finishes loading
+    });
+</script>
+</body>
+</html>

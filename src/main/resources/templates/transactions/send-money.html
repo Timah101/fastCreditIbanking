@@ -112,7 +112,7 @@
                                             <label for="select-account" class="label-span">Select Account</label>
                                             <select id="select-account" class="form-control-send-money mb-3"
                                                     th:field="*{debitAccount}">
-                                                <option disabled hidden selected value="0"> -- Select Account --
+                                                <option disabled selected value="0"> -- Select Account --
                                                 </option>
                                                 <option style="background-color: #D1D0CE"
                                                         th:each="accountBalance : ${accountBalanceResponse}"
@@ -122,7 +122,7 @@
                                         </div>
                                         <div class="mb-4">
                                             <label for="account_local" class="label-span">Account Number</label> <span
-                                                id="localName" class="float-right"></span>
+                                                id="localName" class="float-right" th:field="*{beneficiaryName}"></span>
                                             <input id="account_local" class="form-control-send-money" maxlength="10"
                                                    placeholder="" th:field="*{creditAccount}">
                                         </div>
@@ -137,7 +137,8 @@
                                                    th:field="*{narration}">
                                         </div>
                                         <div class="mb-4">
-                                            <input class="submit-send-money" type="submit" placeholder="Proceed">
+                                            <input id="submit-local" class="submit-send-money" type="submit"
+                                                   placeholder="Proceed">
                                         </div>
 
                                     </form>
@@ -180,8 +181,7 @@
                                             <label for="select-account" class="label-span">Select Account</label>
                                             <select id="select-account-others" class="form-control-send-money mb-3"
                                                     th:field="*{debitAccount}">
-                                                <option disabled selected value="0"> -- Select Account --
-                                                </option>
+                                                <option selected value="0"> -- Select Account --</option>
                                                 <option style="background-color: #D1D0CE"
                                                         th:each="accountBalance : ${accountBalanceResponse}"
                                                         th:text="${accountBalance.getAccountNumber()}"
@@ -189,11 +189,10 @@
                                             </select>
                                         </div>
                                         <div class="mb-4">
-                                            <label for="select-bank-others" class="label-span">Select Bank</label> <span
-                                                id="othersName" class="float-right"></span>
+                                            <label for="select-bank-others" class="label-span">Select Bank</label>
                                             <select id="select-bank-others" class="form-control-send-money mb-3"
                                                     th:field="*{beneficiaryBank}">
-                                                <option disabled hidden selected value="0"> -- Select Bank --</option>
+                                                <option disabled selected value="0"> -- Select Bank --</option>
                                                 <option style="background-color: #D1D0CE"
                                                         th:each="bankList : ${bankListResponse}"
                                                         th:text="${bankList.getBank()}"
@@ -202,7 +201,8 @@
                                         </div>
                                         <div class="mb-4">
                                             <label for="account_others" class="label-span">Account Number</label> <span
-                                                id="otherName" class="float-right"></span>
+                                                id="othersName" class="float-right"
+                                                th:field="*{beneficiaryName}"></span>
                                             <input id="account_others" class="form-control-send-money" maxlength="10"
                                                    placeholder="" th:field="*{creditAccount}">
                                         </div>
@@ -217,7 +217,8 @@
                                                    th:field="*{narration}">
                                         </div>
                                         <div class="mb-4">
-                                            <input class="submit-send-money" type="submit" placeholder="Proceed">
+                                            <input id="submit-others" class="submit-send-money" type="submit"
+                                                   placeholder="Proceed">
                                         </div>
 
                                     </form>
@@ -248,23 +249,33 @@
                         <div class="form-confirm-money">
                             <div class="confirm-money-block">
                                 <div class="confirm-block">
-                                    <form method="post" th:object="${sendMoneyLocalFormPin}"
+                                    <form id="myForm" method="post" th:object="${sendMoneyLocalFormPin}"
                                           th:action="@{/send-money/local}">
-                                        <div class="mb-4">
-                                            <div class="mb-2"><span>Name</span> <span class="float-right">Babajide Balogun</span>
+                                        <div id="resultMessage" class="alert-fast" style="display:none;"></div>
+                                        <div class="mb-4" th:object="${localTxnData}">
+                                            <div class="mb-2"><span>Transaction Type</span> <span class="float-right">Funds Transfer</span>
+                                            </div>
+                                            <div class="mb-2"><span>Account Number</span> <span class="float-right"
+                                                                                                th:text="${localTxnData.getCreditAccount()}"></span>
+                                            </div>
+                                            <div class="mb-2"><span>Name</span> <span class="float-right"
+                                                                                      th:text="${localTxnData.getBeneficiaryName()}"></span>
                                             </div>
                                             <div class="mb-2"><span>Bank</span> <span
-                                                    class="float-right">Access Bank</span></div>
-                                            <div class="mb-2"><span>Amount</span> <span
-                                                    class="float-right">N50,000</span></div>
-                                            <div class="mb-2"><span>Amount</span> <span
-                                                    class="float-right">N50,000</span></div>
+                                                    class="float-right">Fast Credit</span>
+                                            </div>
+                                            <div class="mb-2"><span>Amount</span> <span class="float-right"
+                                                                                        th:text="${localTxnData.getAmount()}"></span>
+                                            </div>
+                                            <div class="mb-2"><span>Date</span> <span class="float-right"
+                                                                                      th:text="${localTxnData.getDate()}"></span>
+                                            </div>
                                         </div>
                                         <div class="mb-4">
                                             <label for="pin" class="confirm-pin">Enter PIN</label>
                                             <input id="pin" type="password" class=""
                                                    style="align-items: center; text-align: center; width: 200px"
-                                                   maxlength="4"
+                                                   maxlength="6"
                                                    placeholder="" th:field="*{pin}">
                                         </div>
                                         <div class="mb-4">
@@ -298,27 +309,38 @@
                         <div class="form-confirm-money">
                             <div class="confirm-money-block">
                                 <div class="confirm-block">
-                                    <form method="post" th:object="${sendMoneyOthersPin}"
+                                    <form id="formData" method="post" th:object="${sendMoneyOthersPin}"
                                           th:action="@{/send-money/others}">
-                                        <div class="mb-4">
-                                            <div class="mb-2"><span>Name</span> <span class="float-right">Babajide Balogun</span>
+                                        <div id="resultMessageData" class="alert-fast" style="display:none;"></div>
+                                        <div class="mb-4" th:object="${othersTxnData}">
+                                            <div class="mb-2"><span>Transaction Type</span> <span class="float-right">Funds Transfer</span>
+                                            </div>
+                                            <div class="mb-2"><span>Account Number</span> <span class="float-right"
+                                                                                                th:text="${othersTxnData.getCreditAccount()}"></span>
+                                            </div>
+                                            <div class="mb-2"><span>Name</span> <span class="float-right"
+                                                                                      th:text="${othersTxnData.getBeneficiaryName()}"></span>
                                             </div>
                                             <div class="mb-2"><span>Bank</span> <span
-                                                    class="float-right">Access Bank</span></div>
-                                            <div class="mb-2"><span>Amount</span> <span
-                                                    class="float-right">N50,000</span></div>
-                                            <div class="mb-2"><span>Amount</span> <span
-                                                    class="float-right">N50,000</span></div>
+                                                    class="float-right">Fast Credit</span>
+                                            </div>
+                                            <div class="mb-2"><span>Amount</span> <span class="float-right"
+                                                                                        th:text="${othersTxnData.getAmount()}"></span>
+                                            </div>
+                                            <div class="mb-2"><span>Date</span> <span class="float-right"
+                                                                                      th:text="${othersTxnData.getDate()}"></span>
+                                            </div>
                                         </div>
                                         <div class="mb-4">
                                             <label for="pin" class="confirm-pin">Enter PIN</label>
                                             <input id="pin-others" type="password" class=""
                                                    style="align-items: center; text-align: center; width: 200px"
-                                                   maxlength="4"
+                                                   maxlength="6"
                                                    placeholder="" th:field="*{pin}">
                                         </div>
                                         <div class="mb-4">
-                                            <input class="submit-comfirm-money" type="submit" placeholder="Submit">
+                                            <input id="" class="submit-comfirm-money" type="submit"
+                                                   placeholder="Submit">
                                         </div>
 
                                     </form>
@@ -337,6 +359,7 @@
 </div>
 
 
+<!--//SHOW OR HIDE LOADER-->
 <script th:inline="javascript">
     function showLoader() {
         const loader = document.getElementById('loader');
@@ -348,32 +371,129 @@
         loader.style.display = 'none';
     }
 </script>
+
+<!--//SUBMIT LOCAL FORM-->
 <script>
+    //submit local form
+    $(document).ready(function () {
+        $('#myForm').submit(function (event) {
+            event.preventDefault();
+            const form = $(this);
+            showLoader();
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (response) {
+                    if (response === "00") {
+                        window.location.href = '/success'; //change to success page
+                    } else {
+                        hideLoader();
+
+                        const resultSection = $('#resultSection');
+                        const resultMessage = $('#resultMessage');
+                        const retryButton = $('#retryButton');
+                        showErrorMessage();
+                        resultMessage.text(response);
+                        resultSection.show();
+                        retryButton.show();
+                    }
+                },
+                error: function (xhr) {
+                    hideLoader();
+                    const resultSection = $('#resultSection');
+                    const resultMessage = $('#resultMessage');
+                    const retryButton = $('#retryButton');
+                    resultMessage.text(xhr.responseText);
+                    resultSection.show();
+                    retryButton.show();
+                }
+            });
+        });
+    });
+
+
+    //Submit others form
+    $(document).ready(function () {
+        $('#formData').submit(function (event) {
+            event.preventDefault();
+            const form = $(this);
+            showLoader();
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (response) {
+                    if (response === "00") {
+                        window.location.href = '/success'; //change to success page
+                    } else {
+                        hideLoader();
+                        const resultSection = $('#resultSection');
+                        const resultMessage = $('#resultMessageData');
+                        const retryButton = $('#retryButton');
+                        showErrorMessageData();
+                        resultMessage.text(response);
+                        resultSection.show();
+                        retryButton.show();
+                    }
+                },
+                error: function (xhr) {
+                    hideLoader();
+                    const resultSection = $('#resultSection');
+                    const resultMessage = $('#resultMessageData');
+                    const retryButton = $('#retryButton');
+                    resultMessage.text(xhr.responseText);
+                }
+            });
+        });
+    });
+
+    function showErrorMessage() {
+        const resultMessage = $('#resultMessage')
+        resultMessage.show();
+    }
+
+    function showErrorMessageData() {
+        const resultMessage = $('#resultMessageData')
+        resultMessage.show();
+    }
+
     window.addEventListener('load', hideLoader);
 </script>
+
+<!--NAME ENQUIRY SCRIPT-->
 <script th:inline="javascript">
     //Name Enquiry for Local
     $(document).ready(function () {
         $('#account_local').on('input', function () {
+            const submitButton = document.getElementById("submit-local");
             const accountNumber = $(this).val();
             console.log("LOCAL ACCOUNT " + accountNumber)
             if (accountNumber.length === 10) {
                 if (accountNumber.match(/^[0-9]+$/)) {
+                    showLoader();
                     $.ajax({
                         type: 'GET',
                         url: `/name/lookup/local/${accountNumber}`,// URL of the controller method
                         success: function (response) {
+                            hideLoader();
                             // Update the view with the response data
                             $('#localName').text(response);
                             console.log(response);
                             console.log(response.toString())
                         },
                         error: function (error) {
+                            submitButton.disabled = true;
+                            submitButton.style.backgroundColor = "grey";
+                            hideLoader();
                             $('#localName').text("Invalid");
                         }
                     });
 
                 } else {
+                    submitButton.disabled = true;
+                    submitButton.style.backgroundColor = "grey";
+                    hideLoader();
                     $('#localName').text("Invalid");
                 }
             }
@@ -384,28 +504,36 @@
     //Name Enquiry For Others
     $(document).ready(function () {
         $('#account_others').on('input', function () {
+
+            const submitButton = document.getElementById("submit-others");
             const beneficiaryAccountNumber = $(this).val();
             const beneficiaryBankCode = $("#select-bank-others").val();
-            console.log("Bank Code")
-            console.log(beneficiaryAccountNumber + "Bank account num")
-            console.log(beneficiaryBankCode + "Bank Code")
+
             if (beneficiaryAccountNumber.length === 10) {
                 if (beneficiaryAccountNumber.match(/^[0-9]+$/)) {
+                    showLoader();
                     $.ajax({
                         type: 'GET',
                         url: `/name/lookup/others/${beneficiaryAccountNumber}/${beneficiaryBankCode}`,// URL of the controller method
                         success: function (response) {
+                            hideLoader();
                             // Update the view with the response data
                             $('#othersName').text(response);
                             console.log(response);
                             console.log(response.toString())
                         },
                         error: function (error) {
+                            submitButton.disabled = true;
+                            submitButton.style.backgroundColor = "grey";
+                            hideLoader();
                             $('#othersName').text("Invalid");
                         }
                     });
 
                 } else {
+                    submitButton.disabled = true;
+                    submitButton.style.backgroundColor = "grey";
+                    hideLoader();
                     $('#othersName').text("Invalid");
                 }
             }

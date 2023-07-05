@@ -5,6 +5,7 @@ import com.iBanking.iBanking.Forms.Forms;
 import com.iBanking.iBanking.payload.customer.*;
 import com.iBanking.iBanking.payload.generics.DecryptRequestPayload;
 import com.iBanking.iBanking.payload.generics.EncryptResponsePayload;
+import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -214,6 +215,58 @@ public class CustomerServiceImpl implements CustomerService {
         log.info("CREATE CUSTOMER RESPONSE PAYLOAD : {}", gson.toJson(createCustomer));
         session.setAttribute("registerCustomerResponse", createCustomer);
         return createCustomer;
+    }
+
+    @Override
+    public GeneralResponsePayload resetPassword(HttpSession session) throws UnirestException {
+        String accessToken = getAccessToken();
+        session.setAttribute("accessTokenCustomer", accessToken);
+        GeneralResponsePayload resetPassword;
+        ResetPasswordRequestPayload requestPayload = new ResetPasswordRequestPayload();
+        Forms resetForm1 = (Forms) session.getAttribute("resetForm1");
+        Forms resetOtp = (Forms) session.getAttribute("resetOtpForm");
+        Forms resetForm2 = (Forms) session.getAttribute("resetForm2");
+
+
+        requestPayload.setMobileNumber(resetForm1.getMobileNumber());
+        requestPayload.setOtp(resetOtp.getOtp());
+        requestPayload.setSecurityQuestion(resetForm2.getSecurityQuestion());
+        requestPayload.setSecurityAnswer(resetForm2.getSecurityAnswer());
+        requestPayload.setNewPassword(resetForm2.getPassword());
+        String requestPayloadJson = gson.toJson(requestPayload);
+
+        //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
+        EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayloadJson);
+        log.info("PASSWORD RESET REQUEST PAYLOAD : {}", requestPayloadJson);
+
+        //CALL THE CUSTOMER DETAILS ENDPOINT
+        String requestPayloadString = gson.toJson(encryptResponsePayload);
+
+        HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + PASSWORD_RESET)
+                .header("accept", "application/json")
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + accessToken)
+                .body(requestPayloadString).asString();
+        String requestBody = jsonResponse.getBody();
+        if (jsonResponse.getStatus() != 200) {
+            resetPassword = new GeneralResponsePayload();
+            resetPassword.setResponseCode("99");
+
+            resetPassword.setResponseMessage("99");
+            log.info(" ERROR WHILE RESETTING PASSWORD {}", jsonResponse.getStatus());
+            return resetPassword;
+        }
+
+        // PASS ENCRYPTED RESPONSE FROM CUSTOMER DETAILS TO DECRYPT API
+        DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
+
+        decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
+        resetPassword = decryptPayload(decryptRequestPayload, GeneralResponsePayload.class);
+        //LOG REQUEST AND RESPONSE
+
+        log.info("RESET PASSWORD RESPONSE PAYLOAD : {}", gson.toJson(resetPassword));
+        session.setAttribute("resetPasswordResponse", resetPassword);
+        return resetPassword;
     }
 
     public static void main(String[] args) throws UnirestException {

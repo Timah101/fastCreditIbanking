@@ -2,9 +2,12 @@ package com.iBanking.iBanking.Forms;
 
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 public class Forms {
     private String mobileNumber;
+    private String beneficiaryMobileNumber;
     private String email;
     private String password;
     private String securityQuestion;
@@ -17,11 +20,16 @@ public class Forms {
     private String amount;
     private String narration;
     private String telco;
+    private String date = String.valueOf(LocalDate.now());
     private String debitAccount;
     private String creditAccount;
     private String dataPlans;
     private String beneficiaryBank;
+    private String beneficiaryName;
     private String smartCardNumber;
+    private String meterNumber;
+    private String biller;
+    private String electricityBillerSelect;
 
 
     private String lastName;

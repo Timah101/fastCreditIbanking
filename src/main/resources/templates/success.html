@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragments :: header}">
+    <title>Create Account</title></head>
+<body style="background: white">
+
+<div class="text-center">
+    <div class="text-center">
+        <div class="card-fast-login">
+
+            <div class="card-body">
+                <div class="basic-form">
+                    <form method="post" th:action="@{/success}">
+                        <div class="mb-2">
+                            <a><img th:src="@{/images/logo.svg}" alt="Fast Credit" width="150" height="100"></a>
+                        </div>
+
+                       <div class="mb-4 success-all">
+                           TRANSACTION SUCCESSFUL
+                       </div>
+
+
+                        <div class="text-center mb-4">
+                            <button class="btn-block btn-login" type="submit">Go Home</button>
+                        </div>
+
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

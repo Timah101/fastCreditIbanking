@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 public class AirtimeRequestPayload {
     private String mobileNumber;
+    private String beneficiaryMobileNumber;
     private String debitAccount;
     private String telco;
     private String amount;

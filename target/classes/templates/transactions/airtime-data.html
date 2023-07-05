@@ -16,9 +16,8 @@
 
 <div class="main-send-money">
     <div class="row no-gutters">
-
-        <div id="errorMessage" th:if="${errorMessage}" class="alert-fast" role="alert" style="width: 400px">
-            <span th:text="${errorMessage}">Error message</span>
+        <div id="errorMessage" class="alert-fast" role="alert" style="width: 400px; display: none">
+            <!--            <span th:text="${errorMessage}">Error message</span>-->
         </div>
 
         <!--        THE MODULE/TOGGLE DIV-->
@@ -78,8 +77,9 @@
                                             <label for="select-account" class="label-span">Select Account</label>
                                             <select id="select-account" class="form-control-send-money mb-3"
                                                     th:field="*{debitAccount}">
-                                                <option disabled hidden selected value="0"> -- Select Account --
-                                                </option>
+                                                <option value=""> -- Select Account --</option>
+                                                <!--                                                <option disabled hidden selected value="0">-->
+                                                <!--                                                </option>-->
                                                 <option style="background-color: #D1D0CE"
                                                         th:each="accountBalance : ${accountBalanceResponse}"
                                                         th:text="${accountBalance.getAccountNumber()}"
@@ -91,7 +91,7 @@
                                             <label for="account_local" class="label-span">Mobile Number</label> <span
                                                 id="localName" class="float-right"></span>
                                             <input id="account_local" class="form-control-send-money" maxlength="10"
-                                                   placeholder="" th:field="*{mobileNumber}">
+                                                   placeholder="" th:field="*{beneficiaryMobileNumber}">
                                         </div>
                                         <div class="airtime-data-img-container mb-4">
                                             <img class="airtime_icon-fast" onclick="updateInputValue('MTN')"
@@ -135,8 +135,6 @@
                 <div class="transfer-money-title"> <!-- SEND MONEY TITLE-->
                     Data Top Up
                 </div>
-
-
                 <div class="transfer-money-form"> <!-- DATA TOP UP-->
 
                     <div class="col-md-12">
@@ -148,8 +146,7 @@
                                             <label for="select-account" class="label-span">Select Account</label>
                                             <select id="select-account-1" class="form-control-send-money mb-3"
                                                     th:field="*{debitAccount}">
-                                                <option disabled selected value="0"> -- Select Account --
-                                                </option>
+                                                <option selected value="0"> -- Select Account --</option>
                                                 <option style="background-color: #D1D0CE"
                                                         th:each="accountBalance : ${accountBalanceResponse}"
                                                         th:text="${accountBalance.getAccountNumber()}"
@@ -160,7 +157,7 @@
                                         <div class="mb-4">
                                             <label for="account_local1" class="label-span">Mobile Number</label>
                                             <input id="account_local1" class="form-control-send-money" maxlength="10"
-                                                   placeholder="" th:field="*{mobileNumber}">
+                                                   placeholder="" th:field="*{beneficiaryMobileNumber}">
                                         </div>
                                         <div class="airtime-data-img-container mb-4 ">
                                             <img class="airtime_icon-fast telco" data-network="MTN"
@@ -172,22 +169,23 @@
                                             <img class="airtime_icon-fast telco" data-network="Airtel"
                                                  onclick="updateInputValueData('Airtel')"
                                                  th:src="@{/images/airtel.png}" width="60" id="airtel1" tabindex="0">
-                                            <img class="airtime_icon-fast telco" data-network="Etisalat"
-                                                 onclick="updateInputValueData('Etisalat')"
+                                            <img class="airtime_icon-fast telco" data-network="Glo"
+                                                 onclick="updateInputValueData('Glo')"
                                                  th:src="@{/images/glo.png}" width="60" id="glo1" tabindex="0">
+
                                             <input id="telcoIdData" th:field="*{telco}" type="hidden"/>
                                         </div>
                                         <div class="mb-4">
                                             <label for="my-select" class="label-span">Select Data Plan</label>
                                             <select id="my-select" class="form-control-send-money mb-3"
-                                                    th:field="*{dataPlans}">
-                                                <option disabled selected value="0"> -- Select Data Plans --
+                                                    th:field="*{dataPlans}" onchange="updateAmountData()">
+                                                <option selected value="0"> -- Select Data Plans --
                                                 </option>
                                             </select>
                                         </div>
                                         <div class="mb-4">
                                             <label for="amount1" class="label-span">Amount</label>
-                                            <input id="amount1" class="form-control-send-money" placeholder=""
+                                            <input id="amount1" class="form-control-send-money" readonly
                                                    th:field="*{amount}">
                                         </div>
                                         <div class="mb-4">
@@ -210,7 +208,7 @@
 
 
         <!--        THE CONFIRM TRANSFER AIRTIME-->
-        <div class="col-md-5 col-sm-12 col-xs-12" th:if="${submitted}">
+        <div id="confirm-airtime" class="col-md-5 col-sm-12 col-xs-12" th:if="${submitted}">
             <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
 
                 <div class="confirm-money-title"> <!-- -->
@@ -222,20 +220,28 @@
                         <div class="form-confirm-money">
                             <div class="confirm-money-block">
                                 <div class="confirm-block">
-                                    <form method="post" th:object="${airtimeFormPin}" th:action="@{/airtime}">
-                                        <div class="mb-4">
-                                            <div class="mb-2"><span>Name</span> <span class="float-right">Babajide Balogun</span>
+                                    <form method="post" id="myForm" th:object="${airtimeFormPin}"
+                                          th:action="@{/airtime}">
+                                        <div id="resultMessage" class="alert-fast" style="display:none;"></div>
+                                        <div class="mb-4" th:object="${airtimeTxnData}">
+                                            <div class="mb-2"><span>Transaction Type</span> <span class="float-right"> Airtime Top Up</span>
                                             </div>
-                                            <div class="mb-2"><span>Bank</span> <span
-                                                    class="float-right">Access Bank</span></div>
-                                            <div class="mb-2"><span>Amount</span> <span
-                                                    class="float-right">N50,000</span></div>
-                                            <div class="mb-2"><span>Amount</span> <span
-                                                    class="float-right">N50,000</span></div>
+                                            <div class="mb-2"><span>Mobile Number</span> <span class="float-right"
+                                                                                               th:text="${airtimeTxnData.getBeneficiaryMobileNumber()}"></span>
+                                            </div>
+                                            <div class="mb-2"><span>Telco</span> <span class="float-right"
+                                                                                       th:text="${airtimeTxnData.getTelco()}"></span>
+                                            </div>
+                                            <div class="mb-2"><span>Amount</span> <span class="float-right"
+                                                                                        th:text="${airtimeTxnData.getAmount()}"></span>
+                                            </div>
+                                            <div class="mb-2"><span>Date</span> <span class="float-right"
+                                                                                      th:text="${airtimeTxnData.getDate()}"></span>
+                                            </div>
                                         </div>
                                         <div class="mb-4">
                                             <label for="pin" class="confirm-pin">Enter PIN</label>
-                                            <input id="pin" type="password" class="otp-pin-input" maxlength="4"
+                                            <input id="pin" type="password" class="otp-pin-input" maxlength="6"
                                                    style=""
                                                    placeholder="" th:field="*{pin}">
                                         </div>
@@ -258,7 +264,7 @@
 
 
         <!--        THE CONFIRM TRANSFER DATA-->
-        <div class="col-md-5 col-sm-12 col-xs-12" th:if="${submitData}">
+        <div id="confirm-data" class="col-md-5 col-sm-12 col-xs-12" th:if="${submitData}">
             <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
 
                 <div class="confirm-money-title"> <!-- -->
@@ -270,20 +276,27 @@
                         <div class="form-confirm-money">
                             <div class="confirm-money-block">
                                 <div class="confirm-block">
-                                    <form method="post" th:object="${dataFormPin}" th:action="@{/data}">
-                                        <div class="mb-4">
-                                            <div class="mb-2"><span>Name</span> <span class="float-right">Babajide Balogun</span>
+                                    <form id="formData" method="post" th:object="${dataFormPin}" th:action="@{/data}">
+                                        <div id="resultMessageData" class="alert-fast" style="display:none;"></div>
+                                        <div class="mb-4" th:object="${dataTxnData}">
+                                            <div class="mb-2"><span>Transaction Type</span> <span class="float-right"> Airtime Top Up</span>
                                             </div>
-                                            <div class="mb-2"><span>Bank</span> <span
-                                                    class="float-right">Access Bank</span></div>
-                                            <div class="mb-2"><span>Amount</span> <span
-                                                    class="float-right">N50,000</span></div>
-                                            <div class="mb-2"><span>Amount</span> <span
-                                                    class="float-right">N50,000</span></div>
+                                            <div class="mb-2"><span>Mobile Number</span> <span class="float-right"
+                                                                                               th:text="${dataTxnData.getBeneficiaryMobileNumber()}"></span>
+                                            </div>
+                                            <div class="mb-2"><span>Telco</span> <span class="float-right"
+                                                                                       th:text="${dataTxnData.getTelco()}"></span>
+                                            </div>
+                                            <div class="mb-2"><span>Amount</span> <span class="float-right"
+                                                                                        th:text="${dataTxnData.getAmount()}"></span>
+                                            </div>
+                                            <div class="mb-2"><span>Date</span> <span class="float-right"
+                                                                                      th:text="${dataTxnData.getDate()}"></span>
+                                            </div>
                                         </div>
                                         <div class="mb-4">
                                             <label for="pin-data" class="confirm-pin">Enter PIN</label>
-                                            <input id="pin-data" type="password" class="" maxlength="4"
+                                            <input id="pin-data" type="password" class="" maxlength="6"
                                                    style="align-items: center; text-align: center; width: 200px"
                                                    placeholder="" th:field="*{pin}">
                                         </div>
@@ -327,10 +340,12 @@
         $(document).on('click', ".telco", function () {
             const telco = $(this).attr("data-network");
             console.log("TELCO FOR DATA PLANS " + telco)
+            showLoader();
             $.ajax({
                 type: 'GET',
-                url: `/data/${telco}`,// URL of the controller method
+                url: `/data2/${telco}`,// URL of the controller method
                 success: function (response) {
+                    hideLoader();
                     const responseJson = JSON.parse(response);
                     const test = responseJson;
                     console.log(response)
@@ -338,12 +353,16 @@
                     let options = "";
                     if (responseJson.responseCode === "00") {
                         responseJson.dataPlans.forEach(function (item) {
-                            options += `<option value="${item.id}">${item.planDescription + ' ' + item.amount + ' ' + item.dataPeriod}</option>`;
+                            options += `<option value="${item.id + ',' + item.amount}">${item.planDescription + ' ' + item.amount + ' ' + item.dataPeriod}</option>`;
                         })
                         $("#my-select").html(options)
                     }
 
+                },
+                error() {
+                    hideLoader();
                 }
+
             });
         });
     });
@@ -355,31 +374,144 @@
         errorMessageElement.style.display = 'none';
         errorMessageElement.style.width = '400px';
     }, 10000); // 10 seconds in milliseconds
+
+
+    //Update the amount field read only for data
+    function updateAmountData() {
+        const selectedOptionArray = document.getElementById("my-select").value;
+        console.log(selectedOptionArray + " the array to be split")
+        const selectedOptionArraySplit = selectedOptionArray.split(",");
+        console.log(selectedOptionArraySplit)
+        if (typeof selectedOptionArraySplit === "string" && selectedOptionArraySplit.trim().length === 0) {
+            const selectedOption = "empty";
+            document.getElementById("amount1").value = selectedOption;
+            console.log(selectedOption)
+        } else {
+            // const selectedOption = document.getElementById("selectOption").value;
+            const selectedOption = selectedOptionArraySplit[1];
+            document.getElementById("amount1").value = selectedOption;
+            console.log(selectedOption)
+        }
+    }
 </script>
 
 <script>
+    $(document).ready(function () {
+        $('#formData').submit(function (event) {
+            event.preventDefault();
+            const form = $(this);
+            showLoader();
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (response) {
+                    if (response === "00") {
+                        window.location.href = '/register'; //change to success page
+                    } else {
+                        hideLoader();
+                        const resultSection = $('#resultSection');
+                        const resultMessage = $('#resultMessageData');
+                        const retryButton = $('#retryButton');
+                        showErrorMessageData();
+                        resultMessage.text(response);
+                        resultSection.show();
+                        retryButton.show();
+                    }
+                },
+                error: function (xhr) {
+                    hideLoader();
+                    const resultSection = $('#resultSection');
+                    const resultMessage = $('#resultMessageData');
+                    const retryButton = $('#retryButton');
+                    resultMessage.text(xhr.responseText);
+                }
+            });
+        });
+    });
+
+</script>
+<script>
+    $(document).ready(function () {
+        $('#myForm').submit(function (event) {
+            event.preventDefault();
+            const form = $(this);
+            showLoader();
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (response) {
+                    if (response === "00") {
+                        window.location.href = '/register'; //change to success page
+                    } else {
+                        hideLoader();
+
+                        const resultSection = $('#resultSection');
+                        const resultMessage = $('#resultMessage');
+                        const retryButton = $('#retryButton');
+                        showErrorMessage();
+                        resultMessage.text(response);
+                        resultSection.show();
+                        retryButton.show();
+                    }
+                },
+                error: function (xhr) {
+                    hideLoader();
+                    const resultSection = $('#resultSection');
+                    const resultMessage = $('#resultMessage');
+                    const retryButton = $('#retryButton');
+                    resultMessage.text(xhr.responseText);
+                    resultSection.show();
+                    retryButton.show();
+                }
+            });
+        });
+    });
+
+    function showErrorMessage() {
+        const resultMessage = $('#resultMessage')
+        resultMessage.show();
+    }
+
+    function showErrorMessageData() {
+        const resultMessage = $('#resultMessageData')
+        resultMessage.show();
+    }
 
     function toggleAirtime() {
         const contentDiv = document.getElementById("airtime");
+        const errorAirtime = document.getElementById("confirm-airtime")
+        const errorData = document.getElementById("confirm-data")
         const contentData = document.getElementById("data");
         if (contentDiv.style.display === "none") {
             contentDiv.style.display = "block";
             contentData.style.display = "none";
+            errorAirtime.style.display = "none";
+            errorData.style.display = "none";
         } else {
             contentDiv.style.display = "none";
             contentData.style.display = "none";
+            errorAirtime.style.display = "none";
+            errorData.style.display = "none";
         }
     }
 
     function toggleData() {
         const contentDiv = document.getElementById("data");
         const contentAirtime = document.getElementById("airtime");
+        const errorAirtime = document.getElementById("confirm-airtime")
+        const errorData = document.getElementById("confirm-data")
         if (contentDiv.style.display === "none") {
             contentDiv.style.display = "block";
             contentAirtime.style.display = "none";
+            errorAirtime.style.display = "none";
+            errorData.style.display = "none";
         } else {
             contentDiv.style.display = "none";
             contentAirtime.style.display = "none";
+            errorAirtime.style.display = "none";
+            errorData.style.display = "none";
         }
     }
 

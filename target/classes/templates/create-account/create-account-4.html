@@ -73,15 +73,6 @@
                                 </div>
                             </div>
                             <div id="resultSection" style="display: none;" class="mb-4">
-                                <!--                                <div class="row">-->
-
-                                <!--                                    <div class="col-sm-4">-->
-                                <!--                                        <div id="resultMessage" class="alert-fast"></div>-->
-                                <!--                                    </div>-->
-                                <!--                                    <div class="col-sm-3">-->
-
-                                <!--                                    </div>-->
-                                <!--                                </div>-->
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <label for="pin" style="color: white">p</label>
@@ -157,17 +148,10 @@
         });
 
         $('#resendButton').click(function (event) {
-            event.preventDefault(); // Prevent default button click
-
-            // Hide "Resend OTP" button
+            event.preventDefault();
             hideResendButton();
-
             hideErrorMessage();
-
-            // Show loader
             showLoader();
-
-
             sendOTP();
         });
     });
@@ -210,11 +194,9 @@
             type: 'POST',
             url: '/resend-otp',
             success: function (response) {
-                // Handle success
                 hideLoader()
             },
             error: function (xhr) {
-                // Handle error
             }
         });
     }

@@ -31,7 +31,7 @@ public class AuthenticationApi {
                 .header("Content-Type", "application/json")
                 .body(requestPayload)
                 .asString();
-
+//        System.out.println(jsonResponse.getStatus() +" : FIRST STATUS ");
         String jsonResponseBody = jsonResponse.getBody();
         accessTokenResponsePayload.setACCESS_TOKEN(jsonResponseBody);
 //        log.info("ACCESS TOKEN {}", jsonResponseBody);

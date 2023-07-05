@@ -25,13 +25,14 @@
             <button class="button-fast" type="submit">Search</button>
         </div>
         <div class="navbar-icons">
-            <a href="#notification">
+            <a th:href="@{/profile}" onclick="showLoader()">
                 <i class="fas fa-bell"></i>
                 <span>Notification</span>
             </a>
-            <a href="#profile">
+            <!--            th:text="${'Hi, ' + customerDetails.getFirstName()}"-->
+            <a th:href="@{/profile}" onclick="showLoader()">
                 <i class="fas fa-user"></i>
-                <span>Hi, Islamiat</span>
+                <span style="font-weight: bolder">Profile</span>
             </a>
         </div>
     </nav>
@@ -180,7 +181,7 @@
     <div class="row">
         <div class="col-md-6 col-sm-12 col-lg-6 col-xl-4 col-xs-12" id="card-fast"
              th:each="accountBalance : ${accountBalanceResponse}">
-            <div class="card-fast">
+            <div class="card-fast card-balance">
                 <div class="balance">
                     <div class="show-bal">
                         <span style="float: left" th:text="*{'N ' +accountBalance.getAvailableBalance}">N0.00</span>
@@ -194,7 +195,7 @@
                     </div>
                     <div class="show-name">
                                 <span style="font-weight: bolder"
-                                      th:text="${customerDetails.getFirstName() + ' ' + customerDetails.getMiddleName() + ' ' + customerDetails.getLastName()}"> ">Islamiat Opafemi</span>
+                                      th:text="${customerDetails.getFirstName() + ' ' + customerDetails.getMiddleName() + ' ' + customerDetails.getLastName()}"> "></span>
                         <span style="float: right">12/50</span>
                     </div>
                 </div>

@@ -3,7 +3,7 @@ package com.iBanking.iBanking.controller;
 import com.iBanking.iBanking.Forms.Forms;
 import com.iBanking.iBanking.payload.accout.AccountDetailsListResponsePayload;
 import com.iBanking.iBanking.payload.accout.AccountDetailsResponsePayload;
-import com.iBanking.iBanking.payload.generics.ResponseCodeResponseMessageResponsePayload;
+import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
 import com.iBanking.iBanking.payload.transactions.sendMoney.GetBankListPResponsePayload;
 import com.iBanking.iBanking.payload.transactions.sendMoney.OtherBanksNameEnquiryResponsePayload;
 import com.iBanking.iBanking.services.AccountService;
@@ -53,6 +53,8 @@ public class SendMoneyController {
         model.addAttribute("sendMoneyOthersPin", new Forms());
         model.addAttribute("sendMoneyOthersForm", new Forms());
 
+        Forms localTxnData = (Forms) session.getAttribute("sendMoneyLocalForm");
+        model.addAttribute("localTxnData", localTxnData);
         model.addAttribute("submitted", true);
 
         return "transactions/send-money";
@@ -60,16 +62,17 @@ public class SendMoneyController {
 
     //Process Send Money and return error if any
     @PostMapping("/send-money/local")
+    @ResponseBody
     public String processSendMoneyLocal(@ModelAttribute Forms sendMoneyLocalFormPin, HttpSession session, RedirectAttributes redirectAttributes, Model model) throws UnirestException {
         session.setAttribute("sendMoneyLocalFormPin", sendMoneyLocalFormPin);
-        ResponseCodeResponseMessageResponsePayload sendMoneyLocal = sendMoneyService.sendMoneyLocal(session);
+        GeneralResponsePayload sendMoneyLocal = sendMoneyService.sendMoneyLocal(session);
         if (sendMoneyLocal.getResponseCode().equals("00")) {
-            return "redirect:/dashboard";
+            return "00";
         } else {
             model.addAttribute("submitted", true);
             String customErrorMessage = sendMoneyLocal.getResponseMessage();
             redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
-            return "redirect:/send-money";
+            return sendMoneyLocal.getResponseMessage();
         }
     }
 
@@ -104,6 +107,8 @@ public class SendMoneyController {
         model.addAttribute("sendMoneyOthersPin", new Forms());
         model.addAttribute("sendMoneyOthersForm", new Forms());
 
+        Forms othersTxnData = (Forms) session.getAttribute("sendMoneyOthersForm");
+        model.addAttribute("othersTxnData", othersTxnData);
         model.addAttribute("submittedOthers", true);
 
         return "transactions/send-money";
@@ -111,17 +116,17 @@ public class SendMoneyController {
 
     //Process Send Money to Other Banks and return errors if any
     @PostMapping("/send-money/others")
+    @ResponseBody
     public String processSendMoneyOthers(@ModelAttribute Forms sendMoneyOthersFormPin, HttpSession session, RedirectAttributes redirectAttributes, Model model) throws UnirestException {
         session.setAttribute("sendMoneyOthersFormPin", sendMoneyOthersFormPin);
-        ResponseCodeResponseMessageResponsePayload sendMoneyOthers = sendMoneyService.sendMoneyOthers(session);
-
+        GeneralResponsePayload sendMoneyOthers = sendMoneyService.sendMoneyOthers(session);
         if (sendMoneyOthers.getResponseCode().equals("00")) {
-            return "redirect:/send-money";
+            return "00";
         } else {
             model.addAttribute("submitted", true);
             String customErrorMessage = sendMoneyOthers.getResponseMessage();
             redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
-            return "redirect:/send-money";
+            return sendMoneyOthers.getResponseMessage();
         }
     }
 
@@ -132,7 +137,7 @@ public class SendMoneyController {
         OtherBanksNameEnquiryResponsePayload nameEnquiry = sendMoneyService.otherBanksNameEnquiry(session, beneficiaryAccount, beneficiaryBankCode);
         if (nameEnquiry.getResponseCode().equals("00")) {
             log.info("NAME ENQUIRY OTHERS {}", nameEnquiry);
-            String name = nameEnquiry.getResponseDescription();
+            String name = nameEnquiry.getAccountName();
             model.addAttribute("name", name);
             return name;
         } else {

@@ -7,6 +7,8 @@ public class ApiPaths {
     static final String DECRYPT_PAYLOAD = "customerService/decrypt";
     public static final String CUSTOMER_DETAILS = "customerService/details";
 
+    public static final String PASSWORD_RESET = "customerService/update/customer";
+
     public static final String CUSTOMER_REGISTER = "customerService/register";
 
     public static final String CUSTOMER_CREATE = "customerService/create/individual";
@@ -33,7 +35,11 @@ public class ApiPaths {
     public static final String OTHER_BANKS_NAME_ENQUIRY = "genericService/ft/name-enquiry";
 
     public static final String CABLE_TV_BILLERS_LIST = "fusionService/cabletv/billers";
+
+    public static final String ELECTRICITY_BILLERS_LIST = "fusionService/electricity/billers";
     public static final String VALIDATE_CABLE_TV = "fusionService/cabletv/validate";
+
+    public static final String VALIDATE_ELECTRICITY = "fusionService/electricity/validate";
 
     public static final String CABLE_TV_PAYMENT = "fusionService/cabletv/pay-bill";
 

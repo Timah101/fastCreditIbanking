@@ -3,7 +3,19 @@
       xmlns:th="http://www.thymeleaf.org">
 
 <head th:insert="~{fragments :: header}">
+    <script>
+        window.onload = function() {
+            if (window.history && window.history.pushState) {
+                window.history.pushState('forward', null, './#forward');
 
+                window.onpopstate = function() {
+                    if (window.location.hash === '#forward') {
+                        window.history.forward();
+                    }
+                };
+            }
+        };
+    </script>
     <title>Sign Up</title></head>
 
 <body>

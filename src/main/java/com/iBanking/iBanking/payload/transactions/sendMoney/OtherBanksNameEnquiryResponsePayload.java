@@ -4,9 +4,6 @@ import lombok.Data;
 
 @Data
 public class OtherBanksNameEnquiryResponsePayload {
-    private String responseCode;
-    private String responseDescription;
-
     private String DestinationInstitutionCode;
     private String AccountNumber;
     private String AccountName;

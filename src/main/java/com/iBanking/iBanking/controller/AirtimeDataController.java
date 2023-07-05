@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import com.iBanking.iBanking.Forms.Forms;
 import com.iBanking.iBanking.payload.accout.AccountDetailsListResponsePayload;
 import com.iBanking.iBanking.payload.customer.CustomerDetailsResponsePayload;
-import com.iBanking.iBanking.payload.generics.ResponseCodeResponseMessageResponsePayload;
+import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
 import com.iBanking.iBanking.payload.transactions.airtimeData.DataPlansResponsePayload;
 import com.iBanking.iBanking.services.AccountService;
 import com.iBanking.iBanking.services.AirtimeDataService;
@@ -39,6 +39,8 @@ public class AirtimeDataController {
         model.addAttribute("accountBalanceResponse", new AccountDetailsListResponsePayload());
         model.addAttribute("customerDetails", new CustomerDetailsResponsePayload());
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
+        String selectedOption = "";
+        model.addAttribute("selectedOptionGotv", selectedOption);
 
         return "transactions/airtime-data";
     }
@@ -58,23 +60,28 @@ public class AirtimeDataController {
         model.addAttribute("customerDetails", new CustomerDetailsResponsePayload());
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
 
+        Forms airtimeTxnData = (Forms) session.getAttribute("airtimeForm");
+        model.addAttribute("airtimeTxnData" , airtimeTxnData);
+
         model.addAttribute("submitted", true);
 
         return "transactions/airtime-data";
     }
 
     @PostMapping("/airtime")
-    public String processAirtime(@ModelAttribute Forms airtimeFormPin, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
+    @ResponseBody
+    public String processAirtime(@ModelAttribute Forms airtimeFormPin, HttpSession session,
+                                 RedirectAttributes redirectAttributes) throws UnirestException {
 
         session.setAttribute("airtimeFormPin", airtimeFormPin);
         airtimeService.airtimeTopUp(session);
-        ResponseCodeResponseMessageResponsePayload airtimeTopUp = (ResponseCodeResponseMessageResponsePayload) session.getAttribute("airtimeTopUpResponse");
+        GeneralResponsePayload airtimeTopUp = (GeneralResponsePayload) session.getAttribute("airtimeTopUpResponse");
         if (airtimeTopUp.getResponseCode().equals("00")) {
-            return "redirect:/airtime-data";
+            return "00";
         } else {
             String customErrorMessage = airtimeTopUp.getResponseMessage();
             redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
-            return "redirect:/airtime-data";
+            return airtimeTopUp.getResponseMessage();
         }
 
     }
@@ -93,6 +100,8 @@ public class AirtimeDataController {
         model.addAttribute("customerDetails", new CustomerDetailsResponsePayload());
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
 
+        Forms dataTxnData = (Forms) session.getAttribute("dataForm");
+        model.addAttribute("dataTxnData" , dataTxnData);
         model.addAttribute("submitData", true);
 
         return "transactions/airtime-data";
@@ -100,22 +109,22 @@ public class AirtimeDataController {
 
 
     @PostMapping("/data")
+    @ResponseBody
     public String processData(@ModelAttribute Forms dataFormPin, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
-
         session.setAttribute("dataFormPin", dataFormPin);
         airtimeService.dataTopUp(session);
-        ResponseCodeResponseMessageResponsePayload dataTopUp = (ResponseCodeResponseMessageResponsePayload) session.getAttribute("dataTopUpResponse");
+        GeneralResponsePayload dataTopUp = (GeneralResponsePayload) session.getAttribute("dataTopUpResponse");
         if (dataTopUp.getResponseCode().equals("00")) {
-            return "redirect:/airtime-data";
+            return "00";
         } else {
             String customErrorMessage = dataTopUp.getResponseMessage();
             redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
-            return "redirect:/airtime-data";
+            return dataTopUp.getResponseMessage();
         }
 
     }
 
-    @GetMapping({"/data/{telco}"})
+    @GetMapping({"/data2/{telco}"})
     @ResponseBody
     public String dataPlansEnquiry(@PathVariable("telco") String telco, HttpSession session) throws IOException, UnirestException {
         Gson gson = new Gson();

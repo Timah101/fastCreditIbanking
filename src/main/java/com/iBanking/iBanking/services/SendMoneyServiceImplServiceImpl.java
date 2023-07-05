@@ -6,7 +6,7 @@ import com.iBanking.iBanking.payload.accout.AccountDetailsResponsePayload;
 import com.iBanking.iBanking.payload.customer.CustomerDetailsResponsePayload;
 import com.iBanking.iBanking.payload.generics.DecryptRequestPayload;
 import com.iBanking.iBanking.payload.generics.EncryptResponsePayload;
-import com.iBanking.iBanking.payload.generics.ResponseCodeResponseMessageResponsePayload;
+import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
 import com.iBanking.iBanking.payload.transactions.sendMoney.*;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
@@ -26,21 +26,22 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
     Gson gson = new Gson();
 
     @Override
-    public ResponseCodeResponseMessageResponsePayload sendMoneyLocal(HttpSession session) throws UnirestException {
+    public GeneralResponsePayload sendMoneyLocal(HttpSession session) throws UnirestException {
         String accessToken = (String) session.getAttribute("accessToken");
-        ResponseCodeResponseMessageResponsePayload sendMoney;
+        GeneralResponsePayload sendMoney;
         SendMoneyLocalRequestPayload requestPayload = new SendMoneyLocalRequestPayload();
 
         Forms sendMoneyLocalForm = (Forms) session.getAttribute("sendMoneyLocalForm");
         CustomerDetailsResponsePayload customerDetails = (CustomerDetailsResponsePayload) session.getAttribute("customerDetailsResponse");
         AccountDetailsResponsePayload accountDetails = (AccountDetailsResponsePayload) session.getAttribute("nameEnquiryLocalResponse");
+        Forms login = (Forms) session.getAttribute("loginForm");
         String originatorName = customerDetails.getFirstName() + " " + customerDetails.getMiddleName() + " " + customerDetails.getLastName();
         requestPayload.setOriginatorName(originatorName);
+        requestPayload.setMobileNumber(login.getMobileNumber());
         requestPayload.setAmount(sendMoneyLocalForm.getAmount());
         requestPayload.setCreditAccount(sendMoneyLocalForm.getCreditAccount());
         requestPayload.setDebitAccount(sendMoneyLocalForm.getDebitAccount());
         requestPayload.setSecurityAnswer("");
-        requestPayload.setMobileNumber(customerDetails.getMobileNumber());
         requestPayload.setPin(sendMoneyLocalForm.getPin());
         requestPayload.setBeneficiaryName(accountDetails.getAccountName());
         requestPayload.setNarration(sendMoneyLocalForm.getNarration());
@@ -60,7 +61,7 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
                 .body(requestPayloadJsonString).asString();
         String requestBody = jsonResponse.getBody();
         if (jsonResponse.getStatus() != 200) {
-            sendMoney = new ResponseCodeResponseMessageResponsePayload();
+            sendMoney = new GeneralResponsePayload();
 
             log.info(" ERROR WHILE SEND MONEY LOCAL {}", jsonResponse.getStatus());
             return sendMoney;
@@ -69,7 +70,7 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
 
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        sendMoney = decryptPayload(decryptRequestPayload, ResponseCodeResponseMessageResponsePayload.class);
+        sendMoney = decryptPayload(decryptRequestPayload, GeneralResponsePayload.class);
         //LOG REQUEST AND RESPONSE
 
         log.info("SEND MONEY LOCAL RESPONSE PAYLOAD : {}", gson.toJson(sendMoney));
@@ -78,16 +79,18 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
     }
 
     @Override
-    public ResponseCodeResponseMessageResponsePayload sendMoneyOthers(HttpSession session) throws UnirestException {
+    public GeneralResponsePayload sendMoneyOthers(HttpSession session) throws UnirestException {
         String accessToken = (String) session.getAttribute("accessToken");
-        ResponseCodeResponseMessageResponsePayload sendMoney;
+        GeneralResponsePayload sendMoney;
         SendMoneyOthersRequestPayload requestPayload = new SendMoneyOthersRequestPayload();
 
         Forms sendMoneyOthersForm = (Forms) session.getAttribute("sendMoneyOthersForm");
         Forms sendMoneyOthersFormPin = (Forms) session.getAttribute("sendMoneyOthersFormPin");
-        CustomerDetailsResponsePayload customerDetails = (CustomerDetailsResponsePayload) session.getAttribute("customerDetailsResponse");
+
         OtherBanksNameEnquiryResponsePayload nameEnquiry = (OtherBanksNameEnquiryResponsePayload) session.getAttribute("otherBanksNameEnquiryResponse");
 
+        Forms login = (Forms) session.getAttribute("loginForm");
+        requestPayload.setMobileNumber(login.getMobileNumber());
         requestPayload.setDestinationBankCode(nameEnquiry.getDestinationInstitutionCode());
         requestPayload.setBeneficiaryAccountNumber(sendMoneyOthersForm.getCreditAccount());
         requestPayload.setAmount(sendMoneyOthersForm.getAmount());
@@ -96,17 +99,15 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
         requestPayload.setBeneficiaryKycLevel(nameEnquiry.getKycLevel());
         requestPayload.setDebitTheirRef(nameEnquiry.getNameEnquiryRef());
         requestPayload.setPaymentDetails(sendMoneyOthersForm.getNarration());
-        requestPayload.setMobileNumber(customerDetails.getMobileNumber());
         requestPayload.setPin(sendMoneyOthersFormPin.getPin());
         String requestPayloadJson = gson.toJson(requestPayload);
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
         EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayloadJson);
-        log.info("SEND MONEY OTHERS ENCRYPTION RESPONSE {}", encryptResponsePayload);
 
         //CALL THE REGISTER CUSTOMER ENDPOINT
         String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
-        log.info("SEND MONEY OTHERS PAYLOAD D {}", requestPayloadJson);
+        log.info("SEND MONEY OTHERS PAYLOAD  {}", requestPayloadJson);
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + SEND_MONEY_LOCAL)
                 .header("accept", "application/json")
                 .header("Content-Type", "application/json")
@@ -114,7 +115,7 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
                 .body(requestPayloadJsonString).asString();
         String requestBody = jsonResponse.getBody();
         if (jsonResponse.getStatus() != 200) {
-            sendMoney = new ResponseCodeResponseMessageResponsePayload();
+            sendMoney = new GeneralResponsePayload();
 
             log.info(" ERROR WHILE SEND MONEY OTHERS {}", jsonResponse.getStatus());
             return sendMoney;
@@ -123,9 +124,8 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
 
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        sendMoney = decryptPayload(decryptRequestPayload, ResponseCodeResponseMessageResponsePayload.class);
+        sendMoney = decryptPayload(decryptRequestPayload, GeneralResponsePayload.class);
         //LOG REQUEST AND RESPONSE
-        log.info("SEND MONEY OTHERS REQUEST PAYLOAD : {}", requestPayload);
         log.info("SEND MONEY OTHERS RESPONSE PAYLOAD : {}", gson.toJson(sendMoney));
         session.setAttribute("sendMoneyOtherResponse", sendMoney);
         return sendMoney;

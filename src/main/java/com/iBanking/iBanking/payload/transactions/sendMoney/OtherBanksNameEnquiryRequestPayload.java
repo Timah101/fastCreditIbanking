@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 public class OtherBanksNameEnquiryRequestPayload {
-    private String responseCode;
-    private String responseMessage;
+//    private String responseCode;
+//    private String responseMessage;
     private String destinationInstitutionCode;
     private String accountNumber;
     private String ChannelCode = "8";

@@ -5,7 +5,7 @@ import com.iBanking.iBanking.Forms.Forms;
 import com.iBanking.iBanking.payload.transactions.airtimeData.AirtimeRequestPayload;
 import com.iBanking.iBanking.payload.generics.DecryptRequestPayload;
 import com.iBanking.iBanking.payload.generics.EncryptResponsePayload;
-import com.iBanking.iBanking.payload.generics.ResponseCodeResponseMessageResponsePayload;
+import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
 import com.iBanking.iBanking.payload.transactions.airtimeData.DataPlansRequestPayload;
 import com.iBanking.iBanking.payload.transactions.airtimeData.DataPlansResponsePayload;
 import com.iBanking.iBanking.payload.transactions.airtimeData.DataRequestPayload;
@@ -28,18 +28,17 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
     Gson gson = new Gson();
 
     @Override
-    public ResponseCodeResponseMessageResponsePayload airtimeTopUp(HttpSession session) throws UnirestException {
+    public GeneralResponsePayload airtimeTopUp(HttpSession session) throws UnirestException {
         String accessToken = (String) session.getAttribute("accessToken");
-        ResponseCodeResponseMessageResponsePayload airtimeTopUp;
+        GeneralResponsePayload airtimeTopUp;
         AirtimeRequestPayload requestPayload = new AirtimeRequestPayload();
 
         Forms airtimeForm = (Forms) session.getAttribute("airtimeForm");
         Forms airtimeFormPin = (Forms) session.getAttribute("airtimeFormPin");
+        Forms loginForm = (Forms) session.getAttribute("loginForm");
 
-        log.info("AIRTIME TOP UP FORMS AIRTIME D {}", airtimeForm);
-        log.info("AIRTIME TOP UP FORMS PIN AIRTIME D {}", airtimeFormPin);
-
-        requestPayload.setMobileNumber(airtimeForm.getMobileNumber());
+        requestPayload.setMobileNumber(loginForm.getMobileNumber());
+        requestPayload.setBeneficiaryMobileNumber(airtimeForm.getBeneficiaryMobileNumber());
         requestPayload.setDebitAccount(airtimeForm.getDebitAccount());
         requestPayload.setTelco(airtimeForm.getTelco());
         requestPayload.setAmount(airtimeForm.getAmount());
@@ -62,7 +61,7 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
                 .body(requestPayloadJsonString).asString();
         String requestBody = jsonResponse.getBody();
         if (jsonResponse.getStatus() != 200) {
-            airtimeTopUp = new ResponseCodeResponseMessageResponsePayload();
+            airtimeTopUp = new GeneralResponsePayload();
             airtimeTopUp.setResponseCode("500");
             airtimeTopUp.setResponseMessage("Error occurred, please try again");
             session.setAttribute("airtimeTopUpResponse", airtimeTopUp);
@@ -73,7 +72,7 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
 
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        airtimeTopUp = decryptPayload(decryptRequestPayload, ResponseCodeResponseMessageResponsePayload.class);
+        airtimeTopUp = decryptPayload(decryptRequestPayload, GeneralResponsePayload.class);
         //LOG REQUEST AND RESPONSE
         log.info("AIRTIME TOP UP REQUEST PAYLOAD : {}", requestPayload);
         log.info("AIRTIME TOP UP RESPONSE PAYLOAD : {}", gson.toJson(airtimeTopUp));
@@ -125,24 +124,26 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
     }
 
     @Override
-    public ResponseCodeResponseMessageResponsePayload dataTopUp(HttpSession session) throws UnirestException {
+    public GeneralResponsePayload dataTopUp(HttpSession session) throws UnirestException {
         String accessToken = (String) session.getAttribute("accessToken");
-        ResponseCodeResponseMessageResponsePayload dataTopUp;
+        GeneralResponsePayload dataTopUp;
         DataRequestPayload requestPayload = new DataRequestPayload();
-
         Forms dataForm = (Forms) session.getAttribute("dataForm");
         Forms dataFormPin = (Forms) session.getAttribute("dataFormPin");
+        Forms loginForm = (Forms) session.getAttribute("loginForm");
 
-        log.info("DATA TOP UP FORMS {}", dataForm);
-        log.info("DATA TOP UP FORMS PIN D {}", dataFormPin);
-        log.info("DATA PLAN FORMS PIN AIRTIME D {}", dataForm.getDataPlans());
-
-        requestPayload.setMobileNumber(dataForm.getMobileNumber());
+        String[] dataPlanId = new String[0];
+        if (dataForm != null) {
+            dataPlanId = dataForm.getDataPlans().split(",");
+        }
+        requestPayload.setMobileNumber(loginForm.getMobileNumber());
+        assert dataForm != null;
+        requestPayload.setBeneficiaryMobileNumber(dataForm.getMobileNumber());
         requestPayload.setDebitAccount(dataForm.getDebitAccount());
         requestPayload.setTelco(dataForm.getTelco());
         requestPayload.setAmount(dataForm.getAmount());
         requestPayload.setPin(dataFormPin.getPin());
-        requestPayload.setDataPlanId(dataForm.getDataPlans());
+        requestPayload.setDataPlanId(dataPlanId[1]);
         requestPayload.setToken("ttyuioknnnm");
         String requestPayloadJson = gson.toJson(requestPayload);
 
@@ -160,10 +161,10 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
                 .body(requestPayloadJsonString).asString();
         String requestBody = jsonResponse.getBody();
         if (jsonResponse.getStatus() != 200) {
-            dataTopUp = new ResponseCodeResponseMessageResponsePayload();
+            dataTopUp = new GeneralResponsePayload();
             dataTopUp.setResponseCode("500");
             dataTopUp.setResponseMessage("Error occurred, please try again");
-            session.setAttribute("airtimeTopUpResponse", dataTopUp);
+            session.setAttribute("dataTopUpResponse", dataTopUp);
             log.info(" ERROR WHILE DATA TOP UP {}", jsonResponse.getStatus());
             return dataTopUp;
         }
@@ -171,7 +172,7 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
 
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        dataTopUp = decryptPayload(decryptRequestPayload, ResponseCodeResponseMessageResponsePayload.class);
+        dataTopUp = decryptPayload(decryptRequestPayload, GeneralResponsePayload.class);
         //LOG REQUEST AND RESPONSE
         log.info("DATA TOP UP REQUEST PAYLOAD : {}", requestPayload);
         log.info("DATA TOP UP RESPONSE PAYLOAD : {}", gson.toJson(dataTopUp));

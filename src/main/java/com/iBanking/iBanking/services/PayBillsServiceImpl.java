@@ -270,7 +270,7 @@ public class PayBillsServiceImpl implements PayBillsService {
         Forms formPin = (Forms) session.getAttribute("electricityFormPin");
         ValidateCableTvResponsePayload customerName;
 
-        requestPayload.setBillerId("");
+        requestPayload.setBillerId(form.getElectricityBillerSelect());
         requestPayload.setMobileNumber(form.getMobileNumber());
         requestPayload.setMeterNumber(form.getSmartCardNumber());
         requestPayload.setDebitAccount(form.getDebitAccount());

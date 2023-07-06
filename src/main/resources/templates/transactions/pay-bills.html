@@ -8,6 +8,9 @@
 </head>
 <body>
 
+<div class="loader" id="loader">
+    <div class="loader-inner"></div>
+</div>
 
 <header th:insert="~{dashboard :: headerfast}"></header>
 <div th:insert="~{dashboard :: sidebarfast}"></div>
@@ -254,33 +257,33 @@
                                                         th:value="${accountBalance.getAccountNumber()}"></option>
                                             </select>
                                         </div>
-                                        <div class="mb-4">
-                                            <label for="select-account" class="label-span">Select Biller</label>
-                                            <select id="biller" class="form-control-send-money mb-3"
-                                                    th:field="*{biller}">
-                                                <option selected value="1"> -- Select Biller --</option>
-                                                <option class="account_number" style="background-color: #D1D0CE"
-                                                        th:value="'E02E'">
-                                                    Eko
-                                                </option>
-                                                <option class="account_number" style="background-color: #D1D0CE"
-                                                        th:value="'Ikeja'">
-                                                    Ikeja
-                                                </option>
-                                                <option class="account_number" style="background-color: #D1D0CE"
-                                                        th:value="'Ibadan'">
-                                                    Ibadan
-                                                </option>
-                                                <option class="account_number" style="background-color: #D1D0CE"
-                                                        th:value="'Enugu'">
-                                                    Enugu
-                                                </option>
-                                                <option class="account_number" style="background-color: #D1D0CE"
-                                                        th:value="'Phed'">
-                                                    Phed
-                                                </option>
-                                            </select>
-                                        </div>
+                                        <!--                                        <div class="mb-4">-->
+                                        <!--                                            <label for="select-account" class="label-span">Select Biller</label>-->
+                                        <!--                                            <select id="biller" class="form-control-send-money mb-3"-->
+                                        <!--                                                    th:field="*{biller}">-->
+                                        <!--                                                <option selected value="1"> &#45;&#45; Select Biller &#45;&#45;</option>-->
+                                        <!--                                                <option class="account_number" style="background-color: #D1D0CE"-->
+                                        <!--                                                        th:value="'E02E'">-->
+                                        <!--                                                    Eko-->
+                                        <!--                                                </option>-->
+                                        <!--                                                <option class="account_number" style="background-color: #D1D0CE"-->
+                                        <!--                                                        th:value="'Ikeja'">-->
+                                        <!--                                                    Ikeja-->
+                                        <!--                                                </option>-->
+                                        <!--                                                <option class="account_number" style="background-color: #D1D0CE"-->
+                                        <!--                                                        th:value="'Ibadan'">-->
+                                        <!--                                                    Ibadan-->
+                                        <!--                                                </option>-->
+                                        <!--                                                <option class="account_number" style="background-color: #D1D0CE"-->
+                                        <!--                                                        th:value="'Enugu'">-->
+                                        <!--                                                    Enugu-->
+                                        <!--                                                </option>-->
+                                        <!--                                                <option class="account_number" style="background-color: #D1D0CE"-->
+                                        <!--                                                        th:value="'Phed'">-->
+                                        <!--                                                    Phed-->
+                                        <!--                                                </option>-->
+                                        <!--                                            </select>-->
+                                        <!--                                        </div>-->
                                         <div class="mb-4">
                                             <label for="my-select-2" class="label-span">Select Electricity
                                                 Biller</label>
@@ -288,10 +291,10 @@
                                                     th:field="*{electricityBillerSelect}">
                                                 <option selected value="0"> -- Select Electricity Biller --
                                                 </option>
-                                                <option style="background-color: #D1D0CE"
+                                                <option style="background-color: #fff"
                                                         th:each="electricity : ${electricityBillers}"
                                                         th:text="${electricity.getPackageName() + ' ' + electricity.getBouquet()}"
-                                                        th:value="${electricity.getBillerId()}"></option>
+                                                        th:value="${electricity.getBiller()}"></option>
                                             </select>
                                             </select>
                                         </div>
@@ -428,22 +431,8 @@
     </div>
 </div>
 
-<!-- UPDATE AMOUNT FIELDS-->
-<script th:inline="javascript">
-    function showLoader() {
-        const loader = document.getElementById('loader');
-        loader.style.display = 'block';
-    }
-
-    function hideLoader() {
-        const loader = document.getElementById('loader');
-        loader.style.display = 'none';
-    }
-</script>
 <!--TOGGLE SHOW OR HIDE FORMS-->
 <script>
-    window.addEventListener('load', hideLoader);
-
 
     //UPDATE AMOUNT FIELD FOR GOTV
     function updateInputValueGotv() {
@@ -489,9 +478,9 @@
         $('#account_local').on('input', function () {
             const cardNumber = $(this).val();
             console.log("GOTV " + cardNumber)
-            showLoader();
             if (cardNumber.length === 10) {
                 if (cardNumber.match(/^[0-9]+$/)) {
+                    showLoader();
                     $.ajax({
                         type: 'GET',
                         url: `/validate/gotv/${cardNumber}`,// URL of the controller method
@@ -521,9 +510,9 @@
         $('#account_others').on('input', function () {
             const cardNumber = $(this).val();
             console.log(cardNumber + " DSTV")
-            showLoader();
             if (cardNumber.length === 10) {
                 if (cardNumber.match(/^[0-9]+$/)) {
+                    showLoader();
                     $.ajax({
                         type: 'GET',
                         url: `/validate/dstv/${cardNumber}`,// URL of the controller method
@@ -551,16 +540,18 @@
     //Name Enquiry For ELECTRICITY
     $(document).ready(function () {
         $('#meter-number').on('input', function () {
-            const biller = $("#biller").val();
+            const biller = $("#biller-plan").val();
             const meterNumber = $(this).val();
             console.log(biller + " ELECTRICITY BILLER");
             console.log(meterNumber + " meter number");
             if (meterNumber.length === 10) {
                 if (meterNumber.match(/^[0-9]+$/)) {
+                    showLoader();
                     $.ajax({
                         type: 'GET',
                         url: `/validate/electricity/${meterNumber}/${biller}`,// URL of the controller method
                         success: function (response) {
+                            hideLoader();
                             // Update the view with the response data
                             $('#electricity-name').text(response);
                             console.log(response);
@@ -613,8 +604,23 @@
     });
 
 
+    //SHOW OR HIDE LOADERS
+    function showLoader() {
+        const loader = document.getElementById('loader');
+        loader.style.display = 'block';
+    }
+
+    function hideLoader() {
+        const loader = document.getElementById('loader');
+        loader.style.display = 'none';
+    }
 </script>
 
+<script th:inline="javascript">
+
+</script>
+
+<!--TOGGLE DIVS-->
 <script>
 
     function toggleGotv() {
@@ -658,10 +664,5 @@
     }
 </script>
 
-
-<!--//ELECTRICITY NAME VALIDATION -->
-<script th:inline="javascript">
-
-</script>
 </body>
 </html>

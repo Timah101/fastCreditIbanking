@@ -14,16 +14,17 @@
             <div th:if="${#httpServletRequest.getAttribute('javax.servlet.error.status_code')} == 500">
                 <p>The application has been refreshed. Please <a href="/login">login</a> again.</p>
             </div>
+
+        </div>
+        <div class="text-center">
             <h1>Error</h1>
             <p th:text="${errorMessage}"></p>
-            <div>
-                <button class="button-fast" th:if="${loggedIn}" onclick="window.location.href='/dashboard'">Go to
-                    Dashboard
-                </button>
-                <button class="button-fast" th:unless="${loggedIn}" onclick="window.location.href='/login'">Go to
-                    Login
-                </button>
-            </div>
+            <button class="button-fast btn-login" th:if="${loggedIn}" onclick="window.location.href='/dashboard'">Go to
+                Dashboards
+            </button>
+            <button class="button-fast btn-login" th:unless="${loggedIn}" onclick="window.location.href='/login'">Go to
+                Login
+            </button>
         </div>
     </div>
 

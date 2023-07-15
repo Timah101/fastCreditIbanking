@@ -6,5 +6,4 @@ import lombok.Data;
 public class Configurations {
     private String tokenUsername = "IBANKINGD01";
     private String tokenPassword = "AmSecret5x";
-
 }

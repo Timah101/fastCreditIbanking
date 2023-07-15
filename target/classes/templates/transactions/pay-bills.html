@@ -257,33 +257,33 @@
                                                         th:value="${accountBalance.getAccountNumber()}"></option>
                                             </select>
                                         </div>
-                                        <div class="mb-4">
-                                            <label for="select-account" class="label-span">Select Biller</label>
-                                            <select id="biller" class="form-control-send-money mb-3"
-                                                    th:field="*{biller}">
-                                                <option selected value="1"> -- Select Biller --</option>
-                                                <option class="account_number" style="background-color: #D1D0CE"
-                                                        th:value="'E02E'">
-                                                    Eko
-                                                </option>
-                                                <option class="account_number" style="background-color: #D1D0CE"
-                                                        th:value="'Ikeja'">
-                                                    Ikeja
-                                                </option>
-                                                <option class="account_number" style="background-color: #D1D0CE"
-                                                        th:value="'Ibadan'">
-                                                    Ibadan
-                                                </option>
-                                                <option class="account_number" style="background-color: #D1D0CE"
-                                                        th:value="'Enugu'">
-                                                    Enugu
-                                                </option>
-                                                <option class="account_number" style="background-color: #D1D0CE"
-                                                        th:value="'Phed'">
-                                                    Phed
-                                                </option>
-                                            </select>
-                                        </div>
+                                        <!--                                        <div class="mb-4">-->
+                                        <!--                                            <label for="select-account" class="label-span">Select Biller</label>-->
+                                        <!--                                            <select id="biller" class="form-control-send-money mb-3"-->
+                                        <!--                                                    th:field="*{biller}">-->
+                                        <!--                                                <option selected value="1"> &#45;&#45; Select Biller &#45;&#45;</option>-->
+                                        <!--                                                <option class="account_number" style="background-color: #D1D0CE"-->
+                                        <!--                                                        th:value="'E02E'">-->
+                                        <!--                                                    Eko-->
+                                        <!--                                                </option>-->
+                                        <!--                                                <option class="account_number" style="background-color: #D1D0CE"-->
+                                        <!--                                                        th:value="'Ikeja'">-->
+                                        <!--                                                    Ikeja-->
+                                        <!--                                                </option>-->
+                                        <!--                                                <option class="account_number" style="background-color: #D1D0CE"-->
+                                        <!--                                                        th:value="'Ibadan'">-->
+                                        <!--                                                    Ibadan-->
+                                        <!--                                                </option>-->
+                                        <!--                                                <option class="account_number" style="background-color: #D1D0CE"-->
+                                        <!--                                                        th:value="'Enugu'">-->
+                                        <!--                                                    Enugu-->
+                                        <!--                                                </option>-->
+                                        <!--                                                <option class="account_number" style="background-color: #D1D0CE"-->
+                                        <!--                                                        th:value="'Phed'">-->
+                                        <!--                                                    Phed-->
+                                        <!--                                                </option>-->
+                                        <!--                                            </select>-->
+                                        <!--                                        </div>-->
                                         <div class="mb-4">
                                             <label for="my-select-2" class="label-span">Select Electricity
                                                 Biller</label>
@@ -345,15 +345,22 @@
                                 <div class="confirm-block">
                                     <form method="post" th:object="${gotvFormPin}"
                                           th:action="@{/gotv}">
-                                        <div class="mb-4">
-                                            <div class="mb-2"><span>Name</span> <span class="float-right">Babajide Balogun</span>
+                                        <div id="resultMessageGotv" class="alert-fast" style="display:none;"></div>
+                                        <div class="mb-4" th:object="${gotvTxnData}">
+                                            <div class="mb-2"><span>Transaction Type</span> <span class="float-right"> GoTV Top Up</span>
                                             </div>
-                                            <div class="mb-2"><span>Bank</span> <span
-                                                    class="float-right">Access Bank</span></div>
-                                            <div class="mb-2"><span>Amount</span> <span
-                                                    class="float-right">N50,000</span></div>
-                                            <div class="mb-2"><span>Amount</span> <span
-                                                    class="float-right">N50,000</span></div>
+                                            <div class="mb-2"><span>SmartCard Number</span> <span class="float-right"
+                                                                                                  th:text="${gotvTxnData.getSmartCardNumber()}"></span>
+                                            </div>
+                                            <div class="mb-2"><span>Biller</span> <span class="float-right"
+                                                                                        th:text="${gotvTxnData.getElectricityBillerSelect()}"></span>
+                                            </div>
+                                            <div class="mb-2"><span>Amount</span> <span class="float-right"
+                                                                                        th:text="${gotvTxnData.getAmount()}"></span>
+                                            </div>
+                                            <div class="mb-2"><span>Date</span> <span class="float-right"
+                                                                                      th:text="${gotvTxnData.getDate()}"></span>
+                                            </div>
                                         </div>
                                         <div class="mb-4">
                                             <label for="pin" class="confirm-pin">Enter PIN</label>
@@ -379,7 +386,6 @@
             </div>
         </div>
 
-
         <!--        THE CONFIRM OTHERS TRANSFER DIV-->
         <div class="col-md-5 col-sm-12 col-xs-12" th:if="${submitDstv}">
             <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
@@ -395,15 +401,22 @@
                                 <div class="confirm-block">
                                     <form method="post" th:object="${dstvFormPin}"
                                           th:action="@{/dstv}">
-                                        <div class="mb-4">
-                                            <div class="mb-2"><span>Name</span> <span class="float-right">Babajide Balogun</span>
+                                        <div id="resultMessageDstv" class="alert-fast" style="display:none;"></div>
+                                        <div class="mb-4" th:object="${dstvTxnData}">
+                                            <div class="mb-2"><span>Transaction Type</span> <span class="float-right"> DsTV Top Up</span>
                                             </div>
-                                            <div class="mb-2"><span>Bank</span> <span
-                                                    class="float-right">Access Bank</span></div>
-                                            <div class="mb-2"><span>Amount</span> <span
-                                                    class="float-right">N50,000</span></div>
-                                            <div class="mb-2"><span>Amount</span> <span
-                                                    class="float-right">N50,000</span></div>
+                                            <div class="mb-2"><span>SmartCard Number</span> <span class="float-right"
+                                                                                                  th:text="${dstvTxnData.getSmartCardNumber()}"></span>
+                                            </div>
+                                            <div class="mb-2"><span>Biller</span> <span class="float-right"
+                                                                                        th:text="${dstvTxnData.getElectricityBillerSelect()}"></span>
+                                            </div>
+                                            <div class="mb-2"><span>Amount</span> <span class="float-right"
+                                                                                        th:text="${dstvTxnData.getAmount()}"></span>
+                                            </div>
+                                            <div class="mb-2"><span>Date</span> <span class="float-right"
+                                                                                      th:text="${dstvTxnData.getDate()}"></span>
+                                            </div>
                                         </div>
                                         <div class="mb-4">
                                             <label for="pin" class="confirm-pin">Enter PIN</label>
@@ -428,50 +441,66 @@
 
             </div>
         </div>
+
+        <!--        THE CONFIRM PAY BILLS TRANSFER DIV-->
+        <div class="col-md-5 col-sm-12 col-xs-12" th:if="${submitDstv}">
+            <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
+
+                <div class="confirm-money-title"> <!-- SEND MONEY TITLE-->
+                    Confirm Transaction
+                </div>
+
+                <div class="confirm-money-form"> <!-- SEND TRANSFER MONEY-->
+                    <div class="col-md-12">
+                        <div class="form-confirm-money">
+                            <div class="confirm-money-block">
+                                <div class="confirm-block">
+                                    <form id="electricityForm" method="post" th:object="${electricityFormPin}"
+                                          th:action="@{/electricity}">
+                                        <div id="resultMessageElectricity" class="alert-fast"
+                                             style="display:none;"></div>
+                                        <div class="mb-4" th:object="${electricityTxnData}">
+                                            <div class="mb-2"><span>Transaction Type</span> <span class="float-right"> Electricity Top Up</span>
+                                            </div>
+                                            <div class="mb-2"><span>Meter Number</span> <span class="float-right"
+                                                                                              th:text="${electricityTxnData.getMeterNumber()}"></span>
+                                            </div>
+                                            <div class="mb-2"><span>Biller</span> <span class="float-right"
+                                                                                        th:text="${electricityTxnData.getElectricityBillerSelect()}"></span>
+                                            </div>
+                                            <div class="mb-2"><span>Amount</span> <span class="float-right"
+                                                                                        th:text="${electricityTxnData.getAmount()}"></span>
+                                            </div>
+                                            <div class="mb-2"><span>Date</span> <span class="float-right"
+                                                                                      th:text="${electricityTxnData.getDate()}"></span>
+                                            </div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="pin" class="confirm-pin">Enter PIN</label>
+                                            <input id="pin-electricity" type="password" class=""
+                                                   style="align-items: center; text-align: center; width: 200px"
+                                                   maxlength="4"
+                                                   placeholder="" th:field="*{pin}">
+                                        </div>
+                                        <div class="mb-4">
+                                            <input class="submit-comfirm-money" type="submit" placeholder="Submit">
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
     </div>
 </div>
 
-<!--TOGGLE SHOW OR HIDE FORMS-->
-<script>
-
-    //UPDATE AMOUNT FIELD FOR GOTV
-    function updateInputValueGotv() {
-        const selectedOptionArray = document.getElementById("my-select").value;
-        console.log(selectedOptionArray + " the array to be split")
-        const selectedOptionArraySplit = selectedOptionArray.split(",");
-        console.log(selectedOptionArraySplit)
-        if (typeof selectedOptionArraySplit === "string" && selectedOptionArraySplit.trim().length === 0) {
-            const selectedOption = "empty";
-            document.getElementById("inputField").value = selectedOption;
-            console.log(selectedOption)
-        } else {
-            // const selectedOption = document.getElementById("selectOption").value;
-            const selectedOption = selectedOptionArraySplit[1];
-            document.getElementById("inputField").value = selectedOption;
-            console.log(selectedOption)
-        }
-    }
-
-
-    //UPDATE AMOUNT FIELD FOR DSTV
-    function updateInputValueDstv() {
-        const selectedOptionArray = document.getElementById("my-select-2").value;
-        console.log(selectedOptionArray + " the array to be split")
-        const selectedOptionArraySplit = selectedOptionArray.split(",");
-        console.log(selectedOptionArraySplit)
-        if (typeof selectedOptionArraySplit === "string" && selectedOptionArraySplit.trim().length === 0) {
-            const selectedOption = "empty";
-            document.getElementById("amount-others").value = selectedOption;
-            console.log(selectedOption)
-        } else {
-            // const selectedOption = document.getElementById("selectOption").value;
-            const selectedOption = selectedOptionArraySplit[1];
-            document.getElementById("amount-others").value = selectedOption;
-            console.log(selectedOption)
-        }
-    }
-</script>
-<!--NAME ENQUIRY FOR BILL PAYMENT-->
 <script th:inline="javascript">
     //Name Enquiry for GOTV
     $(document).ready(function () {
@@ -510,9 +539,9 @@
         $('#account_others').on('input', function () {
             const cardNumber = $(this).val();
             console.log(cardNumber + " DSTV")
-            showLoader();
             if (cardNumber.length === 10) {
                 if (cardNumber.match(/^[0-9]+$/)) {
+                    showLoader();
                     $.ajax({
                         type: 'GET',
                         url: `/validate/dstv/${cardNumber}`,// URL of the controller method
@@ -604,9 +633,7 @@
     });
 
 
-</script>
-
-<script th:inline="javascript">
+    //SHOW OR HIDE LOADERS
     function showLoader() {
         const loader = document.getElementById('loader');
         loader.style.display = 'block';
@@ -617,8 +644,10 @@
         loader.style.display = 'none';
     }
 </script>
+
 <script>
 
+    //TOGGLE GOTV
     function toggleGotv() {
         const contentDiv = document.getElementById("send-money-local");
         const contentOthers = document.getElementById("send-money-others");
@@ -631,6 +660,7 @@
         }
     }
 
+    //TOGGLE DSTV
     function toggleDstv() {
         const contentDiv = document.getElementById("send-money-others");
         const contentOthers = document.getElementById("send-money-local");
@@ -643,6 +673,7 @@
         }
     }
 
+    //TOGGLE ELECTRICITY
     function toggleElectricity() {
         const contentDiv = document.getElementById("electricity");
         const contentOthers = document.getElementById("send-money-local");
@@ -658,12 +689,156 @@
         }
 
     }
+
+
+    //UPDATE AMOUNT FIELD FOR GOTV
+    function updateInputValueGotv() {
+        const selectedOptionArray = document.getElementById("my-select").value;
+        console.log(selectedOptionArray + " the array to be split")
+        const selectedOptionArraySplit = selectedOptionArray.split(",");
+        console.log(selectedOptionArraySplit)
+        if (typeof selectedOptionArraySplit === "string" && selectedOptionArraySplit.trim().length === 0) {
+            const selectedOption = "empty";
+            document.getElementById("inputField").value = selectedOption;
+            console.log(selectedOption)
+        } else {
+            // const selectedOption = document.getElementById("selectOption").value;
+            const selectedOption = selectedOptionArraySplit[1];
+            document.getElementById("inputField").value = selectedOption;
+            console.log(selectedOption)
+        }
+    }
+
+
+    //UPDATE AMOUNT FIELD FOR DSTV
+    function updateInputValueDstv() {
+        const selectedOptionArray = document.getElementById("my-select-2").value;
+        console.log(selectedOptionArray + " the array to be split")
+        const selectedOptionArraySplit = selectedOptionArray.split(",");
+        console.log(selectedOptionArraySplit)
+        if (typeof selectedOptionArraySplit === "string" && selectedOptionArraySplit.trim().length === 0) {
+            const selectedOption = "empty";
+            document.getElementById("amount-others").value = selectedOption;
+            console.log(selectedOption)
+        } else {
+            // const selectedOption = document.getElementById("selectOption").value;
+            const selectedOption = selectedOptionArraySplit[1];
+            document.getElementById("amount-others").value = selectedOption;
+            console.log(selectedOption)
+        }
+    }
+
+    // SUBMIT FORM FOR ELECTRICITY
+    $(document).ready(function () {
+        $('#electricityForm').submit(function (event) {
+            event.preventDefault();
+            const form = $(this);
+            showLoader();
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (response) {
+                    if (response === "00") {
+                        window.location.href = '/success'; //change to success page
+                    } else {
+                        hideLoader();
+                        const resultSection = $('#resultSection');
+                        const resultMessage = $('#resultMessageElectricity');
+                        showErrorMessage();
+                        resultMessage.text(response);
+                        resultSection.show();
+
+                    }
+                },
+                error: function (xhr) {
+                    hideLoader();
+                    const resultSection = $('#resultSection');
+                    const resultMessage = $('#resultMessageElectricity');
+                    const retryButton = $('#retryButton');
+                    resultMessage.text(xhr.responseText);
+                    resultSection.show();
+                    retryButton.show();
+                }
+            });
+        });
+    });
+
+    // SUBMIT FORM FOR GOTV
+    $(document).ready(function () {
+        $('#gotvForm').submit(function (event) {
+            event.preventDefault();
+            const form = $(this);
+            showLoader();
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (response) {
+                    if (response === "00") {
+                        window.location.href = '/success'; //change to success page
+                    } else {
+                        hideLoader();
+
+                        const resultSection = $('#resultSection');
+                        const resultMessage = $('#resultMessageGotv');
+                        const retryButton = $('#retryButton');
+                        showErrorMessage();
+                        resultMessage.text(response);
+                        resultSection.show();
+                        retryButton.show();
+                    }
+                },
+                error: function (xhr) {
+                    hideLoader();
+                    const resultSection = $('#resultSection');
+                    const resultMessage = $('#resultMessageGotv');
+                    const retryButton = $('#retryButton');
+                    resultMessage.text(xhr.responseText);
+                    resultSection.show();
+                    retryButton.show();
+                }
+            });
+        });
+    });
+    // SUBMIT FORM FOR DSTV
+    $(document).ready(function () {
+        $('#dstvForm').submit(function (event) {
+            event.preventDefault();
+            const form = $(this);
+            showLoader();
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (response) {
+                    if (response === "00") {
+                        window.location.href = '/success'; //change to success page
+                    } else {
+                        hideLoader();
+
+                        const resultSection = $('#resultSection');
+                        const resultMessage = $('#resultMessageDstv');
+                        const retryButton = $('#retryButton');
+                        showErrorMessage();
+                        resultMessage.text(response);
+                        resultSection.show();
+                        retryButton.show();
+                    }
+                },
+                error: function (xhr) {
+                    hideLoader();
+                    const resultSection = $('#resultSection');
+                    const resultMessage = $('#resultMessageDstv');
+                    const retryButton = $('#retryButton');
+                    resultMessage.text(xhr.responseText);
+                    resultSection.show();
+                    retryButton.show();
+                }
+            });
+        });
+    });
 </script>
 
-
-<!--//ELECTRICITY NAME VALIDATION -->
-<script th:inline="javascript">
-
-</script>
 </body>
 </html>

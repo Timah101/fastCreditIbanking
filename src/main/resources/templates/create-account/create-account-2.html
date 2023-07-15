@@ -58,7 +58,11 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="marital"> Marital Status</label>
-                                    <input id="marital" type="text" class="form-control" placeholder="" th:field="*{maritalStatus}">
+                                    <select id="marital" class="default-select form-control wide mb-3" th:field="*{maritalStatus}" required>
+                                        <option value=""> -- select an option -- </option>
+                                        <option value="Male">Married</option>
+                                        <option value="Female">Single</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="row mb-4">

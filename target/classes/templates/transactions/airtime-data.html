@@ -407,7 +407,7 @@
                 data: form.serialize(),
                 success: function (response) {
                     if (response === "00") {
-                        window.location.href = '/register'; //change to success page
+                        window.location.href = '/success'; //change to success page
                     } else {
                         hideLoader();
                         const resultSection = $('#resultSection');
@@ -443,7 +443,7 @@
                 data: form.serialize(),
                 success: function (response) {
                     if (response === "00") {
-                        window.location.href = '/register'; //change to success page
+                        window.location.href = '/success'; //change to success page
                     } else {
                         hideLoader();
 

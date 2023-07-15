@@ -19,15 +19,13 @@
                         <div class="mb-2 create-left">
                             <a><img th:src="@{/images/logo.svg}" alt="Fast Credit" width="130" height="90"></a>
                         </div>
-                        <div class="mb-4 create-left">Let's get to know you.
+                        <div class="mb-5 create-left">Let's get to know you.
                         </div>
-                        <div class="mb-4 create-left">Let's get to know you.
-                        </div>
-                        <div class="mb-4">
+                        <div class="mb-5">
                             <label for="phone" class="label-create"> Phone Number</label>
                             <input id="phone" type="text" class="form-control" placeholder="" th:field="*{mobileNumber}">
                         </div>
-                        <div class="mb-4">
+                        <div class="mb-5">
                             <label for="email" class="label-create"> Email</label>
                             <input id="email" type="text" class="form-control" placeholder="" th:field="*{email}">
                         </div>
@@ -35,6 +33,8 @@
                             <button class="btn-block btn-login">Proceed</button>
                         </div>
                     </form>
+                    <p>Already have a profile? <a class="text-primary" th:href="@{/login}">Login</a>
+                    </p>
                 </div>
             </div>
         </div>

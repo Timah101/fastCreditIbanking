@@ -1,7 +1,9 @@
 package com.iBanking.iBanking.utils;
 
 public class ApiPaths {
-    public static final String BASE_URL = "https://omnichannelapi.fastcredit-ng.com//expertbridge/api/";
+
+//    http://omnichannelapi2.fastcredit-ng.com
+    public static final String BASE_URL = "http://omnichannelapi2.fastcredit-ng.com//expertbridge/api/";
     static final String GENERATE_TOKEN = "token/generate-token";
     static final String ENCRYPT_PAYLOAD = "customerService/encrypt";
     static final String DECRYPT_PAYLOAD = "customerService/decrypt";

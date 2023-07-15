@@ -75,24 +75,28 @@ public class PayBillsController {
         model.addAttribute("electricityForm", new Forms());
         model.addAttribute("electricityFormPin", new Forms());
 
+        Forms gotvTxnData = (Forms) session.getAttribute("gotvForm");
+        model.addAttribute("gotvTxnData" , gotvTxnData);
+
         model.addAttribute("submitted", true);
 
         return "transactions/pay-bills";
     }
 
     @PostMapping("/gotv")
+    @ResponseBody
     public String processGotv(Model model, Forms gotvFormPin, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
         session.setAttribute("gotvFormPin", gotvFormPin);
         String biller = "GOTV";
         payBillsService.cableTvPayment(session, biller);
         CableTvPaymentResponse cableTvPaymentResponse = (CableTvPaymentResponse) session.getAttribute("cableTvPaymentResponse");
         if (cableTvPaymentResponse.getResponseCode().equals("00")) {
-            return "redirect:/pay-bills";
+            return "00";
         } else {
             model.addAttribute("submitted", true);
             String customErrorMessage = cableTvPaymentResponse.getResponseMessage();
             redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
-            return "redirect:/pay-bills";
+            return cableTvPaymentResponse.getResponseMessage();
         }
 
     }
@@ -152,6 +156,9 @@ public class PayBillsController {
         model.addAttribute("electricityForm", new Forms());
         model.addAttribute("electricityFormPin", new Forms());
 
+        Forms dstvTxnData = (Forms) session.getAttribute("dstvForm");
+        model.addAttribute("dstvTxnData" , dstvTxnData);
+
         model.addAttribute("submitDstv", true);
 
         return "transactions/pay-bills";
@@ -159,18 +166,19 @@ public class PayBillsController {
 
     //PROCESS DSTV PAYMENT
     @PostMapping("/dstv")
+    @ResponseBody
     public String processDstv(Model model, Forms dstvFormPin, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
         session.setAttribute("dstvFormPin", dstvFormPin);
         String biller = "DSTV";
         payBillsService.cableTvPayment(session, biller);
         CableTvPaymentResponse cableTvPaymentResponse = (CableTvPaymentResponse) session.getAttribute("cableTvPaymentResponse");
         if (cableTvPaymentResponse.getResponseCode().equals("00")) {
-            return "redirect:/pay-bills";
+            return "00";
         } else {
             model.addAttribute("submitted", true);
             String customErrorMessage = cableTvPaymentResponse.getResponseMessage();
             redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
-            return "redirect:/pay-bills";
+            return cableTvPaymentResponse.getResponseMessage();
         }
 
     }
@@ -214,7 +222,10 @@ public class PayBillsController {
         model.addAttribute("electricityForm", new Forms());
         model.addAttribute("electricityFormPin", new Forms());
 
-        model.addAttribute("submitted", true);
+        Forms electricityTxnData = (Forms) session.getAttribute("electricityForm");
+        model.addAttribute("electricityTxnData" , electricityTxnData);
+
+        model.addAttribute("submittedElectricity", true);
 
         return "transactions/pay-bills";
     }

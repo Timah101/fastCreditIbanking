@@ -21,7 +21,8 @@ public class CustomErrorControllerAdvice implements ErrorController {
         // Add the loggedIn attribute to the model
         model.addAttribute("loggedIn", loggedIn);
         model.addAttribute("errorMessage", "An unexpected error occurred");
-        return "error-page"; // Return the name of your custom error page template
+//        return "error-page"; // Return the name of your custom error page template
+        return "redirect:/login";
     }
 }
 

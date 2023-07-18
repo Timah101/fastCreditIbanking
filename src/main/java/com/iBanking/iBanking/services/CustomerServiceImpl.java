@@ -28,21 +28,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     //GET CUSTOMER DETAILS
     @Override
-    public CustomerDetailsResponsePayload getCustomerDetails(HttpSession session) throws UnirestException {
+    public CustomerDetailsResponsePayload getCustomerDetails(HttpSession session, String mobileNUmber) throws UnirestException {
         String accessToken = getAccessToken();
         session.setAttribute("accessTokenCustomer", accessToken);
         CustomerDetailsResponsePayload customerDetailsResponse;
         CustomerDetailsRequestPayload customerDetailsRequestPayload = new CustomerDetailsRequestPayload();
-        Forms loginForm = (Forms) session.getAttribute("loginForm");
-        Forms registerForm = (Forms) session.getAttribute("registerForm1");
-        String mobileNumber = "";
-        if (loginForm == null) {
-            mobileNumber = registerForm.getMobileNumber();
-        } else {
-            mobileNumber = loginForm.getMobileNumber();
-        }
-
-        customerDetailsRequestPayload.setMobileNumber(mobileNumber);
+        customerDetailsRequestPayload.setMobileNumber(mobileNUmber);
         String requestPayload = gson.toJson(customerDetailsRequestPayload);
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
@@ -87,11 +78,12 @@ public class CustomerServiceImpl implements CustomerService {
         Forms registerForm1 = (Forms) session.getAttribute("registerForm1");
         Forms registerForm2 = (Forms) session.getAttribute("registerForm2");
         Forms registerForm3 = (Forms) session.getAttribute("registerForm3");
+        Forms registerFormPassword = (Forms) session.getAttribute("registerFormPassword");
         requestPayload.setMobileNumber(registerForm1.getMobileNumber());
-        requestPayload.setSecurityQuestion(registerForm3.getSecurityQuestion());
-        requestPayload.setSecurityAnswer(registerForm3.getSecurityAnswer());
+        requestPayload.setSecurityQuestion(registerFormPassword.getSecurityQuestion());
+        requestPayload.setSecurityAnswer(registerFormPassword.getSecurityAnswer());
         requestPayload.setPin(registerForm3.getPin());
-        requestPayload.setPassword(registerForm3.getPassword());
+        requestPayload.setPassword(registerFormPassword.getPassword());
         requestPayload.setOtp(registerForm2.getOtp());
         requestPayload.setReferredBy("");
         requestPayload.setReferralCode("");
@@ -99,11 +91,10 @@ public class CustomerServiceImpl implements CustomerService {
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
         EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayloadJson);
-        log.info("REGISTER CUSTOMER ENCRYPTION RESPONSE {}", encryptResponsePayload);
 
         //CALL THE REGISTER CUSTOMER ENDPOINT
         String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
-        log.info("CUSTOMER DETAILS PAYLOAD D {}", requestPayloadJson);
+        log.info("REGISTER CUSTOMER REQUEST PAYLOAD : {}", requestPayloadJson);
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + CUSTOMER_REGISTER)
                 .header("accept", "application/json")
                 .header("Content-Type", "application/json")
@@ -123,7 +114,7 @@ public class CustomerServiceImpl implements CustomerService {
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
         registerCustomer = decryptPayload(decryptRequestPayload, RegisterCustomerResponsePayload.class);
         //LOG REQUEST AND RESPONSE
-        log.info("REGISTER CUSTOMER REQUEST PAYLOAD : {}", requestPayload);
+
         log.info("REGISTER CUSTOMER RESPONSE PAYLOAD : {}", gson.toJson(registerCustomer));
         session.setAttribute("registerCustomerResponse", registerCustomer);
         return registerCustomer;

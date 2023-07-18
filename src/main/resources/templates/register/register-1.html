@@ -22,12 +22,13 @@
 
                         <div class=" register-left">Enter Mobile Number to Proceed
                         </div>
-                        <div class="border-rectangle"></div>
-                        <div class="mb-4">
-                            <label for="phone" class="label-create"> Phone Number</label>
-                            <input id="phone" type="text" class="form-control" placeholder="" th:field="*{mobileNumber}">
+                        <div class="border-rectangle mb-5"></div>
+                        <div class="mb-5">
+                            <label for="phone" class="label-create"> Mobile Number</label>
+                            <input id="phone" type="text" class="form-control" maxlength="11"
+                                   th:field="*{mobileNumber}">
                         </div>
-                        <div class="text-center mb-4">
+                        <div class="text-center mb-5">
                             <button class="btn-block btn-login" type="submit">Proceed</button>
                         </div>
 

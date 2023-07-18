@@ -52,7 +52,8 @@ public class LoginController {
 
                 CompletableFuture<CustomerDetailsResponsePayload> customerDetailsFuture = CompletableFuture.supplyAsync(() -> {
                     try {
-                        return customerService.getCustomerDetails(session);
+                        Forms loginFormMobileNumber = (Forms) session.getAttribute("loginForm");
+                        return customerService.getCustomerDetails(session, loginFormMobileNumber.getMobileNumber());
                     } catch (UnirestException e) {
                         throw new RuntimeException("Error while getting customer details", e);
                     }

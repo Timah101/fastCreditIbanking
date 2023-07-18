@@ -9,20 +9,26 @@
 <div class="container-fluid">
 
     <div class="row">
-        <div class="col-xl-2 col-lg-2"></div>
+        <div class="col-xl-2 col-lg-2">
+            <div class="banner">
+
+            </div>
+        </div>
         <div class="col-xl-8 col-lg-8">
             <div class="card">
-                <div class="card-header">
-                    <h1 class="card-title-create">Customer Information</h1>
-                </div>
+<!--                <div class="card-header">-->
+<!--                    Customer Information-->
+<!--&lt;!&ndash;                    <h1 class="card-title-create"></h1>&ndash;&gt;-->
+<!--                </div>-->
                 <div class="card-body">
                     <div class="basic-form">
                         <form method="post" th:object="${createAccountForm2}" th:action="@{/open-account-2}">
                             <div class="row mb-4">
                                 <div class="col-sm-6">
                                     <label for="title"> Title</label>
-                                    <select id="title" class="default-select form-control wide mb-3" th:field="*{title}" required>
-                                        <option value=""> -- select an option -- </option>
+                                    <select id="title" class="default-select form-control wide mb-3" th:field="*{title}"
+                                            required>
+                                        <option value=""> -- select an option --</option>
                                         <option value="Mr">Mr</option>
                                         <option value="Mrs">Mrs</option>
                                         <option value="Miss">Miss</option>
@@ -34,8 +40,9 @@
                                 </div>
                                 <div class="col-sm-6 mt-2 mt-sm-0">
                                     <label for="gender"> Gender</label>
-                                    <select id="gender" class="default-select form-control wide mb-3" th:field="*{gender}" required>
-                                        <option value=""> -- select an option -- </option>
+                                    <select id="gender" class="default-select form-control wide mb-3"
+                                            th:field="*{gender}" required>
+                                        <option value=""> -- select an option --</option>
                                         <option value="Male">Male</option>
                                         <option value="Female">Female</option>
                                     </select>
@@ -44,38 +51,44 @@
                             <div class="row mb-4">
                                 <div class="col-sm-6">
                                     <label for="first-name"> First Name</label>
-                                    <input id="first-name" type="text" class="form-control" placeholder="" th:field="*{firstName}">
+                                    <input id="first-name" type="text" class="form-control" placeholder=""
+                                           th:field="*{firstName}">
                                 </div>
                                 <div class="col-sm-6 mt-2 mt-sm-0">
                                     <label for="last-name"> Last Name</label>
-                                    <input id="last-name" type="text" class="form-control" placeholder="" th:field="*{lastName}">
+                                    <input id="last-name" type="text" class="form-control" placeholder=""
+                                           th:field="*{lastName}">
                                 </div>
                             </div>
                             <div class="row mb-4">
                                 <div class="col-sm-6 mt-2 mt-sm-0">
                                     <label for="other"> Other Name</label>
-                                    <input id="other" type="text" class="form-control" placeholder="" th:field="*{otherName}">
+                                    <input id="other" type="text" class="form-control" placeholder=""
+                                           th:field="*{otherName}">
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="marital"> Marital Status</label>
-                                    <select id="marital" class="default-select form-control wide mb-3" th:field="*{maritalStatus}" required>
-                                        <option value=""> -- select an option -- </option>
+                                    <select id="marital" class="default-select form-control wide mb-3"
+                                            th:field="*{maritalStatus}" required>
+                                        <option value=""> -- select an option --</option>
                                         <option value="Male">Married</option>
                                         <option value="Female">Single</option>
+                                        <option value="Female">Divorced</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="row mb-4">
+                            <div class="row mb-5">
                                 <div class="col-sm-6">
                                     <label for="dob"> Date Of Birth</label>
                                     <input id="dob" type="date" class="form-control" placeholder="" th:field="*{dob}">
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="nationality"> Nationality</label>
-                                    <input id="nationality" type="text" class="form-control" placeholder="" th:field="*{nationality}">
+                                    <input id="nationality" type="text" class="form-control" placeholder=""
+                                           th:field="*{nationality}">
                                 </div>
                             </div>
-                            <div class="text-center mb-4">
+                            <div class="text-center">
                                 <button class="btn-block btn-login">Proceed</button>
                             </div>
                         </form>
@@ -84,7 +97,11 @@
             </div>
 
         </div>
-        <div class="col-xl-2 col-lg-2"></div>
+        <div class="col-xl-2 col-lg-2">
+            <div class="banner">
+
+            </div>
+        </div>
 
 
     </div>

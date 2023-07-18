@@ -2,6 +2,7 @@ package com.iBanking.iBanking.controller;
 
 import com.iBanking.iBanking.Forms.Forms;
 import com.iBanking.iBanking.payload.SendOtpResponsePayload;
+import com.iBanking.iBanking.payload.customer.CustomerDetailsResponsePayload;
 import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
 import com.iBanking.iBanking.services.CustomerService;
 import com.iBanking.iBanking.services.SendOtpService;
@@ -36,23 +37,30 @@ public class ResetPasswordController {
 
     @PostMapping("/reset")
     public String processReset1(Model model, Forms resetForm1, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
-
         session.setAttribute("resetForm1", resetForm1);
         String purpose = "PR";
-        final SendOtpResponsePayload sendOtp = sendOtpService.sendOtp(session, purpose);
-        if (sendOtp.getResponseCode().equals("00")) {
-            return "redirect:/otp";
+        Forms formPasswordReset = (Forms) session.getAttribute("resetForm1");
+        CustomerDetailsResponsePayload customerDetails = customerService.getCustomerDetails(session, formPasswordReset.getMobileNumber());
+        if (customerDetails.getResponseCode().equals("00")) {
+            final SendOtpResponsePayload sendOtp = sendOtpService.sendOtp(session, purpose, formPasswordReset.getMobileNumber());
+            if (sendOtp.getResponseCode().equals("00")) {
+                return "redirect:/otp";
+            } else {
+                String customErrorMessage = sendOtp.getResponseMessage();
+                redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
+                return "redirect:/reset";
+            }
         } else {
-            String customErrorMessage = sendOtp.getResponseMessage();
+            String customErrorMessage = customerDetails.getResponseMessage();
             redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
             return "redirect:/reset";
         }
-
     }
 
     @GetMapping("/otp")
-    public String showOtp(Model model) {
-
+    public String showOtp(Model model, HttpSession session) {
+        Forms formPasswordReset = (Forms) session.getAttribute("resetForm1");
+        model.addAttribute("mobileNumberForm", formPasswordReset);
         model.addAttribute("resetOtpForm", new Forms());
 
         return "profile/reset-otp";
@@ -68,10 +76,11 @@ public class ResetPasswordController {
     }
 
     @GetMapping("/reset-2")
-    public String showReset2(Model model) {
+    public String showReset2(Model model, HttpSession session) {
 
+        CustomerDetailsResponsePayload customer = (CustomerDetailsResponsePayload) session.getAttribute("customerDetailsResponse");
         model.addAttribute("resetForm2", new Forms());
-
+        model.addAttribute("securityQuestion", customer);
         return "profile/reset-password-2";
     }
 
@@ -82,7 +91,11 @@ public class ResetPasswordController {
 
         final GeneralResponsePayload resetPassword = customerService.resetPassword(session);
         if (resetPassword.getResponseCode().equals("00")) {
-            return "redirect:/success";
+            return "redirect:/login";
+        } else if (resetPassword.getResponseCode().equals("03")) {
+            String customErrorMessage = resetPassword.getResponseMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
+            return "redirect:/otp";
         } else {
             String customErrorMessage = resetPassword.getResponseMessage();
             redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);

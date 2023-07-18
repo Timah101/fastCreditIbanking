@@ -29,12 +29,12 @@
 
             </div>
         </div>
-        <div class="col-md-3 col-sm-12 col-lg-3 col-xl-3 col-xs-12">
+        <div class="col-md-4 col-sm-12 col-lg-4 col-xl-4 col-xs-12">
             <div class="" th:object="${loginForm}">
                 <div th:if="${errorMessage}" class="alert-fast" role="alert">
                     <span th:text="${errorMessage}">Error message</span>
                 </div>
-                <div class="text-center mb-5">
+                <div class="text-center mb-4">
                     <a><img th:src="@{/images/logo.svg}" alt="Fast Credit" width="200" height="100"></a>
                 </div>
                 <form method="post" th:action="@{/login}" id="loginForm">
@@ -43,17 +43,18 @@
                         <input type="text" class="form-control-login" style="background-color: #D1D0CE;"
                                th:field="*{mobileNumber}">
                     </div>
-                    <div class="mb-5 password-container">
+                    <div class="password-container">
                         <label class="mb-1" for="password"><span class="fa fa-lock"></span><span class="login-params">
-                             Password</span></label> <span class="login-params-password-forgot">Forgot Password</span>
+                             Password</span></label>
                         <input id="password" type="password" class="form-control-login"
                                style="background-color: #D1D0CE;" th:field="*{password}">
                         <i id="eye-icon" class="fas fa-eye password-toggle" onclick="togglePasswordVisibility()"></i>
                     </div>
+                    <p><a class="text-primary login-params-password-forgot mb-5" th:href="@{/reset}">Forgot Password?</a></p>
                     <div class="row d-flex justify-content-between mt-4 mb-2">
 
                     </div>
-                    <div class="text-center mb-5">
+                    <div class="text-center mb-4">
                         <a>
                             <button type="submit" class="btn-block btn-login">Login</button>
                         </a>
@@ -62,7 +63,6 @@
                 <div class="new-account">
                     <p>Don't have a profile yet? <a class="text-primary" th:href="@{/register}">Register</a>
                     </p>
-                    <p><a class="text-primary" th:href="@{/register}">Forgot Password?</a></p>
                     <p>You do not have an account? <a class="text-primary"
                                                       th:href="@{/open-account}">Create Account</a></p>
                 </div>

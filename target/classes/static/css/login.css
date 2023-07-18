@@ -134,7 +134,7 @@ input:checked + .slider:before {
     color: white;
 }
 
-.airtime-data {
+.dashboard-container-main {
     /*border: 1px solid green;*/
     width: 260px;
     height: 200px;
@@ -205,17 +205,12 @@ input:checked + .slider:before {
     padding-bottom: 40px;
 }
 
-.airtime-fast {
-    display: flex;
-    float: left;
-    align-items: center;
-    /*#effaf0*/
+.dashboard-container {
     background-color: rgba(203, 207, 210, 0.18);
-    box-shadow: 4px 3px 4px 1px #888888;
+    box-shadow: 0px 3px 4px 0px #888888;
     width: 120px;
     height: 120px;
-    /*top: 111px;*/
-    /*position: absolute;*/
+    padding-top: 25px;
 }
 
 .request-loan {
@@ -260,13 +255,17 @@ input:checked + .slider:before {
     /*position: absolute;*/
 }
 
-.img-airtime {
-    position: absolute;
-    margin-left: 30px;
-    margin-top: -20px;
+.dashboard-container-svg {
+    text-align: center;
 }
 
-.img-airtime svg {
+.dashboard-container-svg svg {
+    height: 2.8em;
+    width: 2.8em;
+    fill: #029247;
+}
+
+.data-fast svg {
     height: 2.8em;
     width: 2.8em;
     fill: #029247;
@@ -278,10 +277,11 @@ input:checked + .slider:before {
     margin-left: 35px;
 }
 
-.airtime-itself {
-    position: absolute;
-    margin-left: 17px;
-    margin-top: 40px;
+.dashboard-container-text {
+    text-align: center;
+    color: var(--bs-body-color);
+    font-size: 12px;
+    font-weight: bold;
 }
 
 .data-itself {
@@ -609,13 +609,12 @@ header {
 }
 
 .form-control-login {
-
     background: #fff;
     border: 1px solid green;
     padding: 0.6rem 1.25rem;
     color: #6e6e6e;
     height: 2.5rem;
-    width: 360px;
+    width: 100%;
     border-radius: 0.3rem;
 }
 
@@ -632,7 +631,8 @@ header {
     /*border: 1px solid green;*/
 
 }
-.txn-successful{
+
+.txn-successful {
     color: green;
     font-size: 40px;
     font-weight: 900;
@@ -695,7 +695,13 @@ header {
     font-size: 18px;
     font-weight: bold;
 }
-
+.security-question {
+    display: flex;
+    margin-left: -2px;
+    color: black;
+    font-size: 13px;
+    font-weight: bold;
+}
 .register-left-2 {
     margin-left: -100px;
     color: black;
@@ -744,7 +750,7 @@ header {
 }
 
 .login-params-password-forgot {
-    margin-left: 140px;
+    float: right;
 }
 
 .create-account {
@@ -759,7 +765,7 @@ header {
     position: relative;
     border: 1px solid white;
     border-radius: 5px;
-    box-shadow: 0px 5px 5px 0px gray;
+    box-shadow: 0px 2px 5px 0px gray;
     height: calc(100% - 50px);
     padding: 20px;
     margin: 30px auto 1.875rem;
@@ -773,7 +779,7 @@ header {
     position: relative;
     border: 0px solid transparent;
     border-radius: 8px;
-    box-shadow: 4px 3px 4px 1px #888888;
+    box-shadow: 0px 5px 4px 0px #888888;
     /*height: calc(100% - 90px);*/
     /*padding: 20px;*/
     display: flex;

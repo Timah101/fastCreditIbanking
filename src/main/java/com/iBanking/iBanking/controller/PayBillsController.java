@@ -76,8 +76,14 @@ public class PayBillsController {
         model.addAttribute("electricityFormPin", new Forms());
 
         Forms gotvTxnData = (Forms) session.getAttribute("gotvForm");
-        model.addAttribute("gotvTxnData" , gotvTxnData);
+        String bouquet = "";
+        if (gotvTxnData != null) {
+            String[] bouquetSplitted = gotvTxnData.getDataPlans().split(",");
+            bouquet = bouquetSplitted[3];
+        }
 
+        model.addAttribute("bouquet", bouquet);
+        model.addAttribute("gotvTxnData", gotvTxnData);
         model.addAttribute("submitted", true);
 
         return "transactions/pay-bills";
@@ -93,7 +99,7 @@ public class PayBillsController {
         if (cableTvPaymentResponse.getResponseCode().equals("00")) {
             return "00";
         } else {
-            model.addAttribute("submitted", true);
+//            model.addAttribute("submitted", true);
             String customErrorMessage = cableTvPaymentResponse.getResponseMessage();
             redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
             return cableTvPaymentResponse.getResponseMessage();
@@ -157,7 +163,15 @@ public class PayBillsController {
         model.addAttribute("electricityFormPin", new Forms());
 
         Forms dstvTxnData = (Forms) session.getAttribute("dstvForm");
-        model.addAttribute("dstvTxnData" , dstvTxnData);
+
+        String bouquet = "";
+        if (dstvTxnData != null) {
+            String[] bouquetSplitted = dstvTxnData.getDataPlans().split(",");
+            bouquet = bouquetSplitted[3];
+        }
+
+        model.addAttribute("bouquet", bouquet);
+        model.addAttribute("dstvTxnData", dstvTxnData);
 
         model.addAttribute("submitDstv", true);
 
@@ -175,7 +189,7 @@ public class PayBillsController {
         if (cableTvPaymentResponse.getResponseCode().equals("00")) {
             return "00";
         } else {
-            model.addAttribute("submitted", true);
+//            model.addAttribute("submitted", true);
             String customErrorMessage = cableTvPaymentResponse.getResponseMessage();
             redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
             return cableTvPaymentResponse.getResponseMessage();
@@ -207,13 +221,16 @@ public class PayBillsController {
         session.setAttribute("electricityForm", electricityForm);
         String gotvBiller = "GOTV";
         String dstvBiller = "DSTV";
+        String biller = "E02E";
         GetCableTvBillersResponsePayload gotvBillerPlan = payBillsService.getCableTvBillers(session, gotvBiller);
         GetCableTvBillersResponsePayload dstvBillerPlan = payBillsService.getCableTvBillers(session, dstvBiller);
+        GetElectricityBillerResponsePayload electricityBiller = payBillsService.getElectricityBillers(session, biller);
 
         AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
         model.addAttribute("gotvBillerPlan", gotvBillerPlan.getBillers());
         model.addAttribute("dstvBillerPlan", dstvBillerPlan.getBillers());
+        model.addAttribute("electricityBillers", electricityBiller.getBiller());
 
         model.addAttribute("gotvForm", new Forms());
         model.addAttribute("gotvFormPin", new Forms());
@@ -223,7 +240,13 @@ public class PayBillsController {
         model.addAttribute("electricityFormPin", new Forms());
 
         Forms electricityTxnData = (Forms) session.getAttribute("electricityForm");
-        model.addAttribute("electricityTxnData" , electricityTxnData);
+        String bouquet = "";
+        if (electricityTxnData != null) {
+            String[] bouquetSplitted = electricityTxnData.getElectricityBillerSelect().split(",");
+            bouquet = bouquetSplitted[1];
+        }
+        model.addAttribute("package", bouquet);
+        model.addAttribute("electricityTxnData", electricityTxnData);
 
         model.addAttribute("submittedElectricity", true);
 
@@ -239,7 +262,7 @@ public class PayBillsController {
         if (electricityPaymentResponse.getResponseCode().equals("00")) {
             return "00";
         } else {
-            model.addAttribute("submitted", true);
+//            model.addAttribute("submitted", true);
             String customErrorMessage = electricityPaymentResponse.getResponseMessage();
             redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
             return electricityPaymentResponse.getResponseMessage();

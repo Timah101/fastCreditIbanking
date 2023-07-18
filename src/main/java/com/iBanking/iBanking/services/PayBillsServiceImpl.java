@@ -115,6 +115,7 @@ public class PayBillsServiceImpl implements PayBillsService {
         Forms formPin;
         String billerId;
         ValidateCableTvResponsePayload customerName;
+
         if (biller.equalsIgnoreCase("GOTV")) {
             form = (Forms) session.getAttribute("gotvForm");
             formPin = (Forms) session.getAttribute("gotvFormPin");
@@ -136,7 +137,7 @@ public class PayBillsServiceImpl implements PayBillsService {
             String[] billerIdSplit = billerId.split(",");
             billerIdSplitted = billerIdSplit[2];
         }
-
+        log.info("Biller Splitted {} ", form.getDataPlans());
         requestPayload.setBillerId(billerIdSplitted);
         requestPayload.setMobileNumber(form.getMobileNumber());
         requestPayload.setSmartCard(form.getSmartCardNumber());
@@ -268,14 +269,18 @@ public class PayBillsServiceImpl implements PayBillsService {
 
         Forms form = (Forms) session.getAttribute("electricityForm");
         Forms formPin = (Forms) session.getAttribute("electricityFormPin");
-        ValidateCableTvResponsePayload customerName;
-
-        requestPayload.setBillerId(form.getElectricityBillerSelect());
+        ValidateElectricityResponsePayload customerName = (ValidateElectricityResponsePayload) session.getAttribute("validateElectricityResponse");
+        String billerId = "";
+        if (form != null) {
+            billerId = form.getElectricityBillerSelect().split(",")[0];
+        }
+        requestPayload.setBillerId(billerId);
+        assert form != null;
         requestPayload.setMobileNumber(form.getMobileNumber());
         requestPayload.setMeterNumber(form.getSmartCardNumber());
         requestPayload.setDebitAccount(form.getDebitAccount());
         requestPayload.setAmount(form.getAmount());
-        requestPayload.setCustomerName(String.valueOf("customerName"));
+        requestPayload.setCustomerName(customerName.getCardHolderName());
         requestPayload.setPin(formPin.getPin());
 
         String requestPayloadJson = gson.toJson(requestPayload);

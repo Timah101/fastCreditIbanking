@@ -1,12 +1,18 @@
 @media (min-width: 900px) {
-
+    .main-module-mobile {
+        /*display: block;*/
+        background-color: red;
+    }
 
     .send-money-module {
         background-color: #03582c;
         max-height: 100vh;
         /*overflow-y: auto;*/
         height: 100vh;
+    }
 
+    .send-money-module-no-show {
+        display: none;
     }
 
     .submit-send-money {
@@ -92,7 +98,7 @@
         padding: 0.6rem 1.25rem;
         color: #6e6e6e;
         height: 2.5rem;
-        width: 300px;
+        width: 100%;
         border-radius: 0.3rem;
         font-size: 12px;
     }
@@ -121,7 +127,7 @@
     }
 
     .confirm-block {
-        padding: 0rem 2rem 2rem 3rem;
+        padding: 2rem 2rem 2rem 3rem;
     }
 
     .form-transfer-money {
@@ -315,14 +321,24 @@
     .send-money-module {
         background-color: #03582c;
         max-height: 100vh;
+        width: 100%;
         /*overflow-y: auto;*/
         height: 100vh;
+        display: none;
+    }
 
+    .send-money-module-mobile {
+        /*background-color: #f0a907;*/
+        max-height: 100vh;
+        width: 100%;
+        /*overflow-y: auto;*/
+        height: 100vh;
+        /*color: red;*/
     }
 
     .submit-send-money {
         background-color: #029247;
-        width: 300px;
+        width: 100%;
         border: 0.0625rem solid #029247;
         padding: 0.3125rem 1.25rem;
         color: #fff;
@@ -383,7 +399,19 @@
         border-bottom: 1px solid #029247;
         padding: 10px;
     }
-
+    .send-money-title-mobile {
+        font-size: 15px;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+        color: #029247;
+        text-transform: capitalize;
+        margin-left: auto;
+        margin-right: auto;
+        font-family: "Lato Black";
+        align-items: center;
+        border-bottom: 1px solid #029247;
+        padding: 10px;
+    }
     .transfer-money-form {
         padding: 2rem 2rem 3rem 2rem;
         /*position: relative;*/
@@ -403,7 +431,7 @@
         padding: 0.6rem 1.25rem;
         color: #6e6e6e;
         height: 2.5rem;
-        width: 300px;
+        width: 100%;
         border-radius: 0.3rem;
         font-size: 12px;
     }
@@ -432,7 +460,7 @@
     }
 
     .confirm-block {
-        padding: 0rem 2rem 2rem 3rem;
+        padding: 2rem 2rem 2rem 3rem;
     }
 
     .form-transfer-money {
@@ -595,7 +623,7 @@
     }
 
     .main-send-money {
-        left: 125px;
+        /*left: 125px;*/
         background-color: #fff;
         height: calc(100% - 30px);
         position: fixed;

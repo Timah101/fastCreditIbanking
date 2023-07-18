@@ -4,6 +4,7 @@ package com.iBanking.iBanking.controller;
 import com.iBanking.iBanking.Forms.Forms;
 import com.iBanking.iBanking.payload.SendOtpResponsePayload;
 import com.iBanking.iBanking.payload.customer.CreateCustomerResponsePayload;
+import com.iBanking.iBanking.payload.customer.CustomerDetailsResponsePayload;
 import com.iBanking.iBanking.services.CustomerService;
 import com.iBanking.iBanking.services.SendOtpService;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -40,16 +41,25 @@ public class CreateAccountController {
     @PostMapping("/open-account")
     public String processCreateAccount1(Model model, Forms createAccountForm1, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
         session.setAttribute("createAccountForm1", createAccountForm1);
+
+        Forms mobileNumberForm = (Forms) session.getAttribute("createAccountForm1");
         String purpose = "AO";
-        final SendOtpResponsePayload sendOtp = otpService.sendOtp(session, purpose);
-        if (sendOtp.getResponseCode().equals("00")) {
-            return "redirect:/confirm-otp";
-        } else {
-            String customErrorMessage = sendOtp.getResponseMessage();
+        CustomerDetailsResponsePayload customerDetails = customerService.getCustomerDetails(session, mobileNumberForm.getMobileNumber());
+        if (customerDetails.getResponseCode().equals("00")) {
+            String customErrorMessage = "Customer exists already, create a profile or proceed to login";
             redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
             return "redirect:/open-account";
+        } else {
+            Forms formCreate = (Forms) session.getAttribute("createAccountForm1");
+            final SendOtpResponsePayload sendOtp = otpService.sendOtp(session, purpose, formCreate.getMobileNumber());
+            if (sendOtp.getResponseCode().equals("00")) {
+                return "redirect:/confirm-otp";
+            } else {
+                String customErrorMessage = sendOtp.getResponseMessage();
+                redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
+                return "redirect:/open-account";
+            }
         }
-
     }
 
     @GetMapping("/confirm-otp")
@@ -163,7 +173,8 @@ public class CreateAccountController {
     @ResponseBody
     public String sendOtp(HttpSession session) throws UnirestException {
         String purpose = "AO";
-        final SendOtpResponsePayload sendOtp = otpService.sendOtp(session, purpose);
+        Forms formCreate = (Forms) session.getAttribute("createAccountForm1");
+        final SendOtpResponsePayload sendOtp = otpService.sendOtp(session, purpose, formCreate.getMobileNumber());
         return sendOtp.getResponseMessage();
     }
 }

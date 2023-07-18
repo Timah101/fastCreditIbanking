@@ -49,11 +49,10 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
         EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayloadJson);
-        log.info("AIRTIME TOP UP ENCRYPTION RESPONSE {}", encryptResponsePayload);
 
         //CALL THE REGISTER CUSTOMER ENDPOINT
         String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
-        log.info("AIRTIME TOP UP PAYLOAD D {}", requestPayloadJson);
+        log.info("AIRTIME TOP UP REQUEST PAYLOAD : {}", requestPayloadJson);
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + AIRTIME_TOP_UP)
                 .header("accept", "application/json")
                 .header("Content-Type", "application/json")
@@ -74,7 +73,7 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
         airtimeTopUp = decryptPayload(decryptRequestPayload, GeneralResponsePayload.class);
         //LOG REQUEST AND RESPONSE
-        log.info("AIRTIME TOP UP REQUEST PAYLOAD : {}", requestPayload);
+
         log.info("AIRTIME TOP UP RESPONSE PAYLOAD : {}", gson.toJson(airtimeTopUp));
         session.setAttribute("airtimeTopUpResponse", airtimeTopUp);
         return airtimeTopUp;
@@ -92,11 +91,11 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
         EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayloadJson);
-        log.info("DATA PLANS LIST ENCRYPTION RESPONSE {}", encryptResponsePayload);
+
 
         //CALL THE REGISTER CUSTOMER ENDPOINT
         String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
-        log.info("DATA PLANS LIST PAYLOAD {}", requestPayloadJson);
+        log.info("DATA PLANS LIST REQUEST PAYLOAD : {}", requestPayloadJson);
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + DATA_PLANS)
                 .header("accept", "application/json")
                 .header("Content-Type", "application/json")
@@ -117,7 +116,7 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
         dataPlans = decryptPayload(decryptRequestPayload, DataPlansResponsePayload.class);
         //LOG REQUEST AND RESPONSE
-        log.info("DATA PLANS LIST REQUEST PAYLOAD : {}", requestPayload);
+
         log.info("DATA PLANS LIST RESPONSE PAYLOAD : {}", gson.toJson(dataPlans));
         session.setAttribute("dataPlansResponse", dataPlans);
         return dataPlans;
@@ -138,7 +137,7 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         }
         requestPayload.setMobileNumber(loginForm.getMobileNumber());
         assert dataForm != null;
-        requestPayload.setBeneficiaryMobileNumber(dataForm.getMobileNumber());
+        requestPayload.setBeneficiaryMobileNumber(dataForm.getBeneficiaryMobileNumber());
         requestPayload.setDebitAccount(dataForm.getDebitAccount());
         requestPayload.setTelco(dataForm.getTelco());
         requestPayload.setAmount(dataForm.getAmount());
@@ -149,11 +148,10 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
         EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayloadJson);
-        log.info("DATA TOP UP ENCRYPTION RESPONSE {}", encryptResponsePayload);
 
         //CALL THE REGISTER CUSTOMER ENDPOINT
         String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
-        log.info("DATA TOP UP PAYLOAD D {}", requestPayloadJson);
+        log.info("DATA TOP UP REQUEST PAYLOAD : {}", requestPayloadJson);
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + DATA_TOP_UP)
                 .header("accept", "application/json")
                 .header("Content-Type", "application/json")
@@ -174,7 +172,7 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
         dataTopUp = decryptPayload(decryptRequestPayload, GeneralResponsePayload.class);
         //LOG REQUEST AND RESPONSE
-        log.info("DATA TOP UP REQUEST PAYLOAD : {}", requestPayload);
+
         log.info("DATA TOP UP RESPONSE PAYLOAD : {}", gson.toJson(dataTopUp));
         session.setAttribute("dataTopUpResponse", dataTopUp);
         return dataTopUp;

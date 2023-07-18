@@ -77,7 +77,7 @@
 
 
         <!--        THE GOTV DIV-->
-        <div id="send-money-local" class="col-md-5 col-sm-12 col-xs-12" style="display: none">
+        <div id="gotv" class="col-md-5 col-sm-12 col-xs-12" style="display: none">
 
             <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
 
@@ -98,7 +98,7 @@
                                             <label for="select-account" class="label-span">Select Account</label>
                                             <select id="select-account" class="form-control-send-money mb-3"
                                                     th:field="*{debitAccount}">
-                                                <option disabled hidden selected value="0"> -- Select Account --
+                                                <option selected value="0"> -- Select Account --
                                                 </option>
                                                 <option style="background-color: #D1D0CE"
                                                         th:each="accountBalance : ${accountBalanceResponse}"
@@ -111,12 +111,12 @@
                                             <label for="my-select" class="label-span">Select Gotv Plan</label>
                                             <select id="my-select" class="form-control-send-money mb-3"
                                                     th:field="*{dataPlans}" onchange="updateInputValueGotv()">
-                                                <option disabled selected value="0"> -- Select Gotv Plans --
+                                                <option selected value="0"> -- Select Gotv Plan --
                                                 </option>
                                                 <option style="background-color: #D1D0CE"
                                                         th:each="gotv : ${gotvBillerPlan}"
                                                         th:text="${gotv.getBouquet() + ' ' + gotv.getMonthlyAmount()}"
-                                                        th:value="${gotv.getBillerId()+','+gotv.getMonthlyAmount()+','+gotv.getProductId()}"></option>
+                                                        th:value="${gotv.getBillerId()+','+gotv.getMonthlyAmount()+','+gotv.getProductId()+ ','+ gotv.getBouquet()}"></option>
                                             </select>
                                         </div>
 
@@ -127,13 +127,14 @@
                                                    th:value="${selectedOptionGotv}" th:field="*{amount}">
                                         </div>
                                         <div class="mb-4">
-                                            <label for="account_local" class="label-span">SmartCard Number</label> <span
-                                                id="localName" class="float-right"></span>
-                                            <input id="account_local" class="form-control-send-money" maxlength="10"
+                                            <label for="gotv-name-enquiry" class="label-span">SmartCard Number</label>
+                                            <span
+                                                    id="localName" class="float-right"></span>
+                                            <input id="gotv-name-enquiry" class="form-control-send-money" maxlength="10"
                                                    placeholder="" th:field="*{smartCardNumber}">
                                         </div>
                                         <div class="mb-4">
-                                            <input class="submit-send-money" type="submit" placeholder="Proceed">
+                                            <input class="submit-send-money" type="submit" placeholder="Proceed" onclick="showLoader()">
                                         </div>
 
                                     </form>
@@ -152,7 +153,7 @@
 
 
         <!--        THE DSTV DIV-->
-        <div id="send-money-others" class="col-md-5 col-sm-12 col-xs-12" style="display: none">
+        <div id="dstv" class="col-md-5 col-sm-12 col-xs-12" style="display: none">
 
             <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
 
@@ -169,12 +170,11 @@
                                 <div class="payment-block">
                                     <form method="post" th:object="${dstvForm}"
                                           th:action="@{/dstv-form}">
-
                                         <div class="mb-4">
                                             <label for="select-account" class="label-span">Select Account</label>
                                             <select id="select-account-others" class="form-control-send-money mb-3"
                                                     th:field="*{debitAccount}">
-                                                <option disabled selected value="0"> -- Select Account --
+                                                <option selected value="0"> -- Select Account --
                                                 </option>
                                                 <option style="background-color: #D1D0CE"
                                                         th:each="accountBalance : ${accountBalanceResponse}"
@@ -187,12 +187,12 @@
                                             <select id="my-select-2" class="form-control-send-money mb-3"
                                                     onchange="updateInputValueDstv()"
                                                     th:field="*{dataPlans}">
-                                                <option disabled selected value="0"> -- Select DstV Plans --
+                                                <option selected value="0"> -- Select DsTV Plan --
                                                 </option>
                                                 <option style="background-color: #D1D0CE"
                                                         th:each="dstv : ${dstvBillerPlan}"
                                                         th:text="${dstv.getBouquet() + ' ' + dstv.getMonthlyAmount()}"
-                                                        th:value="${dstv.getBillerId() + ',' + dstv.getMonthlyAmount() + ',' + dstv.getProductId()}"></option>
+                                                        th:value="${dstv.getBillerId() + ',' + dstv.getMonthlyAmount() + ',' + dstv.getProductId()+','+ dstv.getBouquet()}"></option>
                                             </select>
                                         </div>
 
@@ -209,9 +209,8 @@
                                                    placeholder="" th:field="*{smartCardNumber}">
                                         </div>
                                         <div class="mb-4">
-                                            <input class="submit-send-money" type="submit" placeholder="Proceed">
+                                            <input class="submit-send-money" type="submit" placeholder="Proceed" onclick="showLoader()">
                                         </div>
-
                                     </form>
                                 </div>
                             </div>
@@ -243,13 +242,13 @@
                             <div class="transfer-money-block">
                                 <div class="payment-block">
                                     <form method="post" th:object="${electricityForm}"
-                                          th:action="@{/electricityForm}">
+                                          th:action="@{/electricity-form}">
 
                                         <div class="mb-4">
                                             <label for="select-account" class="label-span">Select Account</label>
                                             <select id="select-electricity" class="form-control-send-money mb-3"
                                                     th:field="*{debitAccount}">
-                                                <option disabled selected value="0"> -- Select Account --
+                                                <option selected value="0"> -- Select Account --
                                                 </option>
                                                 <option style="background-color: #D1D0CE"
                                                         th:each="accountBalance : ${accountBalanceResponse}"
@@ -285,7 +284,7 @@
                                         <!--                                            </select>-->
                                         <!--                                        </div>-->
                                         <div class="mb-4">
-                                            <label for="my-select-2" class="label-span">Select Electricity
+                                            <label for="biller-plan" class="label-span">Select Electricity
                                                 Biller</label>
                                             <select id="biller-plan" class="form-control-send-money mb-3"
                                                     th:field="*{electricityBillerSelect}">
@@ -294,9 +293,9 @@
                                                 <option style="background-color: #fff"
                                                         th:each="electricity : ${electricityBillers}"
                                                         th:text="${electricity.getPackageName() + ' ' + electricity.getBouquet()}"
-                                                        th:value="${electricity.getBiller()}"></option>
+                                                        th:value="${electricity.getBiller() + ',' + electricity.getPackageName()}"></option>
                                             </select>
-                                            </select>
+
                                         </div>
 
                                         <div class="mb-4">
@@ -312,7 +311,7 @@
                                                    placeholder="" th:field="*{meterNumber}">
                                         </div>
                                         <div class="mb-4">
-                                            <input class="submit-send-money" type="submit" placeholder="Proceed">
+                                            <input class="submit-send-money" type="submit" placeholder="Proceed" onclick="showLoader()">
                                         </div>
 
                                     </form>
@@ -331,7 +330,7 @@
 
 
         <!--        THE CONFIRM GOTV DIV-->
-        <div class="col-md-5 col-sm-12 col-xs-12" th:if="${submitted}">
+        <div id="confirmGotv" class="col-md-5 col-sm-12 col-xs-12" th:if="${submitted}">
             <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
 
                 <div class="confirm-money-title"> <!-- SEND MONEY TITLE-->
@@ -343,7 +342,7 @@
                         <div class="form-confirm-money">
                             <div class="confirm-money-block">
                                 <div class="confirm-block">
-                                    <form method="post" th:object="${gotvFormPin}"
+                                    <form id="gotvForm" method="post" th:object="${gotvFormPin}"
                                           th:action="@{/gotv}">
                                         <div id="resultMessageGotv" class="alert-fast" style="display:none;"></div>
                                         <div class="mb-4" th:object="${gotvTxnData}">
@@ -352,8 +351,8 @@
                                             <div class="mb-2"><span>SmartCard Number</span> <span class="float-right"
                                                                                                   th:text="${gotvTxnData.getSmartCardNumber()}"></span>
                                             </div>
-                                            <div class="mb-2"><span>Biller</span> <span class="float-right"
-                                                                                        th:text="${gotvTxnData.getElectricityBillerSelect()}"></span>
+                                            <div class="mb-2"><span>Bouquet</span> <span class="float-right"
+                                                                                         th:text="${bouquet}"></span>
                                             </div>
                                             <div class="mb-2"><span>Amount</span> <span class="float-right"
                                                                                         th:text="${gotvTxnData.getAmount()}"></span>
@@ -387,7 +386,7 @@
         </div>
 
         <!--        THE CONFIRM OTHERS TRANSFER DIV-->
-        <div class="col-md-5 col-sm-12 col-xs-12" th:if="${submitDstv}">
+        <div id="confirmDstv" class="col-md-5 col-sm-12 col-xs-12" th:if="${submitDstv}">
             <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
 
                 <div class="confirm-money-title"> <!-- SEND MONEY TITLE-->
@@ -399,7 +398,7 @@
                         <div class="form-confirm-money">
                             <div class="confirm-money-block">
                                 <div class="confirm-block">
-                                    <form method="post" th:object="${dstvFormPin}"
+                                    <form id="dstvForm" method="post" th:object="${dstvFormPin}"
                                           th:action="@{/dstv}">
                                         <div id="resultMessageDstv" class="alert-fast" style="display:none;"></div>
                                         <div class="mb-4" th:object="${dstvTxnData}">
@@ -408,8 +407,8 @@
                                             <div class="mb-2"><span>SmartCard Number</span> <span class="float-right"
                                                                                                   th:text="${dstvTxnData.getSmartCardNumber()}"></span>
                                             </div>
-                                            <div class="mb-2"><span>Biller</span> <span class="float-right"
-                                                                                        th:text="${dstvTxnData.getElectricityBillerSelect()}"></span>
+                                            <div class="mb-2"><span>Bouquet</span> <span class="float-right"
+                                                                                         th:text="${bouquet}"></span>
                                             </div>
                                             <div class="mb-2"><span>Amount</span> <span class="float-right"
                                                                                         th:text="${dstvTxnData.getAmount()}"></span>
@@ -442,15 +441,15 @@
             </div>
         </div>
 
-        <!--        THE CONFIRM PAY BILLS TRANSFER DIV-->
-        <div class="col-md-5 col-sm-12 col-xs-12" th:if="${submitDstv}">
-            <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
+        <!--        THE CONFIRM ELECTRICITY TRANSFER DIV-->
+        <div id="confirmElectricity" class="col-md-5 col-sm-12 col-xs-12" th:if="${submittedElectricity}">
+            <div class="send-money"> <!-- -->
 
-                <div class="confirm-money-title"> <!-- SEND MONEY TITLE-->
+                <div class="confirm-money-title"> <!-- -->
                     Confirm Transaction
                 </div>
 
-                <div class="confirm-money-form"> <!-- SEND TRANSFER MONEY-->
+                <div class="confirm-money-form">
                     <div class="col-md-12">
                         <div class="form-confirm-money">
                             <div class="confirm-money-block">
@@ -465,8 +464,8 @@
                                             <div class="mb-2"><span>Meter Number</span> <span class="float-right"
                                                                                               th:text="${electricityTxnData.getMeterNumber()}"></span>
                                             </div>
-                                            <div class="mb-2"><span>Biller</span> <span class="float-right"
-                                                                                        th:text="${electricityTxnData.getElectricityBillerSelect()}"></span>
+                                            <div class="mb-2"><span>Package</span> <span class="float-right"
+                                                                                         th:text="${package}"></span>
                                             </div>
                                             <div class="mb-2"><span>Amount</span> <span class="float-right"
                                                                                         th:text="${electricityTxnData.getAmount()}"></span>
@@ -502,9 +501,10 @@
 </div>
 
 <script th:inline="javascript">
+
     //Name Enquiry for GOTV
     $(document).ready(function () {
-        $('#account_local').on('input', function () {
+        $('#gotv-name-enquiry').on('input', function () {
             const cardNumber = $(this).val();
             console.log("GOTV " + cardNumber)
             if (cardNumber.length === 10) {
@@ -515,6 +515,7 @@
                         url: `/validate/gotv/${cardNumber}`,// URL of the controller method
                         success: function (response) {
                             // Update the view with the response data
+                            hideLoader();
                             $('#localName').text(response);
                             console.log(response);
                             console.log(response.toString())
@@ -533,7 +534,6 @@
         });
     });
 
-
     //Name Enquiry For DSTV
     $(document).ready(function () {
         $('#account_others').on('input', function () {
@@ -546,6 +546,7 @@
                         type: 'GET',
                         url: `/validate/dstv/${cardNumber}`,// URL of the controller method
                         success: function (response) {
+                            hideLoader();
                             // Update the view with the response data
                             $('#otherName').text(response);
                             console.log(response);
@@ -565,11 +566,11 @@
         });
     });
 
-
     //Name Enquiry For ELECTRICITY
     $(document).ready(function () {
         $('#meter-number').on('input', function () {
-            const biller = $("#biller-plan").val();
+            let biller = $("#biller-plan").val();
+            biller = biller.split(",")[0];
             const meterNumber = $(this).val();
             console.log(biller + " ELECTRICITY BILLER");
             console.log(meterNumber + " meter number");
@@ -600,8 +601,7 @@
         });
     });
 
-
-    //ELECTRICITY PLANS
+    //ELECTRICITY PLANS (NO LONGER USED)
     $(document).ready(function () {
         $('#biller').on('change', function () {
             const biller = $("#biller").val();
@@ -632,52 +632,167 @@
         });
     });
 
+    // SUBMIT FORM FOR ELECTRICITY
+    $(document).ready(function () {
+        $('#electricityForm').submit(function (event) {
+            event.preventDefault();
+            const form = $(this);
+            showLoader();
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (response) {
+                    if (response === "00") {
+                        window.location.href = '/success'; //change to success page
+                    } else {
+                        hideLoader();
+                        const resultSection = $('#resultSection');
+                        const resultMessage = $('#resultMessageElectricity');
+                        showErrorMessageElect();
+                        resultMessage.text(response);
+                        resultSection.show();
+                    }
+                },
+                error: function (xhr) {
+                    hideLoader();
+                    const resultSection = $('#resultSection');
+                    const resultMessage = $('#resultMessageElectricity');
+                    const retryButton = $('#retryButton');
+                    showErrorMessageElect();
+                    resultMessage.text(xhr.responseText);
+                    resultSection.show();
+                    retryButton.show();
+                }
+            });
+        });
+    });
 
-    //SHOW OR HIDE LOADERS
-    function showLoader() {
-        const loader = document.getElementById('loader');
-        loader.style.display = 'block';
-    }
+    // SUBMIT FORM FOR GOTV
+    $(document).ready(function () {
+        $('#gotvForm').submit(function (event) {
+            event.preventDefault();
+            const form = $(this);
+            showLoader();
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (response) {
+                    if (response === "00") {
+                        window.location.href = '/success'; //change to success page
+                    } else {
+                        hideLoader();
+                        const resultSection = $('#resultSection');
+                        const resultMessage = $('#resultMessageGotv');
+                        const retryButton = $('#retryButton');
+                        showErrorMessageGotv();
+                        resultMessage.text(response);
+                        resultSection.show();
+                        retryButton.show();
+                    }
+                },
+                error: function (xhr) {
+                    hideLoader();
+                    const resultSection = $('#resultSection');
+                    const resultMessage = $('#resultMessageGotv');
+                    const retryButton = $('#retryButton');
+                    showErrorMessageGotv();
+                    resultMessage.text(xhr.responseText);
+                    resultSection.show();
+                    retryButton.show();
+                }
+            });
+        });
+    });
 
-    function hideLoader() {
-        const loader = document.getElementById('loader');
-        loader.style.display = 'none';
-    }
+    // SUBMIT FORM FOR DSTV
+    $(document).ready(function () {
+        $('#dstvForm').submit(function (event) {
+            event.preventDefault();
+            const form = $(this);
+            showLoader();
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (response) {
+                    if (response === "00") {
+                        window.location.href = '/success'; //change to success page
+                    } else {
+                        hideLoader();
+                        const resultSection = $('#resultSection');
+                        const resultMessage = $('#resultMessageDstv');
+                        const retryButton = $('#retryButton');
+                        showErrorMessageDstv();
+                        resultMessage.text(response);
+                        resultSection.show();
+                        retryButton.show();
+                    }
+                },
+                error: function (xhr) {
+                    hideLoader();
+                    const resultSection = $('#resultSection');
+                    const resultMessage = $('#resultMessageDstv');
+                    const retryButton = $('#retryButton');
+                    showErrorMessageDstv()
+                    resultMessage.text(xhr.responseText);
+                    resultSection.show();
+                    retryButton.show();
+                }
+            });
+        });
+    });
+
 </script>
 
 <script>
-
     //TOGGLE GOTV
     function toggleGotv() {
-        const contentDiv = document.getElementById("send-money-local");
-        const contentOthers = document.getElementById("send-money-others");
+        hideConfirmDstv();
+        hideConfirmElectricity();
+        hideConfirmGotv();
+        const contentDiv = document.getElementById("gotv");
+        const contentOthers = document.getElementById("dstv");
+        const contentElect = document.getElementById("electricity");
         if (contentDiv.style.display === "none") {
             contentDiv.style.display = "block";
             contentOthers.style.display = "none";
+            contentElect.style.display = "none";
         } else {
             contentDiv.style.display = "none";
             contentOthers.style.display = "none";
+            contentElect.style.display = "none";
         }
     }
 
     //TOGGLE DSTV
     function toggleDstv() {
-        const contentDiv = document.getElementById("send-money-others");
-        const contentOthers = document.getElementById("send-money-local");
+        hideConfirmDstv();
+        hideConfirmElectricity();
+        hideConfirmGotv();
+        const contentDiv = document.getElementById("dstv");
+        const contentOthers = document.getElementById("gotv");
+        const contentElect = document.getElementById("electricity");
         if (contentDiv.style.display === "none") {
             contentDiv.style.display = "block";
             contentOthers.style.display = "none";
+            contentElect.style.display = "none";
         } else {
             contentDiv.style.display = "none";
             contentOthers.style.display = "none";
+            contentElect.style.display = "none";
         }
     }
 
     //TOGGLE ELECTRICITY
     function toggleElectricity() {
+        hideConfirmDstv();
+        hideConfirmElectricity();
+        hideConfirmGotv();
         const contentDiv = document.getElementById("electricity");
-        const contentOthers = document.getElementById("send-money-local");
-        const contentLocal = document.getElementById("send-money-others");
+        const contentOthers = document.getElementById("gotv");
+        const contentLocal = document.getElementById("dstv");
         if (contentDiv.style.display === "none") {
             contentDiv.style.display = "block";
             contentOthers.style.display = "none";
@@ -728,116 +843,53 @@
         }
     }
 
-    // SUBMIT FORM FOR ELECTRICITY
-    $(document).ready(function () {
-        $('#electricityForm').submit(function (event) {
-            event.preventDefault();
-            const form = $(this);
-            showLoader();
-            $.ajax({
-                type: 'POST',
-                url: form.attr('action'),
-                data: form.serialize(),
-                success: function (response) {
-                    if (response === "00") {
-                        window.location.href = '/success'; //change to success page
-                    } else {
-                        hideLoader();
-                        const resultSection = $('#resultSection');
-                        const resultMessage = $('#resultMessageElectricity');
-                        showErrorMessage();
-                        resultMessage.text(response);
-                        resultSection.show();
 
-                    }
-                },
-                error: function (xhr) {
-                    hideLoader();
-                    const resultSection = $('#resultSection');
-                    const resultMessage = $('#resultMessageElectricity');
-                    const retryButton = $('#retryButton');
-                    resultMessage.text(xhr.responseText);
-                    resultSection.show();
-                    retryButton.show();
-                }
-            });
+    //SHOW OR HIDE LOADERS
+    function showLoader() {
+        const loader = document.getElementById('loader');
+        loader.style.display = 'block';
+    }
+
+    function hideLoader() {
+        const loader = document.getElementById('loader');
+        loader.style.display = 'none';
+    }
+
+    function showErrorMessageGotv() {
+        const resultMessage = $('#resultMessageGotv')
+        resultMessage.show();
+    }
+
+    function showErrorMessageDstv() {
+        const resultMessage = $('#resultMessageDstv')
+        resultMessage.show();
+    }
+
+    function showErrorMessageElect() {
+        const resultMessage = $('#resultMessageElectricity')
+        resultMessage.show();
+    }
+
+    function  hideConfirmGotv(){
+        const resultMessage = $('#confirmGotv')
+        resultMessage.hide();
+    }
+    function  hideConfirmDstv(){
+        const resultMessage = $('#confirmDstv')
+        resultMessage.hide();
+    }
+    function  hideConfirmElectricity(){
+        const resultMessage = $('#confirmElectricity')
+        resultMessage.hide();
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggleIcon = document.querySelector(".toggle-icon");
+        const sidebar = document.querySelector(".sidebar");
+        toggleIcon.addEventListener("click", function () {
+            sidebar.classList.toggle("collapsed");
         });
     });
 
-    // SUBMIT FORM FOR GOTV
-    $(document).ready(function () {
-        $('#gotvForm').submit(function (event) {
-            event.preventDefault();
-            const form = $(this);
-            showLoader();
-            $.ajax({
-                type: 'POST',
-                url: form.attr('action'),
-                data: form.serialize(),
-                success: function (response) {
-                    if (response === "00") {
-                        window.location.href = '/success'; //change to success page
-                    } else {
-                        hideLoader();
-
-                        const resultSection = $('#resultSection');
-                        const resultMessage = $('#resultMessageGotv');
-                        const retryButton = $('#retryButton');
-                        showErrorMessage();
-                        resultMessage.text(response);
-                        resultSection.show();
-                        retryButton.show();
-                    }
-                },
-                error: function (xhr) {
-                    hideLoader();
-                    const resultSection = $('#resultSection');
-                    const resultMessage = $('#resultMessageGotv');
-                    const retryButton = $('#retryButton');
-                    resultMessage.text(xhr.responseText);
-                    resultSection.show();
-                    retryButton.show();
-                }
-            });
-        });
-    });
-    // SUBMIT FORM FOR DSTV
-    $(document).ready(function () {
-        $('#dstvForm').submit(function (event) {
-            event.preventDefault();
-            const form = $(this);
-            showLoader();
-            $.ajax({
-                type: 'POST',
-                url: form.attr('action'),
-                data: form.serialize(),
-                success: function (response) {
-                    if (response === "00") {
-                        window.location.href = '/success'; //change to success page
-                    } else {
-                        hideLoader();
-
-                        const resultSection = $('#resultSection');
-                        const resultMessage = $('#resultMessageDstv');
-                        const retryButton = $('#retryButton');
-                        showErrorMessage();
-                        resultMessage.text(response);
-                        resultSection.show();
-                        retryButton.show();
-                    }
-                },
-                error: function (xhr) {
-                    hideLoader();
-                    const resultSection = $('#resultSection');
-                    const resultMessage = $('#resultMessageDstv');
-                    const retryButton = $('#retryButton');
-                    resultMessage.text(xhr.responseText);
-                    resultSection.show();
-                    retryButton.show();
-                }
-            });
-        });
-    });
 </script>
 
 </body>

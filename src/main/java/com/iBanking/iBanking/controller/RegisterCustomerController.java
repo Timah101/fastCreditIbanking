@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
@@ -25,6 +26,8 @@ public class RegisterCustomerController {
     SendOtpService sendOtpService;
     @Autowired
     CustomerService customerService;
+    @Autowired
+    SendOtpService otpService;
 
     @GetMapping("/register")
     public String showRegister1(Model model) {
@@ -37,7 +40,8 @@ public class RegisterCustomerController {
         session.setAttribute("registerForm1", registerForm1);
 
         //CHECK IF CUSTOMER EXISTING FIRST
-        CustomerDetailsResponsePayload customerDetails = customerService.getCustomerDetails(session);
+        Forms formMobileNumber = (Forms) session.getAttribute("registerForm1");
+        CustomerDetailsResponsePayload customerDetails = customerService.getCustomerDetails(session, formMobileNumber.getMobileNumber());
         Forms registerForm11 = (Forms) session.getAttribute("registerForm1");
         if (customerDetails.getResponseCode().equals("03")) {
             String customErrorMessage = customerDetails.getResponseMessage();
@@ -50,7 +54,8 @@ public class RegisterCustomerController {
                 return "redirect:/register";
             } else {
                 String purpose = "RE";
-                SendOtpResponsePayload sendOtp = sendOtpService.sendOtp(session, purpose);
+                Forms formRegister = (Forms) session.getAttribute("registerForm1");
+                SendOtpResponsePayload sendOtp = sendOtpService.sendOtp(session, purpose, formRegister.getMobileNumber());
                 if (sendOtp.getResponseCode().equals("00")) {
                     return "redirect:/register/confirm-otp";
                 } else {
@@ -64,8 +69,11 @@ public class RegisterCustomerController {
     }
 
     @GetMapping("/register/confirm-otp")
-    public String showRegister2(Model model) {
+    public String showRegister2(Model model, HttpSession session) {
         model.addAttribute("registerForm2", new Forms());
+
+        Forms mobileNumberForm = (Forms) session.getAttribute("registerForm1");
+        model.addAttribute("mobileNumberForm", mobileNumberForm);
         return "register/register-2";
     }
 
@@ -73,6 +81,18 @@ public class RegisterCustomerController {
     public String processRegister2(@ModelAttribute Forms registerForm2, HttpSession session) {
         session.setAttribute("registerForm2", registerForm2);
 
+        return "redirect:/register/create-password";
+    }
+
+    @GetMapping("/register/create-password")
+    public String showRegisterPassword(Model model) {
+        model.addAttribute("registerFormPassword", new Forms());
+        return "register/register-3-password";
+    }
+
+    @PostMapping("/register/create-password")
+    public String processRegisterPassword(@ModelAttribute Forms registerFormPassword, HttpSession session) {
+        session.setAttribute("registerFormPassword", registerFormPassword);
         return "redirect:/register/create-profile";
     }
 
@@ -83,23 +103,32 @@ public class RegisterCustomerController {
     }
 
     @PostMapping("/register/create-profile")
+    @ResponseBody
     public String processRegister3(@ModelAttribute Forms registerForm3, HttpSession session, RedirectAttributes redirectAttributes) {
         session.setAttribute("registerForm3", registerForm3);
         try {
             customerService.registerCustomer(session);
             RegisterCustomerResponsePayload registerCustomerResponse = (RegisterCustomerResponsePayload) session.getAttribute("registerCustomerResponse");
-
             if (registerCustomerResponse.getResponseCode().equals("00")) {
-                return "redirect:/login";
+                return "00";
+            } else if (registerCustomerResponse.getResponseCode().equals("03")) {
+                return "03";
             } else {
-                String customErrorMessage = registerCustomerResponse.getResponseMessage();
-                redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
-                return "redirect:/register/confirm-otp";
+                return registerCustomerResponse.getResponseMessage();
             }
         } catch (Exception e) {
             log.info("Error while registering customer {}", e.getMessage());
             throw new RuntimeException("Error while registering customer", e);
         }
 
+    }
+
+    @PostMapping("/resend-otp-register")
+    @ResponseBody
+    public String sendOtp(HttpSession session) throws UnirestException {
+        String purpose = "RE";
+        Forms formCreate = (Forms) session.getAttribute("registerForm1");
+        final SendOtpResponsePayload sendOtp = otpService.sendOtp(session, purpose, formCreate.getMobileNumber());
+        return sendOtp.getResponseMessage();
     }
 }

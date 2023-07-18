@@ -44,11 +44,10 @@ public class AccountServiceImpl implements AccountService {
 
         //Call the Encrypt API
         EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayload);
-        log.info("ACCOUNT DETAILS ENCRYPTION RESPONSE {}", encryptResponsePayload);
 
         //CALL THE ACCOUNT DETAILS ENDPOINT
         String requestPayloadJson = gson.toJson(encryptResponsePayload);
-        log.info("ACCOUNT DETAILS PAYLOAD D {}", requestPayloadJson);
+        log.info("ACCOUNT DETAILS REQUEST PAYLOAD : {}", requestPayloadJson);
         HttpResponse<String> response = Unirest.post(BASE_URL + ACCOUNT_DETAILS)
                 .header("accept", "application/json")
                 .header("Content-Type", "application/json")
@@ -67,7 +66,6 @@ public class AccountServiceImpl implements AccountService {
         accountDetailsResponse = decryptPayload(decryptRequestPayload, AccountDetailsResponsePayload.class);
 
         //LOG REQUEST RESPONSE
-        log.info("ACCOUNT DETAILS REQUEST PAYLOAD : {}", requestPayload);
         log.info("ACCOUNT DETAILS RESPONSE PAYLOAD : {}", gson.toJson(accountDetailsResponse));
         session.setAttribute("nameEnquiryLocalResponse", accountDetailsResponse);
         return accountDetailsResponse;
@@ -78,31 +76,22 @@ public class AccountServiceImpl implements AccountService {
         String accessToken = (String) session.getAttribute("accessToken");
         AccountDetailsListResponsePayload accountBalanceResponse;
         MobileNumberRequestPayload requestPayload = new MobileNumberRequestPayload();
-
         Forms loginForm = (Forms) session.getAttribute("loginForm");
-
         requestPayload.setMobileNumber(loginForm.getMobileNumber());
-
         String requestPayloadJson = gson.toJson(requestPayload);
-
         //Call the Encrypt API
         EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayloadJson);
         log.info("ACCOUNT DETAILS LIST REQUEST PAYLOAD : {}", requestPayloadJson);
-
         //CALL THE ACCOUNT DETAILS LIST ENDPOINT
         String responseString = gson.toJson(encryptResponsePayload);
-
         HttpResponse<String> response = Unirest.post(BASE_URL + ACCOUNT_DETAILS_LIST)
                 .header("accept", "application/json")
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + accessToken)
                 .body(responseString).asString();
         String requestBody = response.getBody();
-        log.info("ACCOUNT DETAILS RESPONSE STATUS : {}", response.getStatus());
-        log.info("ACCOUNT DETAILS RESPONSE BODY : {}", response.getBody());
         if (response.getStatus() != 200 || response.getBody().isEmpty()) {
             accountBalanceResponse = new AccountDetailsListResponsePayload();
-
             AccountList balance = new AccountList();
             List<AccountList> bal = new ArrayList<>();
             balance.setAvailableBalance("...");
@@ -120,9 +109,7 @@ public class AccountServiceImpl implements AccountService {
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
         accountBalanceResponse = decryptPayload(decryptRequestPayload, AccountDetailsListResponsePayload.class);
-
         //LOG REQUEST RESPONSE
-
         log.info("ACCOUNT DETAILS LIST RESPONSE PAYLOAD : {}", gson.toJson(accountBalanceResponse));
         session.setAttribute("accountBalanceResponse", accountBalanceResponse);
         return accountBalanceResponse;

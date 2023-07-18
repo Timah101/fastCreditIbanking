@@ -5,6 +5,9 @@
 <head th:insert="~{fragments :: header}">
     <title>Create Account</title></head>
 <body style="background: white">
+<div class="loader" id="loader">
+    <div class="loader-inner"></div>
+</div>
 
 <div class="text-center">
     <div class="text-center">
@@ -12,46 +15,38 @@
 
             <div class="card-body">
                 <div class="basic-form">
-                    <form method="post"  th:action="@{/register/create-profile}"  th:object="${registerForm3}">
-                        <div th:if="${errorMessage}" class="alert-fast" role="alert">
-                            <span th:text="${errorMessage}">Error message</span>
-                        </div>
+                    <form method="post" id="myForm" th:action="@{/register/create-profile}"
+                          th:object="${registerForm3}">
                         <div class="mb-2">
                             <a><img th:src="@{/images/logo.svg}" alt="Fast Credit" width="150" height="100"></a>
                         </div>
-
-                        <div class=" register-left">Please Create Login Credentials
+                        <div id="resultMessage" class="alert-fast" style="display:none; background: red"></div>
+                        <div id="successMessage" class="alert-fast" style="display:none; background: green">Successfully registered</div>
+                        <div class=" register-left">Create PIN
                         </div>
                         <div class="border-rectangle"></div>
+
                         <div class="mb-4">
-                            <label for="password" class="label-create">Password</label>
-                            <input id="password" type="password" class="form-control" placeholder="" th:field="*{password}">
-                        </div>
-                        <div class="mb-4">
-                            <label for="password-2" class="label-create">Renter Password</label>
-                            <input id="password-2" type="password" class="form-control" placeholder="">
-                        </div>
-                        <div class="mb-4">
-                            <label for="pin" class="label-create">PIN</label>
+                            <label for="pin" class="label-create">Create your transactional PIN</label>
                             <input id="pin" type="password" class="form-control" placeholder="" th:field="*{pin}">
                         </div>
                         <div class="mb-4">
-                            <label for="pin-2" class="label-create">Renter PIN</label>
+                            <label for="pin-2" class="label-create">Confirm your transactional PIN</label>
                             <input id="pin-2" type="password" class="form-control" placeholder="">
                         </div>
-                        <div class="mb-4">
-                            <label for="security" class="label-create">Security Question</label>
-                            <input id="security" type="text" class="form-control" placeholder="" th:field="*{securityQuestion}">
+                        <div id="resultSection" style="display: none;" class="mb-4">
+                            <button class="btn-block btn-login" id="resendButton" style="background-color: red">Click
+                                to Resend OTP
+                            </button>
+                            <label for="otp" id="otp-label" style="font-weight: bolder; color: green"> Enter New Otp</label>
+                            <input id="otp" class="form-control otp-pin-input"
+                                   maxlength="6" placeholder="" th:field="*{otp}">
                         </div>
-                        <div class="mb-4">
-                            <label for="security-2" class="label-create">Security Answer</label>
-                            <input id="security-2" type="text" class="form-control" placeholder="" th:field="*{securityAnswer}">
-                        </div>
+
                         <div class="text-center mb-4">
                             <button class="btn-block btn-login" type="submit">Create Profile</button>
                         </div>
                     </form>
-
 
                 </div>
             </div>
@@ -60,5 +55,126 @@
 
 </div>
 
+
+<script>
+    $(document).ready(function () {
+        $('#myForm').submit(function (event) {
+            event.preventDefault();
+            const form = $(this);
+            showLoader();
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (response) {
+                    if (response === "00") {
+                        $("#successMessage").fadeIn(1000, function() {
+                            // Wait for 2 seconds and then fade out
+                            $(this).delay(2000).fadeOut(1000, function() {
+                                // Redirect to another page
+                                window.location.href = '/login';
+                            });
+                        });
+
+                    } else if (response === "03") {
+                        hideLoader();
+                        showResendButton();
+                        hideNewOtp();
+                        const resultSection = $('#resultSection');
+                        const resultMessage = $('#resultMessage');
+                        const retryButton = $('#retryButton');
+                        showErrorMessage();
+                        resultMessage.text("The OTP  is invalid. Enter a valid OTP");
+                        resultSection.show();
+                        retryButton.show();
+                    } else {
+                        console.log(response + " the message")
+                        hideLoader();
+                        showErrorMessage();
+                        const resultMessage = $('#resultMessage');
+                        resultMessage.text(response);
+                    }
+                },
+                error: function (xhr) {
+                    hideLoader();
+                    const resultSection = $('#resultSection');
+                    const resultMessage = $('#resultMessage');
+                    const retryButton = $('#retryButton');
+                    resultMessage.text(xhr.responseText);
+                    resultSection.show();
+                    retryButton.show();
+                }
+            });
+        });
+
+        $('#resendButton').click(function (event) {
+            event.preventDefault();
+            hideResendButton();
+            hideErrorMessage();
+            showLoader();
+            sendOTP();
+        });
+    });
+
+    function showResendButton() {
+        const resendButton = $('#resendButton');
+        resendButton.show();
+    }
+
+    function hideErrorMessage() {
+        const resultMessage = $('#resultMessage')
+        resultMessage.hide();
+    }
+
+    function showErrorMessage() {
+        const resultMessage = $('#resultMessage')
+        resultMessage.show();
+    }
+
+    function showNewOtp() {
+        const showNewOtp = $('#otp');
+        const showNewOtpLabel = $('#otp-label');
+        showNewOtp.show();
+        showNewOtpLabel.show()
+    }
+
+    function hideNewOtp() {
+        const showNewOtp = $('#otp');
+        const showNewOtpLabel = $('#otp-label');
+        showNewOtp.hide();
+        showNewOtpLabel.hide()
+    }
+
+    function hideResendButton() {
+        const resendButton = $('#resendButton');
+        resendButton.hide();
+    }
+
+    function showLoader() {
+        const loader = $('#loader');
+        loader.show();
+    }
+
+    function hideLoader() {
+        const loader = $('#loader');
+        loader.hide();
+    }
+
+
+    //This function resends OTP
+    function sendOTP() {
+        showLoader();
+        $.ajax({
+            type: 'POST',
+            url: '/resend-otp-register',
+            success: function (response) {
+                hideLoader()
+                showNewOtp();
+            },
+            error: function (xhr) {
+            }
+        });
+    }
+</script>
 </body>
 </html>

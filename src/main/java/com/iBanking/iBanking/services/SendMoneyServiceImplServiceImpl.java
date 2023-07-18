@@ -153,7 +153,7 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
         String requestBody = jsonResponse.getBody();
         if (jsonResponse.getStatus() != 200) {
             getBanksList = new GetBankListPResponsePayload();
-
+            session.setAttribute("getBankListResponse", getBanksList);
             log.info(" ERROR WHILE GETTING BANK LIST {}", jsonResponse.getStatus());
             return getBanksList;
         }

@@ -24,30 +24,11 @@ public class SendOtpServiceImpl implements SendOtpService {
     Gson gson = new Gson();
 
     @Override
-    public SendOtpResponsePayload sendOtp(HttpSession session, String purpose) throws UnirestException {
+    public SendOtpResponsePayload sendOtp(HttpSession session, String purpose, String mobileNumber) throws UnirestException {
         String accessToken = getAccessToken();
         SendOtpResponsePayload sendOtp;
         SendOtpPayloadRequest requestPayload = new SendOtpPayloadRequest();
-
-        String mobileNumber = "";
-        Forms formRegister = (Forms) session.getAttribute("registerForm1");
-        Forms formCreate = (Forms) session.getAttribute("createAccountForm1");
-        Forms formPasswordReset = (Forms) session.getAttribute("resetForm1");
-        System.out.println(formRegister + " : register" + formCreate + " : create");
-//        if (formRegister == null) {
-//            mobileNumber = formCreate.getMobileNumber();
-//        } else {
-//            mobileNumber = formRegister.getMobileNumber();
-//        }
-        if (purpose.equalsIgnoreCase("PR")) {
-            mobileNumber = formPasswordReset.getMobileNumber();
-        }else if(purpose.equalsIgnoreCase("RE")){
-            assert formRegister != null;
-            mobileNumber = formRegister.getMobileNumber();
-        }else if(purpose.equalsIgnoreCase("AO")){
-            assert formRegister != null;
-            mobileNumber = formCreate.getMobileNumber();
-        }
+        
         requestPayload.setMobileNumber(mobileNumber);
         requestPayload.setPurpose(purpose);
 

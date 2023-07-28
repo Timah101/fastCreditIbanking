@@ -6,6 +6,7 @@ import com.iBanking.iBanking.payload.customer.LoginRequestPayload;
 import com.iBanking.iBanking.payload.customer.LoginResponsePayload;
 import com.iBanking.iBanking.payload.generics.DecryptRequestPayload;
 import com.iBanking.iBanking.payload.generics.EncryptResponsePayload;
+import com.iBanking.iBanking.utils.AuthenticationApi;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -20,14 +21,17 @@ import static com.iBanking.iBanking.utils.AuthenticationApi.*;
 
 @Service
 @Slf4j
-public class LoginServiceImpl implements LoginService{
+public class LoginServiceImpl implements LoginService {
 
     Gson gson = new Gson();
     @Autowired
     LoginService loginService;
+    @Autowired
+    AuthenticationApi authenticationApi;
+
     @Override
     public LoginResponsePayload login(HttpSession session) throws UnirestException {
-        String accessToken = getAccessToken();
+        String accessToken = authenticationApi.getAccessToken();
         session.setAttribute("accessToken", accessToken);
         LoginRequestPayload loginRequestPayload = new LoginRequestPayload();
         LoginResponsePayload loginResponsePayload = new LoginResponsePayload();
@@ -38,7 +42,7 @@ public class LoginServiceImpl implements LoginService{
         String requestPayload = gson.toJson(loginRequestPayload);
         log.info(" LOGIN REQUEST PAYLOAD : {}", requestPayload);
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
-        EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayload);
+        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayload);
 
 
         //CALL THE LOGIN ENDPOINT
@@ -62,7 +66,7 @@ public class LoginServiceImpl implements LoginService{
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
 
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        loginResponsePayload = decryptPayload(decryptRequestPayload, LoginResponsePayload.class);
+        loginResponsePayload = authenticationApi.decryptPayload(decryptRequestPayload, LoginResponsePayload.class);
         //LOG REQUEST AND RESPONSE
 
         log.info("LOGIN RESPONSE PAYLOAD : {}", gson.toJson(loginResponsePayload));

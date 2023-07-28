@@ -12,6 +12,19 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import com.google.gson.Gson;
+
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 
 import static com.iBanking.iBanking.utils.ApiPaths.*;
@@ -66,8 +79,6 @@ public class AuthenticationApi {
     }
 
     public <T, R> R decryptPayload(T request, Class<R> responseType) throws UnirestException {
-//        request.setResponse("oxjnc/iwXauEUn8rKAIrvgbATWArzBo/HyhOcSNgws65Os0YKxM4m/eWeUHLg5h/");
-
         String requestPayload = gson.toJson(request);
 //        log.info("DECRYPT REQUEST PAYLOAD INSIDE HERE {}", request);
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + DECRYPT_PAYLOAD)
@@ -82,6 +93,62 @@ public class AuthenticationApi {
         gson.fromJson(requestBody, responseType);
 //        log.info("DECRYPTED RESPONSE INSIDE FROM DECRYPT METHOD {}", gson.fromJson(requestBody, responseType));
         return gson.fromJson(requestBody, responseType);
+    }
+
+
+    public String encrypt(String plaintext) {
+        try {
+            String secret = "77T18925x42783H7508302949Q618671";
+            byte[] IV = new byte[16];
+            byte[] key = secret.getBytes("UTF-8");
+            SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
+            //Get Cipher Instance
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+
+            //Create SecretKeySpec
+            SecretKeySpec keySpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
+
+            //Create IvParameterSpec
+            IvParameterSpec ivSpec = new IvParameterSpec(IV);
+
+            //Initialize Cipher for ENCRYPT_MODE
+            cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);
+
+            //Perform Encryption
+            return Base64.getEncoder()
+                    .encodeToString(cipher.doFinal(plaintext.getBytes("UTF-8")));
+        } catch (UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException |
+                 InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException |
+                 BadPaddingException unsupportedEncodingException) {
+        }
+        return null;
+    }
+
+    public String decrypt(String cipherText) {
+        try {
+            String secret = "77T18925x42783H7508302949Q618671";
+            byte[] IV = new byte[16];
+            byte[] key = secret.getBytes("UTF-8");
+            SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
+            //Get Cipher Instance
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+
+            //Create SecretKeySpec
+            SecretKeySpec keySpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
+
+            //Create IvParameterSpec
+            IvParameterSpec ivSpec = new IvParameterSpec(IV);
+
+            //Initialize Cipher for DECRYPT_MODE
+            cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
+
+            //Perform Decryption
+            return new String(cipher.doFinal(Base64.getDecoder().decode(cipherText)));
+        } catch (UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException |
+                 InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException |
+                 BadPaddingException unsupportedEncodingException) {
+        }
+        return null;
     }
 
 

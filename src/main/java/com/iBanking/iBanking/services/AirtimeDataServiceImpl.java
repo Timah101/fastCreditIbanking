@@ -9,23 +9,26 @@ import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
 import com.iBanking.iBanking.payload.transactions.airtimeData.DataPlansRequestPayload;
 import com.iBanking.iBanking.payload.transactions.airtimeData.DataPlansResponsePayload;
 import com.iBanking.iBanking.payload.transactions.airtimeData.DataRequestPayload;
+import com.iBanking.iBanking.utils.AuthenticationApi;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 
 import static com.iBanking.iBanking.utils.ApiPaths.*;
-import static com.iBanking.iBanking.utils.AuthenticationApi.decryptPayload;
-import static com.iBanking.iBanking.utils.AuthenticationApi.encryptPayload;
 
 @Service
 @Slf4j
 public class AirtimeDataServiceImpl implements AirtimeDataService {
 
     Gson gson = new Gson();
+
+    @Autowired
+    AuthenticationApi authenticationApi;
 
     @Override
     public GeneralResponsePayload airtimeTopUp(HttpSession session) throws UnirestException {
@@ -48,7 +51,7 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         String requestPayloadJson = gson.toJson(requestPayload);
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
-        EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
 
         //CALL THE REGISTER CUSTOMER ENDPOINT
         String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
@@ -71,7 +74,7 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
 
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        airtimeTopUp = decryptPayload(decryptRequestPayload, GeneralResponsePayload.class);
+        airtimeTopUp = authenticationApi.decryptPayload(decryptRequestPayload, GeneralResponsePayload.class);
         //LOG REQUEST AND RESPONSE
 
         log.info("AIRTIME TOP UP RESPONSE PAYLOAD : {}", gson.toJson(airtimeTopUp));
@@ -90,7 +93,7 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         String requestPayloadJson = gson.toJson(requestPayload);
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
-        EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
 
 
         //CALL THE REGISTER CUSTOMER ENDPOINT
@@ -114,7 +117,7 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
 
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        dataPlans = decryptPayload(decryptRequestPayload, DataPlansResponsePayload.class);
+        dataPlans = authenticationApi.decryptPayload(decryptRequestPayload, DataPlansResponsePayload.class);
         //LOG REQUEST AND RESPONSE
 
         log.info("DATA PLANS LIST RESPONSE PAYLOAD : {}", gson.toJson(dataPlans));
@@ -147,7 +150,7 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         String requestPayloadJson = gson.toJson(requestPayload);
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
-        EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
 
         //CALL THE REGISTER CUSTOMER ENDPOINT
         String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
@@ -170,7 +173,7 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
 
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        dataTopUp = decryptPayload(decryptRequestPayload, GeneralResponsePayload.class);
+        dataTopUp = authenticationApi.decryptPayload(decryptRequestPayload, GeneralResponsePayload.class);
         //LOG REQUEST AND RESPONSE
 
         log.info("DATA TOP UP RESPONSE PAYLOAD : {}", gson.toJson(dataTopUp));

@@ -6,6 +6,7 @@ import com.iBanking.iBanking.payload.customer.*;
 import com.iBanking.iBanking.payload.generics.DecryptRequestPayload;
 import com.iBanking.iBanking.payload.generics.EncryptResponsePayload;
 import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
+import com.iBanking.iBanking.utils.AuthenticationApi;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -25,11 +26,13 @@ public class CustomerServiceImpl implements CustomerService {
     Gson gson = new Gson();
     @Autowired
     CustomerService customerService;
+    @Autowired
+    AuthenticationApi authenticationApi;
 
     //GET CUSTOMER DETAILS
     @Override
     public CustomerDetailsResponsePayload getCustomerDetails(HttpSession session, String mobileNUmber) throws UnirestException {
-        String accessToken = getAccessToken();
+        String accessToken = authenticationApi.getAccessToken();
         session.setAttribute("accessTokenCustomer", accessToken);
         CustomerDetailsResponsePayload customerDetailsResponse;
         CustomerDetailsRequestPayload customerDetailsRequestPayload = new CustomerDetailsRequestPayload();
@@ -37,7 +40,7 @@ public class CustomerServiceImpl implements CustomerService {
         String requestPayload = gson.toJson(customerDetailsRequestPayload);
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
-        EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayload);
+        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayload);
         log.info("CUSTOMER DETAILS REQUEST PAYLOAD : {}", requestPayload);
 
         //CALL THE CUSTOMER DETAILS ENDPOINT
@@ -62,7 +65,7 @@ public class CustomerServiceImpl implements CustomerService {
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
 
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        customerDetailsResponse = decryptPayload(decryptRequestPayload, CustomerDetailsResponsePayload.class);
+        customerDetailsResponse = authenticationApi.decryptPayload(decryptRequestPayload, CustomerDetailsResponsePayload.class);
         //LOG REQUEST AND RESPONSE
 
         log.info("CUSTOMER DETAILS RESPONSE PAYLOAD : {}", gson.toJson(customerDetailsResponse));
@@ -90,7 +93,7 @@ public class CustomerServiceImpl implements CustomerService {
         String requestPayloadJson = gson.toJson(requestPayload);
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
-        EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
 
         //CALL THE REGISTER CUSTOMER ENDPOINT
         String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
@@ -112,7 +115,7 @@ public class CustomerServiceImpl implements CustomerService {
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
 
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        registerCustomer = decryptPayload(decryptRequestPayload, RegisterCustomerResponsePayload.class);
+        registerCustomer = authenticationApi.decryptPayload(decryptRequestPayload, RegisterCustomerResponsePayload.class);
         //LOG REQUEST AND RESPONSE
 
         log.info("REGISTER CUSTOMER RESPONSE PAYLOAD : {}", gson.toJson(registerCustomer));
@@ -122,7 +125,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CreateCustomerResponsePayload createCustomer(HttpSession session) throws UnirestException {
-        String accessToken = getAccessToken();
+        String accessToken = authenticationApi.getAccessToken();
         CreateCustomerResponsePayload createCustomer;
         CreateCustomerWithoutBvnRequestPayload requestPayload = new CreateCustomerWithoutBvnRequestPayload();
         Forms createForm1 = (Forms) session.getAttribute("createAccountForm1");
@@ -178,7 +181,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         String requestPayloadJson = gson.toJson(requestPayload);
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
-        EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
 
         //CALL THE CREATE CUSTOMER ENDPOINT
         String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
@@ -200,7 +203,7 @@ public class CustomerServiceImpl implements CustomerService {
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
 
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        createCustomer = decryptPayload(decryptRequestPayload, CreateCustomerResponsePayload.class);
+        createCustomer = authenticationApi.decryptPayload(decryptRequestPayload, CreateCustomerResponsePayload.class);
         //LOG REQUEST AND RESPONSE
 
         log.info("CREATE CUSTOMER RESPONSE PAYLOAD : {}", gson.toJson(createCustomer));
@@ -210,7 +213,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public GeneralResponsePayload resetPassword(HttpSession session) throws UnirestException {
-        String accessToken = getAccessToken();
+        String accessToken = authenticationApi.getAccessToken();
         session.setAttribute("accessTokenCustomer", accessToken);
         GeneralResponsePayload resetPassword;
         ResetPasswordRequestPayload requestPayload = new ResetPasswordRequestPayload();
@@ -227,7 +230,7 @@ public class CustomerServiceImpl implements CustomerService {
         String requestPayloadJson = gson.toJson(requestPayload);
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
-        EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
         log.info("PASSWORD RESET REQUEST PAYLOAD : {}", requestPayloadJson);
 
         //CALL THE CUSTOMER DETAILS ENDPOINT
@@ -252,7 +255,7 @@ public class CustomerServiceImpl implements CustomerService {
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
 
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        resetPassword = decryptPayload(decryptRequestPayload, GeneralResponsePayload.class);
+        resetPassword = authenticationApi.decryptPayload(decryptRequestPayload, GeneralResponsePayload.class);
         //LOG REQUEST AND RESPONSE
 
         log.info("RESET PASSWORD RESPONSE PAYLOAD : {}", gson.toJson(resetPassword));

@@ -151,7 +151,7 @@ public class PayBillsServiceImpl implements PayBillsService {
         String requestPayloadJson = gson.toJson(requestPayload);
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD TO ENCRYPT
-        EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
 
         //CALL THE GET BANKS ENDPOINT AND PASS THE ENCRYPTED PAYLOAD
         String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
@@ -255,7 +255,7 @@ public class PayBillsServiceImpl implements PayBillsService {
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
 
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        validateElectricity = decryptPayload(decryptRequestPayload, ValidateElectricityResponsePayload.class);
+        validateElectricity = authenticationApi.decryptPayload(decryptRequestPayload, ValidateElectricityResponsePayload.class);
         //LOG REQUEST AND RESPONSE
 
         log.info("VALIDATE ELECTRICITY RESPONSE PAYLOAD : {}", gson.toJson(validateElectricity));
@@ -288,7 +288,7 @@ public class PayBillsServiceImpl implements PayBillsService {
         String requestPayloadJson = gson.toJson(requestPayload);
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD TO ENCRYPT
-        EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
 
         //CALL THE GET BANKS ENDPOINT AND PASS THE ENCRYPTED PAYLOAD
         String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
@@ -312,7 +312,7 @@ public class PayBillsServiceImpl implements PayBillsService {
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
 
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        electricityPayment = decryptPayload(decryptRequestPayload, GeneralResponsePayload.class);
+        electricityPayment = authenticationApi.decryptPayload(decryptRequestPayload, GeneralResponsePayload.class);
         //LOG REQUEST AND RESPONSE
 
 

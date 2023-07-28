@@ -9,10 +9,12 @@ import com.iBanking.iBanking.payload.accout.AccountList;
 import com.iBanking.iBanking.payload.generics.DecryptRequestPayload;
 import com.iBanking.iBanking.payload.generics.EncryptResponsePayload;
 import com.iBanking.iBanking.payload.generics.MobileNumberRequestPayload;
+import com.iBanking.iBanking.utils.AuthenticationApi;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
@@ -21,8 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.iBanking.iBanking.utils.ApiPaths.*;
-import static com.iBanking.iBanking.utils.AuthenticationApi.decryptPayload;
-import static com.iBanking.iBanking.utils.AuthenticationApi.encryptPayload;
+
 
 
 @Slf4j
@@ -30,7 +31,8 @@ import static com.iBanking.iBanking.utils.AuthenticationApi.encryptPayload;
 public class AccountServiceImpl implements AccountService {
 
     Gson gson = new Gson();
-
+    @Autowired
+    AuthenticationApi authenticationApi;
     @Override
     public AccountDetailsResponsePayload getAccountDetailsLocal(HttpSession session, String accountNumber) throws UnirestException {
         String accessToken = (String) session.getAttribute("accessToken");
@@ -43,7 +45,7 @@ public class AccountServiceImpl implements AccountService {
         String requestPayload = gson.toJson(accountDetailsRequestPayload);
 
         //Call the Encrypt API
-        EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayload);
+        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayload);
 
         //CALL THE ACCOUNT DETAILS ENDPOINT
         String requestPayloadJson = gson.toJson(encryptResponsePayload);
@@ -63,7 +65,7 @@ public class AccountServiceImpl implements AccountService {
 
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        accountDetailsResponse = decryptPayload(decryptRequestPayload, AccountDetailsResponsePayload.class);
+        accountDetailsResponse = authenticationApi.decryptPayload(decryptRequestPayload, AccountDetailsResponsePayload.class);
 
         //LOG REQUEST RESPONSE
         log.info("ACCOUNT DETAILS RESPONSE PAYLOAD : {}", gson.toJson(accountDetailsResponse));
@@ -80,7 +82,7 @@ public class AccountServiceImpl implements AccountService {
         requestPayload.setMobileNumber(loginForm.getMobileNumber());
         String requestPayloadJson = gson.toJson(requestPayload);
         //Call the Encrypt API
-        EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
         log.info("ACCOUNT DETAILS LIST REQUEST PAYLOAD : {}", requestPayloadJson);
         //CALL THE ACCOUNT DETAILS LIST ENDPOINT
         String responseString = gson.toJson(encryptResponsePayload);
@@ -108,7 +110,7 @@ public class AccountServiceImpl implements AccountService {
         //CALL THE DECRYPT API
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        accountBalanceResponse = decryptPayload(decryptRequestPayload, AccountDetailsListResponsePayload.class);
+        accountBalanceResponse = authenticationApi.decryptPayload(decryptRequestPayload, AccountDetailsListResponsePayload.class);
         //LOG REQUEST RESPONSE
         log.info("ACCOUNT DETAILS LIST RESPONSE PAYLOAD : {}", gson.toJson(accountBalanceResponse));
         session.setAttribute("accountBalanceResponse", accountBalanceResponse);

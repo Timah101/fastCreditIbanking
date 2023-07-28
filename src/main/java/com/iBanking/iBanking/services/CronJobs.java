@@ -1,23 +1,33 @@
 package com.iBanking.iBanking.services;
 
 
+import com.google.gson.Gson;
+import com.iBanking.iBanking.utils.AuthenticationApi;
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
 
 @Configuration
 @EnableScheduling
 @EnableEncryptableProperties
-public class cronJobs {
+public class CronJobs {
     @Autowired
     SendOtpService otpService;
+    @Autowired
+    AuthenticationApi authenticationApi;
+    Gson gson = new Gson();
 
     @Scheduled(fixedRate = 50000)
     public void testSecurity() {
         otpService.testSecretKeys();
+        String username = "Tunde";
+        String requestJson = gson.toJson(username);
+        System.out.println(requestJson);
+        final String encrypt = authenticationApi.encrypt(requestJson);
+        System.out.println(encrypt);
+        String decrypt = authenticationApi.decrypt(encrypt);
+        System.out.println(decrypt + ": decrypted");
     }
-
 }

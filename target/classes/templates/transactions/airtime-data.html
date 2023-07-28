@@ -55,18 +55,8 @@
             </div>
         </div>
 
-        <div id="main-module-mobile" class="col-md-2 col-sm-12 col-xs-12 send-money-module-no-show" style="display: none">
+        <div id="main-module-mobile" class="col-md-2 col-sm-12 col-xs-12 send-money-module-no-show">
             <div id="send-money-module-mobile" class="send-money-module-mobile">
-                <!--                <div id="send-money-min-mobile" class="send-money-mini">-->
-                <!--                    <a class="btn-block btn-login" onclick="toggleMobile()">-->
-                <!--                        Airtime Top Up-->
-                <!--                    </a>-->
-                <!--                </div>-->
-                <!--                <div id="send-money-min-1-mobile" class="send-money-mini">-->
-                <!--                    <a class="btn-block btn-login" onclick="toggleMobile()">-->
-                <!--                        Data Top Up-->
-                <!--                    </a>-->
-                <!--                </div>-->
                 <div class="form-transfer-money">
                     <div class="transfer-money-block">
                         <div class="payment-block">
@@ -108,14 +98,12 @@
                         <div class="form-transfer-money">
                             <div class="transfer-money-block">
                                 <div class="payment-block">
-                                    <form method="post" th:object="${airtimeForm}" th:action="@{/airtime-form}">
+                                    <form id="" method="post" th:object="${airtimeForm}" th:action="@{/airtime-form}">
                                         <div class="mb-4">
                                             <label for="select-account" class="label-span">Select Account</label>
                                             <select id="select-account" class="form-control-send-money mb-3"
                                                     th:field="*{debitAccount}">
                                                 <option value=""> -- Select Account --</option>
-                                                <!--                                                <option disabled hidden selected value="0">-->
-                                                <!--                                                </option>-->
                                                 <option style="background-color: #D1D0CE"
                                                         th:each="accountBalance : ${accountBalanceResponse}"
                                                         th:text="${accountBalance.getAccountNumber()}"
@@ -146,7 +134,8 @@
                                                    th:field="*{amount}">
                                         </div>
                                         <div class="mb-4">
-                                            <input class="submit-send-money" type="submit" placeholder="Proceed"
+                                            <input class="submit-send-money" type="submit"
+                                                   placeholder="Proceed"
                                                    onclick="showLoader()">
                                         </div>
 
@@ -362,7 +351,7 @@
     function showLoader() {
         const loader = document.getElementById('loader');
         const mobileDiv = document.getElementById('main-module-mobile');
-        mobileDiv.style.display= 'none';
+        mobileDiv.style.display = 'none';
         loader.style.display = 'block';
     }
 
@@ -473,6 +462,12 @@
 
 </script>
 <script>
+    document.getElementById("submit-input").addEventListener("click", function (event) {
+        document.getElementById("main-module-mobile").style.display = "none";
+        document.getElementById("send-money-module-mobile").style.display = "none";
+        alert("THIS GUY WAS CLICKED")
+    });
+
     $(document).ready(function () {
         $('#myForm').submit(function (event) {
             event.preventDefault();

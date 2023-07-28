@@ -1,50 +1,49 @@
 package com.iBanking.iBanking.utils;
 
-public class ApiPaths {
+public interface ApiPaths {
 
-//    http://omnichannelapi2.fastcredit-ng.com
-    public static final String BASE_URL = "http://omnichannelapi2.fastcredit-ng.com//expertbridge/api/";
-    static final String GENERATE_TOKEN = "token/generate-token";
-    static final String ENCRYPT_PAYLOAD = "customerService/encrypt";
-    static final String DECRYPT_PAYLOAD = "customerService/decrypt";
-    public static final String CUSTOMER_DETAILS = "customerService/details";
+    //    http://omnichannelapi2.fastcredit-ng.com
+    String BASE_URL = "http://omnichannelapi2.fastcredit-ng.com//expertbridge/api/";
+    String GENERATE_TOKEN = "token/generate-token";
+    String ENCRYPT_PAYLOAD = "customerService/encrypt";
+    String DECRYPT_PAYLOAD = "customerService/decrypt";
+    String CUSTOMER_DETAILS = "customerService/details";
 
-    public static final String PASSWORD_RESET = "customerService/update/customer";
+    String PASSWORD_RESET = "customerService/update/customer";
 
-    public static final String CUSTOMER_REGISTER = "customerService/register";
+    String CUSTOMER_REGISTER = "customerService/register";
 
-    public static final String CUSTOMER_CREATE = "customerService/create/individual";
-    public static final String CUSTOMER_LOGIN = "customerService/authenticate/user";
+    String CUSTOMER_CREATE = "customerService/create/individual";
+    String CUSTOMER_LOGIN = "customerService/authenticate/user";
 
-    public static final String ACCOUNT_DETAILS = "customerService/account/details";
+    String ACCOUNT_DETAILS = "customerService/account/details";
 
-    public static final String ACCOUNT_DETAILS_LIST = "customerService/account/list";
+    String ACCOUNT_DETAILS_LIST = "customerService/account/list";
 
-    public static final String SEND_OTP = "customerService/otp/send";
+    String SEND_OTP = "customerService/otp/send";
 
-    public static final String AIRTIME_TOP_UP = "fusionService/airtime/purchase";
+    String AIRTIME_TOP_UP = "fusionService/airtime/purchase";
 
-    public static final String DATA_TOP_UP = "fusionService/data/purchase";
+    String DATA_TOP_UP = "fusionService/data/purchase";
 
-    public static final String DATA_PLANS = "fusionService/data/plans";
+    String DATA_PLANS = "fusionService/data/plans";
 
-    public static final String SEND_MONEY_LOCAL = "genericService/ft/local";
+    String SEND_MONEY_LOCAL = "genericService/ft/local";
 
-    public static final String SEND_MONEY_OTHERS = "genericService/ft/others";
+    String SEND_MONEY_OTHERS = "genericService/ft/others";
 
-    public static final String GET_BANKS_LIST = "genericService/banks";
+    String GET_BANKS_LIST = "genericService/banks";
 
-    public static final String OTHER_BANKS_NAME_ENQUIRY = "genericService/ft/name-enquiry";
+    String OTHER_BANKS_NAME_ENQUIRY = "genericService/ft/name-enquiry";
 
-    public static final String CABLE_TV_BILLERS_LIST = "fusionService/cabletv/billers";
+    String CABLE_TV_BILLERS_LIST = "fusionService/cabletv/billers";
 
-    public static final String ELECTRICITY_BILLERS_LIST = "fusionService/electricity/billers";
-    public static final String VALIDATE_CABLE_TV = "fusionService/cabletv/validate";
+    String ELECTRICITY_BILLERS_LIST = "fusionService/electricity/billers";
+    String VALIDATE_CABLE_TV = "fusionService/cabletv/validate";
 
-    public static final String VALIDATE_ELECTRICITY = "fusionService/electricity/validate";
+    String VALIDATE_ELECTRICITY = "fusionService/electricity/validate";
 
-    public static final String CABLE_TV_PAYMENT = "fusionService/cabletv/pay-bill";
-
+    String CABLE_TV_PAYMENT = "fusionService/cabletv/pay-bill";
 
 
 }

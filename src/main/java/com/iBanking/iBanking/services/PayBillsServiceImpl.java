@@ -6,23 +6,25 @@ import com.iBanking.iBanking.payload.generics.DecryptRequestPayload;
 import com.iBanking.iBanking.payload.generics.EncryptResponsePayload;
 import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
 import com.iBanking.iBanking.payload.transactions.cableTv.*;
+import com.iBanking.iBanking.utils.AuthenticationApi;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 
 import static com.iBanking.iBanking.utils.ApiPaths.*;
-import static com.iBanking.iBanking.utils.AuthenticationApi.decryptPayload;
-import static com.iBanking.iBanking.utils.AuthenticationApi.encryptPayload;
 
 @Slf4j
 @Service
 public class PayBillsServiceImpl implements PayBillsService {
 
     Gson gson = new Gson();
+    @Autowired
+    AuthenticationApi authenticationApi;
 
     @Override
     public GetCableTvBillersResponsePayload getCableTvBillers(HttpSession session, String biller) throws UnirestException {
@@ -35,7 +37,7 @@ public class PayBillsServiceImpl implements PayBillsService {
         String requestPayloadJson = gson.toJson(requestPayload);
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD TO ENCRYPT
-        EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
 
         //CALL THE GET BANKS ENDPOINT AND PASS THE ENCRYPTED PAYLOAD
         String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
@@ -56,7 +58,7 @@ public class PayBillsServiceImpl implements PayBillsService {
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
 
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        cableTvBillers = decryptPayload(decryptRequestPayload, GetCableTvBillersResponsePayload.class);
+        cableTvBillers = authenticationApi.decryptPayload(decryptRequestPayload, GetCableTvBillersResponsePayload.class);
         //LOG REQUEST AND RESPONSE
 
         log.info("CABLE TV BILLERS LIST RESPONSE PAYLOAD : {}", gson.toJson(cableTvBillers));
@@ -76,7 +78,7 @@ public class PayBillsServiceImpl implements PayBillsService {
         String requestPayloadJson = gson.toJson(requestPayload);
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD TO ENCRYPT
-        EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
 
         //CALL THE GET BANKS ENDPOINT AND PASS THE ENCRYPTED PAYLOAD
         String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
@@ -97,7 +99,7 @@ public class PayBillsServiceImpl implements PayBillsService {
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
 
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        validateCableTv = decryptPayload(decryptRequestPayload, ValidateCableTvResponsePayload.class);
+        validateCableTv = authenticationApi.decryptPayload(decryptRequestPayload, ValidateCableTvResponsePayload.class);
         //LOG REQUEST AND RESPONSE
 
         log.info("VALIDATE CABLE TV RESPONSE PAYLOAD : {}", gson.toJson(validateCableTv));
@@ -173,7 +175,7 @@ public class PayBillsServiceImpl implements PayBillsService {
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
 
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        cableTvPayment = decryptPayload(decryptRequestPayload, CableTvPaymentResponse.class);
+        cableTvPayment = authenticationApi.decryptPayload(decryptRequestPayload, CableTvPaymentResponse.class);
         //LOG REQUEST AND RESPONSE
 
 
@@ -191,7 +193,7 @@ public class PayBillsServiceImpl implements PayBillsService {
         String requestPayloadJson = gson.toJson(requestPayload);
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD TO ENCRYPT
-        EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
 
         //CALL THE GET BANKS ENDPOINT AND PASS THE ENCRYPTED PAYLOAD
         String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
@@ -212,7 +214,7 @@ public class PayBillsServiceImpl implements PayBillsService {
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
 
         decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        getElectricityBillers = decryptPayload(decryptRequestPayload, GetElectricityBillerResponsePayload.class);
+        getElectricityBillers = authenticationApi.decryptPayload(decryptRequestPayload, GetElectricityBillerResponsePayload.class);
         //LOG REQUEST AND RESPONSE
 
         log.info("ELECTRICITY BILLERS LIST RESPONSE PAYLOAD : {}", gson.toJson(getElectricityBillers));
@@ -232,7 +234,7 @@ public class PayBillsServiceImpl implements PayBillsService {
         String requestPayloadJson = gson.toJson(requestPayload);
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD TO ENCRYPT
-        EncryptResponsePayload encryptResponsePayload = encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
 
         //CALL THE GET BANKS ENDPOINT AND PASS THE ENCRYPTED PAYLOAD
         String requestPayloadJsonString = gson.toJson(encryptResponsePayload);

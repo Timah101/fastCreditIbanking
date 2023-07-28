@@ -10,21 +10,30 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 
 import static com.iBanking.iBanking.utils.ApiPaths.*;
 
 
 @Slf4j
+@Component
 public class AuthenticationApi {
     static Gson gson = new Gson();
-    static Configurations configurations = new Configurations();
 
-    public static String getAccessToken() throws UnirestException {
+    @Autowired
+    FastCreditConfig fastCreditConfig;
+
+    public String getAccessToken() throws UnirestException {
         AccessTokenRequestPayload accessTokenRequestPayload = new AccessTokenRequestPayload();
         AccessTokenResponsePayload accessTokenResponsePayload = new AccessTokenResponsePayload();
-        accessTokenRequestPayload.setUserName(configurations.getTokenUsername());
-        accessTokenRequestPayload.setPassword(configurations.getTokenPassword());
+        String userName = fastCreditConfig.userName();
+        String passWord = fastCreditConfig.password();
+        System.out.println("Username {}" + userName);
+        System.out.println("Username {}" + passWord);
+        accessTokenRequestPayload.setUserName("configurations.getTokenUsername()");
+        accessTokenRequestPayload.setPassword("configurations.getTokenPassword()");
         String requestPayload = gson.toJson(accessTokenRequestPayload);
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + GENERATE_TOKEN)
                 .header("accept", "application/json")
@@ -39,7 +48,7 @@ public class AuthenticationApi {
     }
 
 
-    public static EncryptResponsePayload encryptPayload(String requestPayloads) throws UnirestException {
+    public EncryptResponsePayload encryptPayload(String requestPayloads) throws UnirestException {
         //        HttpSession session
         //        String accessToken = (String) session.getAttribute("accessToken");
 //        log.info("ENCRYPTION REQUEST {}", requestPayloads);
@@ -56,7 +65,7 @@ public class AuthenticationApi {
 
     }
 
-    public static <T, R> R decryptPayload(T request, Class<R> responseType) throws UnirestException {
+    public <T, R> R decryptPayload(T request, Class<R> responseType) throws UnirestException {
 //        request.setResponse("oxjnc/iwXauEUn8rKAIrvgbATWArzBo/HyhOcSNgws65Os0YKxM4m/eWeUHLg5h/");
 
         String requestPayload = gson.toJson(request);

@@ -12,44 +12,61 @@
 <header th:insert="~{dashboard :: headerfast}"></header>
 <div th:insert="~{dashboard :: sidebarfast}"></div>
 
-<div class="text-center">
-    <div class="text-center">
-        <div class="card-fast-login">
-
-            <div class="card-body">
-                <div class="basic-form">
-                    <form method="post">
-                        <div th:if="${errorMessage}" class="alert-fast" role="alert">
-                            <span th:text="${errorMessage}">Error message</span>
-                        </div>
-                        <div class="mb-2">
-                            <a><img th:src="@{/images/logo.svg}" alt="Fast Credit" width="150" height="100"></a>
-                        </div>
-
-                        <div class=" register-left">Profile
-                        </div>
-                        <div class="border-rectangle"></div>
-
-                        <div class="mb-4">
-                            <a th:href="@{/reset}" onclick="showLoader()">Password Reset</a>
-                        </div>
-                        <div class="mb-4">
-                            <a th:href="@{/reset}" onclick="showLoader()">Pin Reset</a>
-                        </div>
-                        <div class="mb-4">
-                            <a th:href="@{/reset}" onclick="showLoader()">Security Question Reset</a>
-                        </div>
-                        <div class="mb-4">
-                            <a th:href="@{/login}" onclick="showLoader()">Log Out</a>
-                        </div>
-                    </form>
-
+<div class="card-fast-login" style="margin-top: 150px">
+    <div class="card-body">
+        <div class="basic-form">
+            <form method="post">
+                <div th:if="${errorMessage}" class="alert-fast" role="alert">
+                    <span th:text="${errorMessage}">Error message</span>
                 </div>
-            </div>
+                <div class="mb-2">
+                    <a><img th:src="@{/images/logo.svg}" alt="Fast Credit" width="150" height="100"></a>
+                </div>
+
+                <div class=" register-left">Profile
+                </div>
+                <div class="border-rectangle"></div>
+
+                <div class="mb-4">
+                    <a th:href="@{/reset}" onclick="showLoader()">Password Reset</a>
+                </div>
+                <div id="send-money-min" class="send-money-mini">
+                    <a class="" onclick="toggleAirtime()">
+                    <span class="send-money-span">
+                    Airtime Top Up</span>
+                        <span class="send-money-mini-svg"> <svg viewBox="0 0 129 129" version="1.1"
+                                                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                            <g>
+                                <path fill="#fff"
+                                      d="m40.4,121.3c-0.8,0.8-1.8,1.2-2.9,1.2s-2.1-0.4-2.9-1.2c-1.6-1.6-1.6-4.2 0-5.8l51-51-51-51c-1.6-1.6-1.6-4.2 0-5.8 1.6-1.6 4.2-1.6 5.8,0l53.9,53.9c1.6,1.6 1.6,4.2 0,5.8l-53.9,53.9z"></path>
+                            </g>
+                        </svg> </span>
+                    </a>
+                </div>
+                <div class="mb-4">
+                    <a th:href="@{/reset}" onclick="showLoader()">Pin Reset</a>
+                    <span class="send-money-mini-svg"> <svg viewBox="0 0 129 129" version="1.1"
+                                                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                            <g>
+                                <path fill="#fff"
+                                      d="m40.4,121.3c-0.8,0.8-1.8,1.2-2.9,1.2s-2.1-0.4-2.9-1.2c-1.6-1.6-1.6-4.2 0-5.8l51-51-51-51c-1.6-1.6-1.6-4.2 0-5.8 1.6-1.6 4.2-1.6 5.8,0l53.9,53.9c1.6,1.6 1.6,4.2 0,5.8l-53.9,53.9z"></path>
+                            </g>
+                        </svg> </span>
+                </div>
+                <div class="mb-4">
+                    <a th:href="@{/reset}" onclick="showLoader()">Security Question Reset</a>
+                </div>
+                <div class="mb-4">
+                    <a th:href="@{/login}" onclick="showLoader()">Log Out</a>
+                </div>
+            </form>
+
         </div>
     </div>
-
 </div>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

@@ -51,11 +51,13 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
         String requestPayloadJson = gson.toJson(requestPayload);
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD TO ENCRYPT
-        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
+        String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
+        encryptResponsePayload1.setRequest(encryptResponsePayload);
 
 
         //CALL THE SEND MONEY ENDPOINT AND PASS THE ENCRYPTED PAYLOAD
-        String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
+        String requestPayloadJsonString = gson.toJson(encryptResponsePayload1);
         log.info("SEND MONEY LOCAL REQUEST PAYLOAD : {}", requestPayloadJson);
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + SEND_MONEY_OTHERS)
                 .header("accept", "application/json")
@@ -69,13 +71,11 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
             log.info(" ERROR WHILE SEND MONEY LOCAL {}", jsonResponse.getStatus());
             return sendMoney;
         }
-        // PASS ENCRYPTED RESPONSE FROM CUSTOMER DETAILS TO DECRYPT API
+        // PASS ENCRYPTED RESPONSE TO DECRYPT API
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
-
-        decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        sendMoney = authenticationApi.decryptPayload(decryptRequestPayload, GeneralResponsePayload.class);
+        String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+        sendMoney = gson.fromJson(decrypt, GeneralResponsePayload.class);
         //LOG REQUEST AND RESPONSE
-
         log.info("SEND MONEY LOCAL RESPONSE PAYLOAD : {}", gson.toJson(sendMoney));
         session.setAttribute("sendMoneyLocalResponse", sendMoney);
         return sendMoney;
@@ -106,10 +106,11 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
         String requestPayloadJson = gson.toJson(requestPayload);
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
-        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
+        String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
+        encryptResponsePayload1.setRequest(encryptResponsePayload);
 
-        //CALL THE REGISTER CUSTOMER ENDPOINT
-        String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
+        String requestPayloadJsonString = gson.toJson(encryptResponsePayload1);
         log.info("SEND MONEY OTHERS PAYLOAD  {}", requestPayloadJson);
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + SEND_MONEY_LOCAL)
                 .header("accept", "application/json")
@@ -123,11 +124,10 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
             log.info(" ERROR WHILE SEND MONEY OTHERS {}", jsonResponse.getStatus());
             return sendMoney;
         }
-        // PASS ENCRYPTED RESPONSE FROM CUSTOMER DETAILS TO DECRYPT API
+        // PASS ENCRYPTED RESPONSE TO DECRYPT API
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
-
-        decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        sendMoney = authenticationApi.decryptPayload(decryptRequestPayload, GeneralResponsePayload.class);
+        String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+        sendMoney = gson.fromJson(decrypt, GeneralResponsePayload.class);
         //LOG REQUEST AND RESPONSE
         log.info("SEND MONEY OTHERS RESPONSE PAYLOAD : {}", gson.toJson(sendMoney));
         session.setAttribute("sendMoneyOtherResponse", sendMoney);
@@ -143,10 +143,12 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
         String requestPayloadJson = gson.toJson(requestPayload);
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD TO ENCRYPT
-        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
+        String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
+        encryptResponsePayload1.setRequest(encryptResponsePayload);
 
         //CALL THE GET BANKS ENDPOINT AND PASS THE ENCRYPTED PAYLOAD
-        String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
+        String requestPayloadJsonString = gson.toJson(encryptResponsePayload1);
         log.info("GET BANKS LIST REQUEST PAYLOAD : {}", requestPayloadJson);
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + GET_BANKS_LIST)
                 .header("accept", "application/json")
@@ -160,11 +162,10 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
             log.info(" ERROR WHILE GETTING BANK LIST {}", jsonResponse.getStatus());
             return getBanksList;
         }
-        // PASS ENCRYPTED RESPONSE FROM CUSTOMER DETAILS TO DECRYPT API
+        // PASS ENCRYPTED RESPONSE TO DECRYPT API
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
-
-        decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        getBanksList = authenticationApi.decryptPayload(decryptRequestPayload, GetBankListPResponsePayload.class);
+        String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+        getBanksList = gson.fromJson(decrypt, GetBankListPResponsePayload.class);
         //LOG REQUEST AND RESPONSE
 
         log.info("GET BANK LIST RESPONSE PAYLOAD : {}", gson.toJson(getBanksList));
@@ -183,10 +184,12 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
         String requestPayloadJson = gson.toJson(requestPayload);
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD TO ENCRYPT
-        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
+        String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
+        encryptResponsePayload1.setRequest(encryptResponsePayload);
 
         //CALL THE GET BANKS ENDPOINT AND PASS THE ENCRYPTED PAYLOAD
-        String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
+        String requestPayloadJsonString = gson.toJson(encryptResponsePayload1);
         log.info("OTHER BANKS NAME ENQUIRY REQUEST PAYLOAD : {}", requestPayloadJson);
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + OTHER_BANKS_NAME_ENQUIRY)
                 .header("accept", "application/json")
@@ -200,11 +203,10 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
             log.info(" ERROR WHILE OTHER BANKS NAME ENQUIRY {}", jsonResponse.getStatus());
             return otherBanksNameEnquiry;
         }
-        // PASS ENCRYPTED RESPONSE FROM CUSTOMER DETAILS TO DECRYPT API
+        // PASS ENCRYPTED RESPONSE TO DECRYPT API
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
-
-        decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        otherBanksNameEnquiry = authenticationApi.decryptPayload(decryptRequestPayload, OtherBanksNameEnquiryResponsePayload.class);
+        String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+        otherBanksNameEnquiry = gson.fromJson(decrypt, OtherBanksNameEnquiryResponsePayload.class);
         //LOG REQUEST AND RESPONSE
 
         log.info("OTHER BANKS NAME ENQUIRY RESPONSE PAYLOAD : {}", gson.toJson(otherBanksNameEnquiry));

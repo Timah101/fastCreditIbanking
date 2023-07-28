@@ -13,6 +13,11 @@
       "sourceType": "com.iBanking.iBanking.utils.FastCreditConfig"
     },
     {
+      "name": "fast-credit.secret-key",
+      "type": "java.lang.String",
+      "sourceType": "com.iBanking.iBanking.utils.FastCreditConfig"
+    },
+    {
       "name": "fast-credit.user-name",
       "type": "java.lang.String",
       "sourceType": "com.iBanking.iBanking.utils.FastCreditConfig"

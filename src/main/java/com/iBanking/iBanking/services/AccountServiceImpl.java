@@ -25,7 +25,6 @@ import java.util.List;
 import static com.iBanking.iBanking.utils.ApiPaths.*;
 
 
-
 @Slf4j
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -33,6 +32,7 @@ public class AccountServiceImpl implements AccountService {
     Gson gson = new Gson();
     @Autowired
     AuthenticationApi authenticationApi;
+
     @Override
     public AccountDetailsResponsePayload getAccountDetailsLocal(HttpSession session, String accountNumber) throws UnirestException {
         String accessToken = (String) session.getAttribute("accessToken");
@@ -45,7 +45,7 @@ public class AccountServiceImpl implements AccountService {
         String requestPayload = gson.toJson(accountDetailsRequestPayload);
 
         //Call the Encrypt API
-        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayload);
+        String encryptResponsePayload = authenticationApi.encryptPayload(requestPayload);
 
         //CALL THE ACCOUNT DETAILS ENDPOINT
         String requestPayloadJson = gson.toJson(encryptResponsePayload);
@@ -63,9 +63,10 @@ public class AccountServiceImpl implements AccountService {
             return accountDetailsResponse;
         }
 
+        // PASS ENCRYPTED RESPONSE TO DECRYPT API
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
-        decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        accountDetailsResponse = authenticationApi.decryptPayload(decryptRequestPayload, AccountDetailsResponsePayload.class);
+        String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+        accountDetailsResponse = gson.fromJson(decrypt, AccountDetailsResponsePayload.class);
 
         //LOG REQUEST RESPONSE
         log.info("ACCOUNT DETAILS RESPONSE PAYLOAD : {}", gson.toJson(accountDetailsResponse));
@@ -82,16 +83,20 @@ public class AccountServiceImpl implements AccountService {
         requestPayload.setMobileNumber(loginForm.getMobileNumber());
         String requestPayloadJson = gson.toJson(requestPayload);
         //Call the Encrypt API
-        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
+        String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
+        encryptResponsePayload1.setRequest(encryptResponsePayload);
         log.info("ACCOUNT DETAILS LIST REQUEST PAYLOAD : {}", requestPayloadJson);
         //CALL THE ACCOUNT DETAILS LIST ENDPOINT
-        String responseString = gson.toJson(encryptResponsePayload);
+        String requestString = gson.toJson(encryptResponsePayload1);
+        log.info("ACCOUNT DETAILS LIST REQUEST PAYLOAD : {}", requestString);
         HttpResponse<String> response = Unirest.post(BASE_URL + ACCOUNT_DETAILS_LIST)
                 .header("accept", "application/json")
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + accessToken)
-                .body(responseString).asString();
+                .body(requestString).asString();
         String requestBody = response.getBody();
+
         if (response.getStatus() != 200 || response.getBody().isEmpty()) {
             accountBalanceResponse = new AccountDetailsListResponsePayload();
             AccountList balance = new AccountList();
@@ -109,8 +114,22 @@ public class AccountServiceImpl implements AccountService {
 
         //CALL THE DECRYPT API
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
-        decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        accountBalanceResponse = authenticationApi.decryptPayload(decryptRequestPayload, AccountDetailsListResponsePayload.class);
+        String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+        accountBalanceResponse = gson.fromJson(decrypt, AccountDetailsListResponsePayload.class);
+        if (accountBalanceResponse.getResponseCode().equals("03")) {
+            accountBalanceResponse = new AccountDetailsListResponsePayload();
+            AccountList balance = new AccountList();
+            List<AccountList> bal = new ArrayList<>();
+            balance.setAvailableBalance("...");
+            balance.setLedgerBalance("...");
+            balance.setAccountNumber("...");
+            bal.add(balance);
+            accountBalanceResponse.setAccountList(bal);
+            accountBalanceResponse.setResponseCode("99");
+            session.setAttribute("accountBalanceResponse", accountBalanceResponse);
+            log.info(" ACCOUNT DETAILS LIST IS EMPTY {}", response.getStatus());
+            return accountBalanceResponse;
+        }
         //LOG REQUEST RESPONSE
         log.info("ACCOUNT DETAILS LIST RESPONSE PAYLOAD : {}", gson.toJson(accountBalanceResponse));
         session.setAttribute("accountBalanceResponse", accountBalanceResponse);

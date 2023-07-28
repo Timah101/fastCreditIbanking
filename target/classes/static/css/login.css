@@ -780,7 +780,7 @@ header {
     border: 0px solid transparent;
     border-radius: 8px;
     box-shadow: 0px 5px 4px 0px #888888;
-    /*height: calc(100% - 90px);*/
+    height: calc(100% - 90px);
     /*padding: 20px;*/
     display: flex;
     flex-direction: column;

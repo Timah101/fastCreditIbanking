@@ -21,13 +21,13 @@ public class CronJobs {
 
     @Scheduled(fixedRate = 50000)
     public void testSecurity() {
-        otpService.testSecretKeys();
+//        otpService.testSecretKeys();
         String username = "Tunde";
         String requestJson = gson.toJson(username);
-        System.out.println(requestJson);
-        final String encrypt = authenticationApi.encrypt(requestJson);
-        System.out.println(encrypt);
-        String decrypt = authenticationApi.decrypt(encrypt);
-        System.out.println(decrypt + ": decrypted");
+//        System.out.println(requestJson);
+//        final String encrypt = authenticationApi.encrypt(requestJson);
+//        System.out.println(encrypt);
+        String decrypt = authenticationApi.decryptPayload("F9bIVbJKWko3yZUjelRMG4FBi4to9c63IiHymOdozcoi0ymtMaFFyvULUUaBd0aDhJ6dowgFq+RYTq5TvXOBeVC4pUbQ0pOVvE8kRkFbHzc=");
+//        System.out.println(decrypt + ": decrypted");
     }
 }

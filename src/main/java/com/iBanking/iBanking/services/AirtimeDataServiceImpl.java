@@ -35,7 +35,6 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         String accessToken = (String) session.getAttribute("accessToken");
         GeneralResponsePayload airtimeTopUp;
         AirtimeRequestPayload requestPayload = new AirtimeRequestPayload();
-
         Forms airtimeForm = (Forms) session.getAttribute("airtimeForm");
         Forms airtimeFormPin = (Forms) session.getAttribute("airtimeFormPin");
         Forms loginForm = (Forms) session.getAttribute("loginForm");
@@ -51,10 +50,12 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         String requestPayloadJson = gson.toJson(requestPayload);
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
-        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
+        String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
+        encryptResponsePayload1.setRequest(encryptResponsePayload);
 
         //CALL THE REGISTER CUSTOMER ENDPOINT
-        String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
+        String requestPayloadJsonString = gson.toJson(encryptResponsePayload1);
         log.info("AIRTIME TOP UP REQUEST PAYLOAD : {}", requestPayloadJson);
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + AIRTIME_TOP_UP)
                 .header("accept", "application/json")
@@ -70,13 +71,11 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
             log.info(" ERROR WHILE AIRTIME TOP UP {}", jsonResponse.getStatus());
             return airtimeTopUp;
         }
-        // PASS ENCRYPTED RESPONSE FROM CUSTOMER DETAILS TO DECRYPT API
+        // PASS ENCRYPTED RESPONSE TO DECRYPT API
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
-
-        decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        airtimeTopUp = authenticationApi.decryptPayload(decryptRequestPayload, GeneralResponsePayload.class);
+        String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+        airtimeTopUp = gson.fromJson(decrypt, GeneralResponsePayload.class);
         //LOG REQUEST AND RESPONSE
-
         log.info("AIRTIME TOP UP RESPONSE PAYLOAD : {}", gson.toJson(airtimeTopUp));
         session.setAttribute("airtimeTopUpResponse", airtimeTopUp);
         return airtimeTopUp;
@@ -87,17 +86,14 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         String accessToken = (String) session.getAttribute("accessToken");
         DataPlansResponsePayload dataPlans;
         DataPlansRequestPayload requestPayload = new DataPlansRequestPayload();
-
         requestPayload.setTelco(telco);
-
         String requestPayloadJson = gson.toJson(requestPayload);
-
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
-        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
-
-
-        //CALL THE REGISTER CUSTOMER ENDPOINT
-        String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
+        String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
+        encryptResponsePayload1.setRequest(encryptResponsePayload);
+        //CALL THE DATA PLANS ENDPOINT
+        String requestPayloadJsonString = gson.toJson(encryptResponsePayload1);
         log.info("DATA PLANS LIST REQUEST PAYLOAD : {}", requestPayloadJson);
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + DATA_PLANS)
                 .header("accept", "application/json")
@@ -108,16 +104,14 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         if (jsonResponse.getStatus() != 200) {
             dataPlans = new DataPlansResponsePayload();
             dataPlans.setResponseCode("500");
-
             session.setAttribute("dataPlansResponse", dataPlans);
             log.info(" ERROR WHILE GETTING DATA PLANS LIST {}", jsonResponse.getStatus());
             return dataPlans;
         }
-        // PASS ENCRYPTED RESPONSE FROM CUSTOMER DETAILS TO DECRYPT API
+        // PASS ENCRYPTED RESPONSE TO DECRYPT API
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
-
-        decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        dataPlans = authenticationApi.decryptPayload(decryptRequestPayload, DataPlansResponsePayload.class);
+        String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+        dataPlans = gson.fromJson(decrypt, DataPlansResponsePayload.class);
         //LOG REQUEST AND RESPONSE
 
         log.info("DATA PLANS LIST RESPONSE PAYLOAD : {}", gson.toJson(dataPlans));
@@ -150,9 +144,10 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         String requestPayloadJson = gson.toJson(requestPayload);
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
-        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
+        String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
+        encryptResponsePayload1.setRequest(encryptResponsePayload);
 
-        //CALL THE REGISTER CUSTOMER ENDPOINT
         String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
         log.info("DATA TOP UP REQUEST PAYLOAD : {}", requestPayloadJson);
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + DATA_TOP_UP)
@@ -169,11 +164,10 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
             log.info(" ERROR WHILE DATA TOP UP {}", jsonResponse.getStatus());
             return dataTopUp;
         }
-        // PASS ENCRYPTED RESPONSE FROM CUSTOMER DETAILS TO DECRYPT API
+        // PASS ENCRYPTED RESPONSE TO DECRYPT API
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
-
-        decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        dataTopUp = authenticationApi.decryptPayload(decryptRequestPayload, GeneralResponsePayload.class);
+        String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+        dataTopUp = gson.fromJson(decrypt, GeneralResponsePayload.class);
         //LOG REQUEST AND RESPONSE
 
         log.info("DATA TOP UP RESPONSE PAYLOAD : {}", gson.toJson(dataTopUp));

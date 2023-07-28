@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpSession;
 
 import static com.iBanking.iBanking.utils.ApiPaths.*;
-import static com.iBanking.iBanking.utils.AuthenticationApi.*;
 
 @Slf4j
 @Service
@@ -42,11 +41,13 @@ public class SendOtpServiceImpl implements SendOtpService {
         String requestPayloadJson = gson.toJson(requestPayload);
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
-        EncryptResponsePayload encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
+        String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
+        encryptResponsePayload1.setRequest(encryptResponsePayload);
         log.info("SEND OTP ENCRYPTION RESPONSE {}", encryptResponsePayload);
 
-        //CALL THE REGISTER CUSTOMER ENDPOINT
-        String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
+
+        String requestPayloadJsonString = gson.toJson(encryptResponsePayload1);
         log.info("SEND OTP PAYLOAD  {}", requestPayloadJson);
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + SEND_OTP)
                 .header("accept", "application/json")
@@ -61,11 +62,11 @@ public class SendOtpServiceImpl implements SendOtpService {
             log.info(" ERROR WHILE SENDING SEND OTP  {}", jsonResponse.getStatus());
             return sendOtp;
         }
-        // PASS ENCRYPTED RESPONSE FROM CUSTOMER DETAILS TO DECRYPT API
+        // PASS ENCRYPTED RESPONSE TO DECRYPT API
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
+        String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+        sendOtp = gson.fromJson(decrypt, SendOtpResponsePayload.class);
 
-        decryptRequestPayload.setResponse(decryptRequestPayload.getResponse());
-        sendOtp = authenticationApi.decryptPayload(decryptRequestPayload, SendOtpResponsePayload.class);
         //LOG REQUEST AND RESPONSE
         log.info("SEND OTP REQUEST PAYLOAD : {}", requestPayload);
         log.info("SEND OTP RESPONSE PAYLOAD : {}", gson.toJson(sendOtp));

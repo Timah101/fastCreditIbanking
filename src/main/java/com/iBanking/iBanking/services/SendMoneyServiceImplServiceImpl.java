@@ -2,7 +2,9 @@ package com.iBanking.iBanking.services;
 
 import com.google.gson.Gson;
 import com.iBanking.iBanking.Forms.Forms;
+import com.iBanking.iBanking.payload.accout.AccountDetailsListResponsePayload;
 import com.iBanking.iBanking.payload.accout.AccountDetailsResponsePayload;
+import com.iBanking.iBanking.payload.accout.AccountList;
 import com.iBanking.iBanking.payload.customer.CustomerDetailsResponsePayload;
 import com.iBanking.iBanking.payload.generics.DecryptRequestPayload;
 import com.iBanking.iBanking.payload.generics.EncryptResponsePayload;
@@ -17,6 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.iBanking.iBanking.utils.ApiPaths.*;
 
@@ -156,12 +161,28 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
                 .header("Authorization", "Bearer " + accessToken)
                 .body(requestPayloadJsonString).asString();
         String requestBody = jsonResponse.getBody();
+        if (requestBody == null || !requestBody.contains("RESPONSE")) {
+            getBanksList = new GetBankListPResponsePayload();
+            GetBankList bankList = new GetBankList();
+            List<GetBankList> bankLists = new ArrayList<>();
+            bankList.setId("...");
+            bankList.setBank("...");
+            bankList.setBankCode("...");
+            bankList.setBankCategory("...");
+            bankLists.add(bankList);
+            getBanksList.setBankList(bankLists);
+            getBanksList.setResponseCode("99");
+            getBanksList.setResponseMessage("...");
+            session.setAttribute("getBankListResponse", getBanksList);
+            return getBanksList;
+        }
         if (jsonResponse.getStatus() != 200) {
             getBanksList = new GetBankListPResponsePayload();
             session.setAttribute("getBankListResponse", getBanksList);
             log.info(" ERROR WHILE GETTING BANK LIST {}", jsonResponse.getStatus());
             return getBanksList;
         }
+
         // PASS ENCRYPTED RESPONSE TO DECRYPT API
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
         String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());

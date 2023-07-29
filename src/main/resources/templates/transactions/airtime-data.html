@@ -55,7 +55,9 @@
             </div>
         </div>
 
-        <div id="main-module-mobile" class="col-md-2 col-sm-12 col-xs-12 send-money-module-no-show">
+        <!--        THE MODULE/TOGGLE DIV FOR MOBILE-->
+        <div id="main-module-mobile" class="col-md-2 col-sm-12 col-xs-12 send-money-module-no-show"
+             th:if="${mobileView}">
             <div id="send-money-module-mobile" class="send-money-module-mobile">
                 <div class="form-transfer-money">
                     <div class="transfer-money-block">
@@ -73,8 +75,7 @@
                                         onclick="toggleMobileData()">Data Top Up
                                 </button>
                             </div>
-                            <div style="padding-bottom: 300px">
-
+                            <div style="padding-bottom: 200px">
                             </div>
                         </div>
                     </div>
@@ -273,7 +274,8 @@
                                                    placeholder="" th:field="*{pin}">
                                         </div>
                                         <div class="mb-4">
-                                            <input class="submit-comfirm-money" type="submit" placeholder="Submit">
+                                            <input class="submit-comfirm-money" type="submit"
+                                                   placeholder="Submit">
                                         </div>
 
                                     </form>
@@ -359,6 +361,16 @@
         const loader = document.getElementById('loader');
         loader.style.display = 'none';
     }
+
+    const mobileViewToggle = document.getElementById('main-module-mobile')
+    const submitInputAirtime = document.getElementById('submitAirtime')
+
+    function hideMobileToggle() {
+        mobileViewToggle.style.display = 'none'
+        alert("mobile toggle was called")
+    }
+
+    submitInputAirtime.addEventListener('click', hideMobileToggle)
 </script>
 <script>
     window.addEventListener('load', hideLoader);
@@ -462,12 +474,6 @@
 
 </script>
 <script>
-    document.getElementById("submit-input").addEventListener("click", function (event) {
-        document.getElementById("main-module-mobile").style.display = "none";
-        document.getElementById("send-money-module-mobile").style.display = "none";
-        alert("THIS GUY WAS CLICKED")
-    });
-
     $(document).ready(function () {
         $('#myForm').submit(function (event) {
             event.preventDefault();
@@ -482,7 +488,6 @@
                         window.location.href = '/success'; //change to success page
                     } else {
                         hideLoader();
-
                         const resultSection = $('#resultSection');
                         const resultMessage = $('#resultMessage');
                         const retryButton = $('#retryButton');

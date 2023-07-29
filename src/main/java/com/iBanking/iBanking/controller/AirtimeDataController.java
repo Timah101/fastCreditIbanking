@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
@@ -41,6 +42,7 @@ public class AirtimeDataController {
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
         String selectedOption = "";
         model.addAttribute("selectedOptionGotv", selectedOption);
+        model.addAttribute("mobileView", true);
 
         return "transactions/airtime-data";
     }
@@ -61,9 +63,10 @@ public class AirtimeDataController {
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
 
         Forms airtimeTxnData = (Forms) session.getAttribute("airtimeForm");
-        model.addAttribute("airtimeTxnData" , airtimeTxnData);
+        model.addAttribute("airtimeTxnData", airtimeTxnData);
 
         model.addAttribute("submitted", true);
+        model.addAttribute("mobileView", false);
 
         return "transactions/airtime-data";
     }
@@ -72,7 +75,7 @@ public class AirtimeDataController {
     @ResponseBody
     public String processAirtime(@ModelAttribute Forms airtimeFormPin, HttpSession session,
                                  RedirectAttributes redirectAttributes) throws UnirestException {
-
+        log.info("AIRTIME SUBMIT HERE {}", "AIRTIME");
         session.setAttribute("airtimeFormPin", airtimeFormPin);
         airtimeService.airtimeTopUp(session);
         GeneralResponsePayload airtimeTopUp = (GeneralResponsePayload) session.getAttribute("airtimeTopUpResponse");
@@ -101,8 +104,9 @@ public class AirtimeDataController {
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
 
         Forms dataTxnData = (Forms) session.getAttribute("dataForm");
-        model.addAttribute("dataTxnData" , dataTxnData);
+        model.addAttribute("dataTxnData", dataTxnData);
         model.addAttribute("submitData", true);
+        model.addAttribute("mobileView", false);
 
         return "transactions/airtime-data";
     }

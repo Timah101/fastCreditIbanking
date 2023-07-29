@@ -1,7 +1,7 @@
 package com.iBanking.iBanking;
 
 
-import com.iBanking.iBanking.utils.FastCreditConfig;
+import com.iBanking.iBanking.config.FastCreditConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

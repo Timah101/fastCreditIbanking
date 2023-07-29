@@ -6,7 +6,7 @@ import com.iBanking.iBanking.payload.generics.EncryptResponsePayload;
 import com.iBanking.iBanking.payload.SendOtpPayloadRequest;
 import com.iBanking.iBanking.payload.SendOtpResponsePayload;
 import com.iBanking.iBanking.utils.AuthenticationApi;
-import com.iBanking.iBanking.utils.FastCreditConfig;
+import com.iBanking.iBanking.config.FastCreditConfig;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;

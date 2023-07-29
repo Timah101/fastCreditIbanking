@@ -67,6 +67,11 @@ public class AccountServiceImpl implements AccountService {
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
         String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
         accountDetailsResponse = gson.fromJson(decrypt, AccountDetailsResponsePayload.class);
+        if (response.getStatus() != 200 || response.getBody().isEmpty() || accountDetailsResponse == null) {
+            accountDetailsResponse = new AccountDetailsResponsePayload();
+            session.setAttribute("nameEnquiryLocalResponse", accountDetailsResponse);
+            return accountDetailsResponse;
+        }
 
         //LOG REQUEST RESPONSE
         log.info("ACCOUNT DETAILS RESPONSE PAYLOAD : {}", gson.toJson(accountDetailsResponse));
@@ -97,7 +102,11 @@ public class AccountServiceImpl implements AccountService {
                 .body(requestString).asString();
         String requestBody = response.getBody();
 
-        if (response.getStatus() != 200 || response.getBody().isEmpty()) {
+        //CALL THE DECRYPT API
+        DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
+        String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+        accountBalanceResponse = gson.fromJson(decrypt, AccountDetailsListResponsePayload.class);
+        if (response.getStatus() != 200 || response.getBody().isEmpty() || accountBalanceResponse == null) {
             accountBalanceResponse = new AccountDetailsListResponsePayload();
             AccountList balance = new AccountList();
             List<AccountList> bal = new ArrayList<>();
@@ -111,11 +120,6 @@ public class AccountServiceImpl implements AccountService {
             log.info(" ERROR WHILE GETTING ACCOUNT DETAILS LIST {}", response.getStatus());
             return accountBalanceResponse;
         }
-
-        //CALL THE DECRYPT API
-        DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
-        String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
-        accountBalanceResponse = gson.fromJson(decrypt, AccountDetailsListResponsePayload.class);
         if (accountBalanceResponse.getResponseCode().equals("03")) {
             accountBalanceResponse = new AccountDetailsListResponsePayload();
             AccountList balance = new AccountList();
@@ -130,6 +134,7 @@ public class AccountServiceImpl implements AccountService {
             log.info(" ACCOUNT DETAILS LIST IS EMPTY {}", response.getStatus());
             return accountBalanceResponse;
         }
+
         //LOG REQUEST RESPONSE
         log.info("ACCOUNT DETAILS LIST RESPONSE PAYLOAD : {}", gson.toJson(accountBalanceResponse));
         session.setAttribute("accountBalanceResponse", accountBalanceResponse);

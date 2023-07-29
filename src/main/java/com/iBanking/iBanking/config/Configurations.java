@@ -1,4 +1,4 @@
-package com.iBanking.iBanking.utils;
+package com.iBanking.iBanking.config;
 
 import lombok.Data;
 import org.springframework.stereotype.Service;

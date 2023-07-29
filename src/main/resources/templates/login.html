@@ -4,11 +4,11 @@
 
 <head th:insert="~{fragments :: header}">
     <script>
-        window.onload = function() {
+        window.onload = function () {
             if (window.history && window.history.pushState) {
                 window.history.pushState('forward', null, './#forward');
 
-                window.onpopstate = function() {
+                window.onpopstate = function () {
                     if (window.location.hash === '#forward') {
                         window.history.forward();
                     }
@@ -34,12 +34,16 @@
                 <div th:if="${errorMessage}" class="alert-fast" role="alert">
                     <span th:text="${errorMessage}">Error message</span>
                 </div>
+                <div th:if="${param.timeout}" class="alert-fast" role="alert">
+                    <span>Your session has timed out due to inactivity.</span>
+                </div>
                 <div class="text-center mb-4">
                     <a><img th:src="@{/images/logo.svg}" alt="Fast Credit" width="200" height="100"></a>
                 </div>
                 <form method="post" th:action="@{/login}" id="loginForm">
                     <div class="mb-5">
-                        <label class="mb-1"><span class="fa fa-user"></span><span class="login-params"> Mobile Number</span></label>
+                        <label class="mb-1"><span class="fa fa-user"></span><span
+                                class="login-params"> Mobile Number</span></label>
                         <input type="text" class="form-control-login" style="background-color: #D1D0CE;"
                                th:field="*{mobileNumber}">
                     </div>
@@ -50,7 +54,8 @@
                                style="background-color: #D1D0CE;" th:field="*{password}">
                         <i id="eye-icon" class="fas fa-eye password-toggle" onclick="togglePasswordVisibility()"></i>
                     </div>
-                    <p><a class="text-primary login-params-password-forgot mb-5" th:href="@{/reset}">Forgot Password?</a></p>
+                    <p><a class="text-primary login-params-password-forgot mb-5" th:href="@{/reset}">Forgot
+                        Password?</a></p>
                     <div class="row d-flex justify-content-between mt-4 mb-2">
 
                     </div>
@@ -79,7 +84,7 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const loader = document.getElementById('loader');
 
         function showLoader() {

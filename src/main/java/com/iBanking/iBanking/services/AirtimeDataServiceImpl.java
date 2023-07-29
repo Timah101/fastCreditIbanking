@@ -2,13 +2,10 @@ package com.iBanking.iBanking.services;
 
 import com.google.gson.Gson;
 import com.iBanking.iBanking.Forms.Forms;
-import com.iBanking.iBanking.payload.transactions.airtimeData.AirtimeRequestPayload;
+import com.iBanking.iBanking.payload.transactions.airtimeData.*;
 import com.iBanking.iBanking.payload.generics.DecryptRequestPayload;
 import com.iBanking.iBanking.payload.generics.EncryptResponsePayload;
 import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
-import com.iBanking.iBanking.payload.transactions.airtimeData.DataPlansRequestPayload;
-import com.iBanking.iBanking.payload.transactions.airtimeData.DataPlansResponsePayload;
-import com.iBanking.iBanking.payload.transactions.airtimeData.DataRequestPayload;
 import com.iBanking.iBanking.utils.AuthenticationApi;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
@@ -18,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.iBanking.iBanking.utils.ApiPaths.*;
 
@@ -75,6 +75,13 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
         String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
         airtimeTopUp = gson.fromJson(decrypt, GeneralResponsePayload.class);
+        if (requestBody == null || airtimeTopUp == null || !requestBody.contains("response")) {
+            airtimeTopUp = new GeneralResponsePayload();
+            airtimeTopUp.setResponseCode("99");
+            airtimeTopUp.setResponseMessage("error occurred");
+            session.setAttribute("airtimeTopUpResponse", airtimeTopUp);
+            return airtimeTopUp;
+        }
         //LOG REQUEST AND RESPONSE
         log.info("AIRTIME TOP UP RESPONSE PAYLOAD : {}", gson.toJson(airtimeTopUp));
         session.setAttribute("airtimeTopUpResponse", airtimeTopUp);
@@ -103,7 +110,10 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         String requestBody = jsonResponse.getBody();
         if (jsonResponse.getStatus() != 200) {
             dataPlans = new DataPlansResponsePayload();
+            DataPlansList dataPlansList = new DataPlansList();
+            List<DataPlansList> dataList = new ArrayList<>();
             dataPlans.setResponseCode("500");
+            dataPlans.setDataPlans(dataList);
             session.setAttribute("dataPlansResponse", dataPlans);
             log.info(" ERROR WHILE GETTING DATA PLANS LIST {}", jsonResponse.getStatus());
             return dataPlans;
@@ -112,6 +122,15 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
         String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
         dataPlans = gson.fromJson(decrypt, DataPlansResponsePayload.class);
+        if (requestBody == null || dataPlans == null || !requestBody.contains("response")) {
+            dataPlans = new DataPlansResponsePayload();
+            DataPlansList dataPlansList = new DataPlansList();
+            List<DataPlansList> dataList = new ArrayList<>();
+            dataPlans.setResponseCode("500");
+            dataPlans.setDataPlans(dataList);
+            session.setAttribute("dataPlansResponse", dataPlans);
+            return dataPlans;
+        }
         //LOG REQUEST AND RESPONSE
 
         log.info("DATA PLANS LIST RESPONSE PAYLOAD : {}", gson.toJson(dataPlans));
@@ -130,7 +149,9 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
 
         String[] dataPlanId = new String[0];
         if (dataForm != null) {
-            dataPlanId = dataForm.getDataPlans().split(",");
+            if (dataForm.getDataPlans() != null) {
+                dataPlanId = dataForm.getDataPlans().split(",");
+            }
         }
         requestPayload.setMobileNumber(loginForm.getMobileNumber());
         assert dataForm != null;
@@ -168,6 +189,13 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
         String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
         dataTopUp = gson.fromJson(decrypt, GeneralResponsePayload.class);
+        if (requestBody == null || dataTopUp == null || !requestBody.contains("response")) {
+            dataTopUp = new GeneralResponsePayload();
+            dataTopUp.setResponseCode("99");
+            dataTopUp.setResponseMessage("error occurred");
+            session.setAttribute("dataTopUpResponse", dataTopUp);
+            return dataTopUp;
+        }
         //LOG REQUEST AND RESPONSE
 
         log.info("DATA TOP UP RESPONSE PAYLOAD : {}", gson.toJson(dataTopUp));

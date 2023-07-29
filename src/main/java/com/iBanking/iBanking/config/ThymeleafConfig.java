@@ -1,4 +1,4 @@
-package com.iBanking.iBanking.utils;
+package com.iBanking.iBanking.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

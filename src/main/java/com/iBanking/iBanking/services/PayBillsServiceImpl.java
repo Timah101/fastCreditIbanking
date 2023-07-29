@@ -6,6 +6,8 @@ import com.iBanking.iBanking.payload.generics.DecryptRequestPayload;
 import com.iBanking.iBanking.payload.generics.EncryptResponsePayload;
 import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
 import com.iBanking.iBanking.payload.transactions.cableTv.*;
+import com.iBanking.iBanking.payload.transactions.sendMoney.GetBankList;
+import com.iBanking.iBanking.payload.transactions.sendMoney.GetBankListPResponsePayload;
 import com.iBanking.iBanking.utils.AuthenticationApi;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
@@ -15,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.iBanking.iBanking.utils.ApiPaths.*;
 
@@ -47,16 +52,34 @@ public class PayBillsServiceImpl implements PayBillsService {
                 .header("Authorization", "Bearer " + accessToken)
                 .body(requestPayloadJsonString).asString();
         String requestBody = jsonResponse.getBody();
+        log.info("CABLE TV BILLERS LIST BODY{}", requestBody);
         if (jsonResponse.getStatus() != 200) {
             cableTvBillers = new GetCableTvBillersResponsePayload();
 
             log.info(" ERROR WHILE CABLE TV BILLERS LIST {}", jsonResponse.getStatus());
             return cableTvBillers;
         }
+
         // PASS ENCRYPTED RESPONSE TO DECRYPT API
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
         String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
         cableTvBillers = gson.fromJson(decrypt, GetCableTvBillersResponsePayload.class);
+        if (requestBody == null || !requestBody.contains("response") || cableTvBillers == null) {
+            cableTvBillers = new GetCableTvBillersResponsePayload();
+            CableTvBillersList billersList = new CableTvBillersList();
+            List<CableTvBillersList> billersLists = new ArrayList<>();
+//            billersList.setId("...");
+//            billersList.setBillerId("...");
+//            billersList.setBiller("...");
+//            billersList.setStatus("...");
+
+            cableTvBillers.setBillers(billersLists);
+            cableTvBillers.setResponseCode("99");
+            cableTvBillers.setResponseMessage("...");
+            session.setAttribute("cableTvBillersResponse", cableTvBillers);
+            return cableTvBillers;
+
+        }
         //LOG REQUEST AND RESPONSE
         log.info("CABLE TV BILLERS LIST RESPONSE PAYLOAD : {}", gson.toJson(cableTvBillers));
         session.setAttribute("cableTvBillersResponse", cableTvBillers);
@@ -197,15 +220,33 @@ public class PayBillsServiceImpl implements PayBillsService {
                 .header("Authorization", "Bearer " + accessToken)
                 .body(requestPayloadJsonString).asString();
         String requestBody = jsonResponse.getBody();
+        log.info("ELECTRICITY LIST BODY{}", requestBody);
         if (jsonResponse.getStatus() != 200) {
             getElectricityBillers = new GetElectricityBillerResponsePayload();
             log.info(" ERROR WHILE ELECTRICITY BILLERS LIST {}", jsonResponse.getStatus());
             return getElectricityBillers;
         }
+
         // PASS ENCRYPTED RESPONSE TO DECRYPT API
         DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
         String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
         getElectricityBillers = gson.fromJson(decrypt, GetElectricityBillerResponsePayload.class);
+        if (requestBody == null || !requestBody.contains("response") || getElectricityBillers == null) {
+            getElectricityBillers = new GetElectricityBillerResponsePayload();
+            ElectricityBillersList billersList = new ElectricityBillersList();
+            List<ElectricityBillersList> billersLists = new ArrayList<>();
+//            billersList.setId("...");
+//            billersList.setBillerId("...");
+//            billersList.setBiller("...");
+//            billersList.setStatus("...");
+
+            getElectricityBillers.setBiller(billersLists);
+            getElectricityBillers.setResponseCode("99");
+            getElectricityBillers.setResponseMessage("...");
+            session.setAttribute("electricityBillersResponse", getElectricityBillers);
+            return getElectricityBillers;
+
+        }
         //LOG REQUEST AND RESPONSE
         log.info("ELECTRICITY BILLERS LIST RESPONSE PAYLOAD : {}", gson.toJson(getElectricityBillers));
         session.setAttribute("electricityBillersResponse", getElectricityBillers);

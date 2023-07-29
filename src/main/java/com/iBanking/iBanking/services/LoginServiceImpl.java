@@ -52,6 +52,7 @@ public class LoginServiceImpl implements LoginService {
                 .header("Authorization", "Bearer " + accessToken)
                 .body(requestPayloadJson).asString();
         String requestBody = jsonResponse.getBody();
+        log.info(" LOGIN RESPONSE BODY {}", requestBody);
         if (jsonResponse.getStatus() != 200) {
             loginResponsePayload = new LoginResponsePayload();
 //            customerDetailsResponse.setResponseCode("500");

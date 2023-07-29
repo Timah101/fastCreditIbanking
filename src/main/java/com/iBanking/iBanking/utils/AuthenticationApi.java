@@ -1,6 +1,7 @@
 package com.iBanking.iBanking.utils;
 
 import com.google.gson.Gson;
+import com.iBanking.iBanking.config.FastCreditConfig;
 import com.iBanking.iBanking.payload.accout.AccountDetailsRequestPayload;
 import com.iBanking.iBanking.payload.generics.AccessTokenRequestPayload;
 import com.iBanking.iBanking.payload.generics.AccessTokenResponsePayload;

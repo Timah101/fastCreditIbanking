@@ -57,7 +57,7 @@ public class AirtimeDataController {
             System.out.println("TRIED TO VALIDATE THE NUMBER HERE ");
             AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
 
-            model.addAttribute("airtimeForm", new Forms());
+//            model.addAttribute("airtimeForm", new Forms());
             model.addAttribute("dataForm", new Forms());
             model.addAttribute("accountBalanceResponse", new AccountDetailsListResponsePayload());
             model.addAttribute("customerDetails", new CustomerDetailsResponsePayload());
@@ -69,7 +69,7 @@ public class AirtimeDataController {
         }
         AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
         System.out.println("account balance in airtime " + accountBalanceResponse);
-        model.addAttribute("airtimeForm", new Forms());
+//        model.addAttribute("airtimeForm", new Forms());
         model.addAttribute("airtimeFormPin", new Forms());
         model.addAttribute("dataFormPin", new Forms());
         model.addAttribute("airtimeFormPin", new Forms());
@@ -113,7 +113,7 @@ public class AirtimeDataController {
     public String processDataFormSubmit(@ModelAttribute("dataForm") Forms dataForm, HttpSession session, Model model) throws UnirestException {
         session.setAttribute("dataForm", dataForm);
         AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
-        model.addAttribute("airtimeForm", new Forms());
+//        model.addAttribute("airtimeForm", new Forms());
         model.addAttribute("dataFormPin", new Forms());
         model.addAttribute("airtimeFormPin", new Forms());
         model.addAttribute("dataForm", new Forms());

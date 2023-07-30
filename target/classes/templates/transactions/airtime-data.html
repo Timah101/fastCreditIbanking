@@ -85,7 +85,7 @@
 
 
         <!--        THE AIRTIME DIV-->
-        <div id="airtime" class="col-md-5 col-sm-12 col-xs-12" style="display: none">
+        <div id="airtime" class="col-md-5 col-sm-12 col-xs-12" style="display: block">
 
             <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
 
@@ -119,7 +119,11 @@
                                             <label for="account_local" class="label-span">Mobile Number</label> <span
                                                 id="localName" class="float-right"></span>
                                             <input id="account_local" class="form-control-send-money" maxlength="10"
+                                                   th:classappend="${#fields.hasErrors('beneficiaryMobileNumber')?'input-error':'form-control-send-money'}"
                                                    placeholder="" th:field="*{beneficiaryMobileNumber}">
+                                            <div class="input-warning" th:if="${#fields.hasErrors('beneficiaryMobileNumber')}"
+                                                 th:errors="*{beneficiaryMobileNumber}"></div>
+                                            <div th:text="${#fields.hasErrors('beneficiaryMobileNumber')}"></div>
                                         </div>
                                         <div class="airtime-data-img-container mb-4">
                                             <img class="airtime_icon-fast" onclick="updateInputValue('MTN')"

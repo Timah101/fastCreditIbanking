@@ -55,7 +55,6 @@
             </div>
         </div>
 
-        <!--        THE MODULE/TOGGLE DIV FOR MOBILE-->
         <div id="main-module-mobile" class="col-md-2 col-sm-12 col-xs-12 send-money-module-no-show"
              th:if="${mobileView}">
             <div id="send-money-module-mobile" class="send-money-module-mobile">
@@ -84,6 +83,7 @@
             </div>
         </div>
 
+
         <!--        THE AIRTIME DIV-->
         <div id="airtime" class="col-md-5 col-sm-12 col-xs-12" style="display: none">
 
@@ -93,17 +93,21 @@
                     Airtime Top Up
                 </div>
 
+
                 <div class="transfer-money-form"> <!-- SEND TRANSFER MONEY-->
+
                     <div class="col-md-12">
                         <div class="form-transfer-money">
                             <div class="transfer-money-block">
                                 <div class="payment-block">
-                                    <form id="" method="post" th:object="${airtimeForm}" th:action="@{/airtime-form}">
+                                    <form method="post" th:object="${airtimeForm}" th:action="@{/airtime-form}">
                                         <div class="mb-4">
                                             <label for="select-account" class="label-span">Select Account</label>
                                             <select id="select-account" class="form-control-send-money mb-3"
                                                     th:field="*{debitAccount}">
                                                 <option value=""> -- Select Account --</option>
+                                                <!--                                                <option disabled hidden selected value="0">-->
+                                                <!--                                                </option>-->
                                                 <option style="background-color: #D1D0CE"
                                                         th:each="accountBalance : ${accountBalanceResponse}"
                                                         th:text="${accountBalance.getAccountNumber()}"
@@ -134,9 +138,7 @@
                                                    th:field="*{amount}">
                                         </div>
                                         <div class="mb-4">
-                                            <input class="submit-send-money" type="submit"
-                                                   placeholder="Proceed"
-                                                   onclick="showLoader()">
+                                            <input class="submit-send-money" type="submit" placeholder="Proceed">
                                         </div>
 
                                     </form>
@@ -205,7 +207,7 @@
                                             <label for="my-select" class="label-span">Select Data Plan</label>
                                             <select id="my-select" class="form-control-send-money mb-3"
                                                     th:field="*{dataPlans}" onchange="updateAmountData()">
-                                                <option selected value="0"> -- Select Data Plan --
+                                                <option selected value="0"> -- Select Data Plans --
                                                 </option>
                                             </select>
                                         </div>
@@ -215,8 +217,7 @@
                                                    th:field="*{amount}">
                                         </div>
                                         <div class="mb-4">
-                                            <input class="submit-send-money" type="submit" placeholder="Proceed"
-                                                   onclick="showLoader()">
+                                            <input class="submit-send-money" type="submit" placeholder="Proceed">
                                         </div>
 
                                     </form>
@@ -273,8 +274,7 @@
                                                    placeholder="" th:field="*{pin}">
                                         </div>
                                         <div class="mb-4">
-                                            <input class="submit-comfirm-money" type="submit"
-                                                   placeholder="Submit">
+                                            <input class="submit-comfirm-money" type="submit" placeholder="Submit">
                                         </div>
 
                                     </form>
@@ -293,7 +293,7 @@
 
         <!--        THE CONFIRM TRANSFER DATA-->
         <div id="confirm-data" class="col-md-5 col-sm-12 col-xs-12" th:if="${submitData}">
-            <div class="send-money"> <!-- MAIN DATA DIV-->
+            <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
 
                 <div class="confirm-money-title"> <!-- -->
                     Confirm Transaction
@@ -307,7 +307,7 @@
                                     <form id="formData" method="post" th:object="${dataFormPin}" th:action="@{/data}">
                                         <div id="resultMessageData" class="alert-fast" style="display:none;"></div>
                                         <div class="mb-4" th:object="${dataTxnData}">
-                                            <div class="mb-2"><span>Transaction Type</span> <span class="float-right"> Data Top Up</span>
+                                            <div class="mb-2"><span>Transaction Type</span> <span class="float-right"> Airtime Top Up</span>
                                             </div>
                                             <div class="mb-2"><span>Mobile Number</span> <span class="float-right"
                                                                                                th:text="${dataTxnData.getBeneficiaryMobileNumber()}"></span>
@@ -351,8 +351,6 @@
 <script th:inline="javascript">
     function showLoader() {
         const loader = document.getElementById('loader');
-        const mobileDiv = document.getElementById('main-module-mobile');
-        mobileDiv.style.display = 'none';
         loader.style.display = 'block';
     }
 
@@ -360,16 +358,6 @@
         const loader = document.getElementById('loader');
         loader.style.display = 'none';
     }
-
-    const mobileViewToggle = document.getElementById('main-module-mobile')
-    const submitInputAirtime = document.getElementById('submitAirtime')
-
-    function hideMobileToggle() {
-        mobileViewToggle.style.display = 'none'
-        alert("mobile toggle was called")
-    }
-
-    submitInputAirtime.addEventListener('click', hideMobileToggle)
 </script>
 <script>
     window.addEventListener('load', hideLoader);
@@ -461,7 +449,6 @@
                 },
                 error: function (xhr) {
                     hideLoader();
-                    showErrorMessageData();
                     const resultSection = $('#resultSection');
                     const resultMessage = $('#resultMessageData');
                     const retryButton = $('#retryButton');
@@ -487,6 +474,7 @@
                         window.location.href = '/success'; //change to success page
                     } else {
                         hideLoader();
+
                         const resultSection = $('#resultSection');
                         const resultMessage = $('#resultMessage');
                         const retryButton = $('#retryButton');
@@ -520,10 +508,7 @@
     }
 
     function toggleAirtime() {
-        hideConfirmData();
-        hideConfirmAirtime()
         const contentDiv = document.getElementById("airtime");
-        const mainModuleMobile = document.getElementById("main-module-mobile");
         const errorAirtime = document.getElementById("confirm-airtime")
         const errorData = document.getElementById("confirm-data")
         const contentData = document.getElementById("data");
@@ -532,13 +517,11 @@
             contentData.style.display = "none";
             errorAirtime.style.display = "none";
             errorData.style.display = "none";
-            mainModuleMobile.style.display = "none";
         } else {
             contentDiv.style.display = "none";
             contentData.style.display = "none";
             errorAirtime.style.display = "none";
             errorData.style.display = "none";
-            mainModuleMobile.style.display = "none";
         }
     }
 
@@ -560,27 +543,21 @@
         contentData.style.display = "block";
     }
 
-
     function toggleData() {
-        hideConfirmData();
-        hideConfirmAirtime()
         const contentDiv = document.getElementById("data");
         const contentAirtime = document.getElementById("airtime");
         const errorAirtime = document.getElementById("confirm-airtime")
         const errorData = document.getElementById("confirm-data")
-        const mainModuleMobile = document.getElementById("main-module-mobile");
         if (contentDiv.style.display === "none") {
             contentDiv.style.display = "block";
             contentAirtime.style.display = "none";
             errorAirtime.style.display = "none";
             errorData.style.display = "none";
-            mainModuleMobile.style.display = "none";
         } else {
             contentDiv.style.display = "none";
             contentAirtime.style.display = "none";
             errorAirtime.style.display = "none";
             errorData.style.display = "none";
-            mainModuleMobile.style.display = "none";
         }
     }
 
@@ -590,29 +567,11 @@
         console.log(val + " telco")
     }
 
-    function hideConfirmData() {
-        const resultMessage = $('#confirm-data')
-        resultMessage.hide();
-    }
-
-    function hideConfirmAirtime() {
-        const resultMessage = $('#confirm-airtime')
-        resultMessage.hide();
-    }
-
     //THIS FUNCTION IS USED TO GET VALUE OF THE SELECTED TELCO FOR DATA
     function updateInputValueData(val) {
         document.getElementById("telcoIdData").value = val;
         console.log(val + " telco")
     }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        const toggleIcon = document.querySelector(".toggle-icon");
-        const sidebar = document.querySelector(".sidebar");
-        toggleIcon.addEventListener("click", function () {
-            sidebar.classList.toggle("collapsed");
-        });
-    });
 </script>
 </body>
 </html>

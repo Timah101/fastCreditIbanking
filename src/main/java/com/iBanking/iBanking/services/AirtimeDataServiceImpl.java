@@ -57,32 +57,30 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         //CALL THE REGISTER CUSTOMER ENDPOINT
         String requestPayloadJsonString = gson.toJson(encryptResponsePayload1);
         log.info("AIRTIME TOP UP REQUEST PAYLOAD : {}", requestPayloadJson);
+        log.info("AIRTIME TOP UP ENCRYPTED REQUEST PAYLOAD : {}", requestPayloadJsonString);
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + AIRTIME_TOP_UP)
                 .header("accept", "application/json")
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + accessToken)
                 .body(requestPayloadJsonString).asString();
-        String requestBody = jsonResponse.getBody();
-        if (jsonResponse.getStatus() != 200) {
+        String responseBody = jsonResponse.getBody();
+        log.info("AIRTIME TOP UP API RESPONSE PAYLOAD : {}", responseBody);
+        if (jsonResponse.getStatus() == 200 && responseBody != null && responseBody.contains("response")) {
+            DecryptRequestPayload decryptRequestPayload = gson.fromJson(responseBody, DecryptRequestPayload.class);
+            String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+            if (decrypt != null) {
+                airtimeTopUp = gson.fromJson(decrypt, GeneralResponsePayload.class);
+            } else {
+                airtimeTopUp = new GeneralResponsePayload();
+                airtimeTopUp.setResponseCode("199");
+                airtimeTopUp.setResponseMessage("error occurred");
+            }
+            log.info("DECRYPTED AIRTIME TOP UP RESPONSE API : {}", decrypt);
+        } else {
             airtimeTopUp = new GeneralResponsePayload();
-            airtimeTopUp.setResponseCode("500");
-            airtimeTopUp.setResponseMessage("Error occurred, please try again");
-            session.setAttribute("airtimeTopUpResponse", airtimeTopUp);
-            log.info(" ERROR WHILE AIRTIME TOP UP {}", jsonResponse.getStatus());
-            return airtimeTopUp;
-        }
-        // PASS ENCRYPTED RESPONSE TO DECRYPT API
-        DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
-        String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
-        airtimeTopUp = gson.fromJson(decrypt, GeneralResponsePayload.class);
-        if (requestBody == null || airtimeTopUp == null || !requestBody.contains("response")) {
-            airtimeTopUp = new GeneralResponsePayload();
-            airtimeTopUp.setResponseCode("99");
+            airtimeTopUp.setResponseCode("199");
             airtimeTopUp.setResponseMessage("error occurred");
-            session.setAttribute("airtimeTopUpResponse", airtimeTopUp);
-            return airtimeTopUp;
         }
-        //LOG REQUEST AND RESPONSE
         log.info("AIRTIME TOP UP RESPONSE PAYLOAD : {}", gson.toJson(airtimeTopUp));
         session.setAttribute("airtimeTopUpResponse", airtimeTopUp);
         return airtimeTopUp;
@@ -102,37 +100,36 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         //CALL THE DATA PLANS ENDPOINT
         String requestPayloadJsonString = gson.toJson(encryptResponsePayload1);
         log.info("DATA PLANS LIST REQUEST PAYLOAD : {}", requestPayloadJson);
+        log.info("DATA PLANS LIST ENCRYPTED REQUEST PAYLOAD : {}", requestPayloadJsonString);
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + DATA_PLANS)
                 .header("accept", "application/json")
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + accessToken)
                 .body(requestPayloadJsonString).asString();
-        String requestBody = jsonResponse.getBody();
-        if (jsonResponse.getStatus() != 200) {
+        String responseBody = jsonResponse.getBody();
+        log.info("DATA PLANS LIST API RESPONSE PAYLOAD : {}", responseBody);
+        if (jsonResponse.getStatus() == 200 && responseBody != null && responseBody.contains("response")) {
+            DecryptRequestPayload decryptRequestPayload = gson.fromJson(responseBody, DecryptRequestPayload.class);
+            String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+            if (decrypt != null) {
+                dataPlans = gson.fromJson(decrypt, DataPlansResponsePayload.class);
+            } else {
+                dataPlans = new DataPlansResponsePayload();
+                dataPlans.setResponseCode("199");
+                DataPlansList dataPlansList = new DataPlansList();
+                List<DataPlansList> dataPlansLists = new ArrayList<>();
+                dataPlansLists.add(dataPlansList);
+                dataPlans.setDataPlans(dataPlansLists);
+            }
+            log.info("DECRYPTED DATA PLANS LIST RESPONSE API : {}", decrypt);
+        } else {
             dataPlans = new DataPlansResponsePayload();
+            dataPlans.setResponseCode("199");
             DataPlansList dataPlansList = new DataPlansList();
-            List<DataPlansList> dataList = new ArrayList<>();
-            dataPlans.setResponseCode("500");
-            dataPlans.setDataPlans(dataList);
-            session.setAttribute("dataPlansResponse", dataPlans);
-            log.info(" ERROR WHILE GETTING DATA PLANS LIST {}", jsonResponse.getStatus());
-            return dataPlans;
+            List<DataPlansList> dataPlansLists = new ArrayList<>();
+            dataPlansLists.add(dataPlansList);
+            dataPlans.setDataPlans(dataPlansLists);
         }
-        // PASS ENCRYPTED RESPONSE TO DECRYPT API
-        DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
-        String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
-        dataPlans = gson.fromJson(decrypt, DataPlansResponsePayload.class);
-        if (requestBody == null || dataPlans == null || !requestBody.contains("response")) {
-            dataPlans = new DataPlansResponsePayload();
-            DataPlansList dataPlansList = new DataPlansList();
-            List<DataPlansList> dataList = new ArrayList<>();
-            dataPlans.setResponseCode("500");
-            dataPlans.setDataPlans(dataList);
-            session.setAttribute("dataPlansResponse", dataPlans);
-            return dataPlans;
-        }
-        //LOG REQUEST AND RESPONSE
-
         log.info("DATA PLANS LIST RESPONSE PAYLOAD : {}", gson.toJson(dataPlans));
         session.setAttribute("dataPlansResponse", dataPlans);
         return dataPlans;
@@ -147,10 +144,13 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
         Forms dataFormPin = (Forms) session.getAttribute("dataFormPin");
         Forms loginForm = (Forms) session.getAttribute("loginForm");
 
-        String[] dataPlanId = new String[0];
+        String[] dataPlanId = new String[4];
         if (dataForm != null) {
             if (dataForm.getDataPlans() != null) {
-                dataPlanId = dataForm.getDataPlans().split(",");
+                String[] dataFormSplit = dataForm.getDataPlans().split(",");
+                if (dataFormSplit.length > 1) {
+                    dataPlanId = dataFormSplit;
+                }
             }
         }
         requestPayload.setMobileNumber(loginForm.getMobileNumber());
@@ -171,35 +171,33 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
 
         String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
         log.info("DATA TOP UP REQUEST PAYLOAD : {}", requestPayloadJson);
+        log.info("DATA TOP UP ENCRYPTED REQUEST PAYLOAD : {}", requestPayloadJsonString);
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + DATA_TOP_UP)
                 .header("accept", "application/json")
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + accessToken)
                 .body(requestPayloadJsonString).asString();
-        String requestBody = jsonResponse.getBody();
-        if (jsonResponse.getStatus() != 200) {
+        String responseBody = jsonResponse.getBody();
+        log.info("DATA TOP UP API RESPONSE PAYLOAD : {}", responseBody);
+        if (jsonResponse.getStatus() == 200 && responseBody != null && responseBody.contains("response")) {
+            DecryptRequestPayload decryptRequestPayload = gson.fromJson(responseBody, DecryptRequestPayload.class);
+            String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+            if (decrypt != null) {
+                dataTopUp = gson.fromJson(decrypt, GeneralResponsePayload.class);
+            } else {
+                dataTopUp = new GeneralResponsePayload();
+                dataTopUp.setResponseCode("199");
+                dataTopUp.setResponseMessage("error occurred");
+            }
+            log.info("DECRYPTED DATA TOP UP RESPONSE API : {}", decrypt);
+        } else {
             dataTopUp = new GeneralResponsePayload();
-            dataTopUp.setResponseCode("500");
-            dataTopUp.setResponseMessage("Error occurred, please try again");
-            session.setAttribute("dataTopUpResponse", dataTopUp);
-            log.info(" ERROR WHILE DATA TOP UP {}", jsonResponse.getStatus());
-            return dataTopUp;
-        }
-        // PASS ENCRYPTED RESPONSE TO DECRYPT API
-        DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
-        String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
-        dataTopUp = gson.fromJson(decrypt, GeneralResponsePayload.class);
-        if (requestBody == null || dataTopUp == null || !requestBody.contains("response")) {
-            dataTopUp = new GeneralResponsePayload();
-            dataTopUp.setResponseCode("99");
+            dataTopUp.setResponseCode("199");
             dataTopUp.setResponseMessage("error occurred");
-            session.setAttribute("dataTopUpResponse", dataTopUp);
-            return dataTopUp;
         }
-        //LOG REQUEST AND RESPONSE
-
         log.info("DATA TOP UP RESPONSE PAYLOAD : {}", gson.toJson(dataTopUp));
         session.setAttribute("dataTopUpResponse", dataTopUp);
         return dataTopUp;
+
     }
 }

@@ -84,6 +84,7 @@ public class AirtimeDataController {
             return "00";
         } else {
             String customErrorMessage = airtimeTopUp.getResponseMessage();
+            System.out.println("airitm custom " + customErrorMessage);
             redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
             return airtimeTopUp.getResponseMessage();
         }

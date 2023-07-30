@@ -33,7 +33,8 @@ public class LoginServiceImpl implements LoginService {
         String accessToken = authenticationApi.getAccessToken();
         session.setAttribute("accessToken", accessToken);
         LoginRequestPayload loginRequestPayload = new LoginRequestPayload();
-        LoginResponsePayload loginResponsePayload = new LoginResponsePayload();
+        new LoginResponsePayload();
+        LoginResponsePayload loginResponsePayload;
         Forms loginForm = (Forms) session.getAttribute("loginForm");
         loginRequestPayload.setMobileNumber(loginForm.getMobileNumber()); //
         loginRequestPayload.setAuthValue(loginForm.getPassword()); //

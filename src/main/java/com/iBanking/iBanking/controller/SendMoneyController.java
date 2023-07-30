@@ -38,6 +38,7 @@ public class SendMoneyController {
         model.addAttribute("sendMoneyLocalFormPin", new Forms());
         model.addAttribute("sendMoneyOthersPin", new Forms());
         model.addAttribute("sendMoneyOthersForm", new Forms());
+        model.addAttribute("mobileView", true);
         return "transactions/send-money";
     }
 
@@ -56,6 +57,7 @@ public class SendMoneyController {
         Forms localTxnData = (Forms) session.getAttribute("sendMoneyLocalForm");
         model.addAttribute("localTxnData", localTxnData);
         model.addAttribute("submitted", true);
+        model.addAttribute("mobileView", false);
 
         return "transactions/send-money";
     }
@@ -110,6 +112,7 @@ public class SendMoneyController {
         Forms othersTxnData = (Forms) session.getAttribute("sendMoneyOthersForm");
         model.addAttribute("othersTxnData", othersTxnData);
         model.addAttribute("submittedOthers", true);
+        model.addAttribute("mobileView", false);
 
         return "transactions/send-money";
     }

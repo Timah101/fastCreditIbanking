@@ -2,11 +2,15 @@ package com.iBanking.iBanking.Forms;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Data
 public class Forms {
     private String mobileNumber;
+    @NotEmpty(message = "must not be empty")
+    @Size(min = 6, max = 8)
     private String beneficiaryMobileNumber;
     private String email;
     private String password;

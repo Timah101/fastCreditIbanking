@@ -399,6 +399,7 @@
         border-bottom: 1px solid #029247;
         padding: 10px;
     }
+
     .send-money-title-mobile {
         font-size: 15px;
         margin-bottom: 0.5rem;
@@ -412,6 +413,7 @@
         border-bottom: 1px solid #029247;
         padding: 10px;
     }
+
     .transfer-money-form {
         padding: 2rem 2rem 3rem 2rem;
         /*position: relative;*/
@@ -470,7 +472,7 @@
 
     .form-confirm-money {
         padding: 3rem 3rem 2rem 2rem;
-
+        margin-left: 20px;
     }
 
     .transfer-money-title {

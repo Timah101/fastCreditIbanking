@@ -27,7 +27,8 @@ public class CronJobs {
 //        System.out.println(requestJson);
 //        final String encrypt = authenticationApi.encrypt(requestJson);
 //        System.out.println(encrypt);
-        String decrypt = authenticationApi.decryptPayload("F9bIVbJKWko3yZUjelRMG4FBi4to9c63IiHymOdozcoi0ymtMaFFyvULUUaBd0aDhJ6dowgFq+RYTq5TvXOBeVC4pUbQ0pOVvE8kRkFbHzc=");
+        String decrypText = "F9bIVbJKWko3yZUjelRMG4FBi4to9c63IiHymOdozcoi0ymtMaFFyvULUUaBd0aDhJ6dowgFq+RYTq5TvXOBeVC4pUbQ0pOVvE8kRkFbHzc\\u003d";
+        String decrypt = authenticationApi.decryptPayload("");
 //        System.out.println(decrypt + ": decrypted");
     }
 }

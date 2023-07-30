@@ -52,6 +52,7 @@ public class AirtimeDataController {
     public String processAirtimeFormSubmit(@ModelAttribute("airtimeForm") Forms airtimeForm, HttpSession session, Model model) {
         session.setAttribute("airtimeForm", airtimeForm);
         AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
+        System.out.println("account balance in airtime " + accountBalanceResponse);
         model.addAttribute("airtimeForm", new Forms());
         model.addAttribute("airtimeFormPin", new Forms());
         model.addAttribute("dataFormPin", new Forms());

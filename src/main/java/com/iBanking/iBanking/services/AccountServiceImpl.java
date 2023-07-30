@@ -110,9 +110,9 @@ public class AccountServiceImpl implements AccountService {
             accountBalanceResponse = new AccountDetailsListResponsePayload();
             AccountList balance = new AccountList();
             List<AccountList> bal = new ArrayList<>();
-            balance.setAvailableBalance("...");
-            balance.setLedgerBalance("...");
-            balance.setAccountNumber("...");
+//            balance.setAvailableBalance("...");
+//            balance.setLedgerBalance("...");
+//            balance.setAccountNumber("...");
             bal.add(balance);
             accountBalanceResponse.setAccountList(bal);
             accountBalanceResponse.setResponseCode("99");
@@ -124,9 +124,9 @@ public class AccountServiceImpl implements AccountService {
             accountBalanceResponse = new AccountDetailsListResponsePayload();
             AccountList balance = new AccountList();
             List<AccountList> bal = new ArrayList<>();
-            balance.setAvailableBalance("...");
-            balance.setLedgerBalance("...");
-            balance.setAccountNumber("...");
+//            balance.setAvailableBalance("...");
+//            balance.setLedgerBalance("...");
+//            balance.setAccountNumber("...");
             bal.add(balance);
             accountBalanceResponse.setAccountList(bal);
             accountBalanceResponse.setResponseCode("99");

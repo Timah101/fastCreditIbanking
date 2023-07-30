@@ -155,12 +155,14 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
         //CALL THE GET BANKS ENDPOINT AND PASS THE ENCRYPTED PAYLOAD
         String requestPayloadJsonString = gson.toJson(encryptResponsePayload1);
         log.info("GET BANKS LIST REQUEST PAYLOAD : {}", requestPayloadJson);
+        log.info("GET BANKS LIST REQUEST PAYLOAD ENCRYPTED : {}", requestPayloadJsonString);
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + GET_BANKS_LIST)
                 .header("accept", "application/json")
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + accessToken)
                 .body(requestPayloadJsonString).asString();
         String requestBody = jsonResponse.getBody();
+        log.info(" ERROR WHILE GETTING BANK LIST {}", jsonResponse.getBody());
         if (requestBody == null || !requestBody.contains("RESPONSE")) {
             getBanksList = new GetBankListPResponsePayload();
             GetBankList bankList = new GetBankList();

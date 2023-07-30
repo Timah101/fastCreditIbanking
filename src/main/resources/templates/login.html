@@ -34,13 +34,13 @@
                 <div th:if="${errorMessage}" class="alert-fast" role="alert">
                     <span th:text="${errorMessage}">Error message</span>
                 </div>
-                <div th:if="${param.timeout}" class="alert-fast" role="alert">
-                    <span>Your session has timed out due to inactivity.</span>
-                </div>
                 <div class="text-center mb-4">
                     <a><img th:src="@{/images/logo.svg}" alt="Fast Credit" width="200" height="100"></a>
                 </div>
                 <form method="post" th:action="@{/login}" id="loginForm">
+                    <div th:if="${param.timeout}" class="alert-fast" role="alert">
+                        <span>Your session has timed out due to inactivity.</span>
+                    </div>
                     <div class="mb-5">
                         <label class="mb-1"><span class="fa fa-user"></span><span
                                 class="login-params"> Mobile Number</span></label>

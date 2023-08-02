@@ -1,7 +1,10 @@
 package com.iBanking.iBanking.services;
 
 import com.google.gson.Gson;
-import com.iBanking.iBanking.Forms.Forms;
+import com.iBanking.iBanking.Forms.AirtimeDataTransactionForms;
+import com.iBanking.iBanking.Forms.DataTransactionForms;
+import com.iBanking.iBanking.Forms.PinForm;
+import com.iBanking.iBanking.Forms.TransactionForms;
 import com.iBanking.iBanking.payload.transactions.airtimeData.*;
 import com.iBanking.iBanking.payload.generics.DecryptRequestPayload;
 import com.iBanking.iBanking.payload.generics.EncryptResponsePayload;
@@ -9,7 +12,6 @@ import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
 import com.iBanking.iBanking.utils.AuthenticationApi;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,9 +38,9 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
             String accessToken = (String) session.getAttribute("accessToken");
             GeneralResponsePayload airtimeTopUp;
             AirtimeRequestPayload requestPayload = new AirtimeRequestPayload();
-            Forms airtimeForm = (Forms) session.getAttribute("airtimeForm");
-            Forms airtimeFormPin = (Forms) session.getAttribute("airtimeFormPin");
-            Forms loginForm = (Forms) session.getAttribute("loginForm");
+            AirtimeDataTransactionForms airtimeForm = (AirtimeDataTransactionForms) session.getAttribute("airtimeForm");
+            PinForm airtimeFormPin = (PinForm) session.getAttribute("airtimeFormPin");
+            TransactionForms loginForm = (TransactionForms) session.getAttribute("loginForm");
 
             requestPayload.setMobileNumber(loginForm.getMobileNumber());
             requestPayload.setBeneficiaryMobileNumber(airtimeForm.getBeneficiaryMobileNumber());
@@ -154,9 +156,9 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
             String accessToken = (String) session.getAttribute("accessToken");
             GeneralResponsePayload dataTopUp;
             DataRequestPayload requestPayload = new DataRequestPayload();
-            Forms dataForm = (Forms) session.getAttribute("dataForm");
-            Forms dataFormPin = (Forms) session.getAttribute("dataFormPin");
-            Forms loginForm = (Forms) session.getAttribute("loginForm");
+            DataTransactionForms dataForm = (DataTransactionForms) session.getAttribute("dataForm");
+            PinForm dataFormPin = (PinForm) session.getAttribute("dataFormPin");
+            TransactionForms loginForm = (TransactionForms) session.getAttribute("loginForm");
 
             String[] dataPlanId = new String[4];
             if (dataForm != null) {

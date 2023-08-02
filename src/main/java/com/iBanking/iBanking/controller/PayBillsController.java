@@ -1,7 +1,7 @@
 package com.iBanking.iBanking.controller;
 
 import com.google.gson.Gson;
-import com.iBanking.iBanking.Forms.Forms;
+import com.iBanking.iBanking.Forms.TransactionForms;
 import com.iBanking.iBanking.payload.accout.AccountDetailsListResponsePayload;
 import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
 import com.iBanking.iBanking.payload.transactions.cableTv.*;
@@ -43,18 +43,18 @@ public class PayBillsController {
         model.addAttribute("gotvBillerPlan", gotvBillerPlan.getBillers());
         model.addAttribute("dstvBillerPlan", dstvBillerPlan.getBillers());
         model.addAttribute("electricityBillers", electricityBiller.getBiller());
-        model.addAttribute("gotvForm", new Forms());
-        model.addAttribute("gotvFormPin", new Forms());
-        model.addAttribute("dstvForm", new Forms());
-        model.addAttribute("dstvFormPin", new Forms());
-        model.addAttribute("electricityForm", new Forms());
-        model.addAttribute("electricityFormPin", new Forms());
+        model.addAttribute("gotvForm", new TransactionForms());
+        model.addAttribute("gotvFormPin", new TransactionForms());
+        model.addAttribute("dstvForm", new TransactionForms());
+        model.addAttribute("dstvFormPin", new TransactionForms());
+        model.addAttribute("electricityForm", new TransactionForms());
+        model.addAttribute("electricityFormPin", new TransactionForms());
 
         return "transactions/pay-bills";
     }
 
     @PostMapping("/gotv-form")
-    public String processGotvForm(@ModelAttribute("gotvForm") Forms gotvForm, Model model, HttpSession session) throws UnirestException {
+    public String processGotvForm(@ModelAttribute("gotvForm") TransactionForms gotvForm, Model model, HttpSession session) throws UnirestException {
         session.setAttribute("gotvForm", gotvForm);
         String gotvBiller = "GOTV";
         String dstvBiller = "DSTV";
@@ -68,14 +68,14 @@ public class PayBillsController {
         model.addAttribute("gotvBillerPlan", gotvBillerPlan.getBillers());
         model.addAttribute("dstvBillerPlan", dstvBillerPlan.getBillers());
         model.addAttribute("electricityBillers", electricityBiller.getBiller());
-        model.addAttribute("gotvForm", new Forms());
-        model.addAttribute("gotvFormPin", new Forms());
-        model.addAttribute("dstvForm", new Forms());
-        model.addAttribute("dstvFormPin", new Forms());
-        model.addAttribute("electricityForm", new Forms());
-        model.addAttribute("electricityFormPin", new Forms());
+        model.addAttribute("gotvForm", new TransactionForms());
+        model.addAttribute("gotvFormPin", new TransactionForms());
+        model.addAttribute("dstvForm", new TransactionForms());
+        model.addAttribute("dstvFormPin", new TransactionForms());
+        model.addAttribute("electricityForm", new TransactionForms());
+        model.addAttribute("electricityFormPin", new TransactionForms());
 
-        Forms gotvTxnData = (Forms) session.getAttribute("gotvForm");
+        TransactionForms gotvTxnData = (TransactionForms) session.getAttribute("gotvForm");
         String bouquet = "";
         if (gotvTxnData != null) {
             String[] bouquetSplitted = gotvTxnData.getDataPlans().split(",");
@@ -91,7 +91,7 @@ public class PayBillsController {
 
     @PostMapping("/gotv")
     @ResponseBody
-    public String processGotv(Model model, Forms gotvFormPin, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
+    public String processGotv(Model model, TransactionForms gotvFormPin, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
         session.setAttribute("gotvFormPin", gotvFormPin);
         String biller = "GOTV";
         payBillsService.cableTvPayment(session, biller);
@@ -141,7 +141,7 @@ public class PayBillsController {
 
     //COLLECT INFORMATION FOR DSTV AND ROUTE TO CONFIRM TRANSACTION
     @PostMapping("/dstv-form")
-    public String processDstvForm(@ModelAttribute("dstvForm") Forms gotvForm, Model model, HttpSession session) throws UnirestException {
+    public String processDstvForm(@ModelAttribute("dstvForm") TransactionForms gotvForm, Model model, HttpSession session) throws UnirestException {
         session.setAttribute("dstvForm", gotvForm);
 
         String gotvBiller = "GOTV";
@@ -155,14 +155,14 @@ public class PayBillsController {
         model.addAttribute("gotvBillerPlan", gotvBillerPlan.getBillers());
         model.addAttribute("dstvBillerPlan", dstvBillerPlan.getBillers());
         model.addAttribute("electricityBillers", electricityBiller.getBiller());
-        model.addAttribute("gotvForm", new Forms());
-        model.addAttribute("gotvFormPin", new Forms());
-        model.addAttribute("dstvForm", new Forms());
-        model.addAttribute("dstvFormPin", new Forms());
-        model.addAttribute("electricityForm", new Forms());
-        model.addAttribute("electricityFormPin", new Forms());
+        model.addAttribute("gotvForm", new TransactionForms());
+        model.addAttribute("gotvFormPin", new TransactionForms());
+        model.addAttribute("dstvForm", new TransactionForms());
+        model.addAttribute("dstvFormPin", new TransactionForms());
+        model.addAttribute("electricityForm", new TransactionForms());
+        model.addAttribute("electricityFormPin", new TransactionForms());
 
-        Forms dstvTxnData = (Forms) session.getAttribute("dstvForm");
+        TransactionForms dstvTxnData = (TransactionForms) session.getAttribute("dstvForm");
 
         String bouquet = "";
         if (dstvTxnData != null) {
@@ -181,7 +181,7 @@ public class PayBillsController {
     //PROCESS DSTV PAYMENT
     @PostMapping("/dstv")
     @ResponseBody
-    public String processDstv(Model model, Forms dstvFormPin, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
+    public String processDstv(Model model, TransactionForms dstvFormPin, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
         session.setAttribute("dstvFormPin", dstvFormPin);
         String biller = "DSTV";
         payBillsService.cableTvPayment(session, biller);
@@ -217,7 +217,7 @@ public class PayBillsController {
 
 
     @PostMapping("/electricity-form")
-    public String processElectricityForm(@ModelAttribute("electricityForm") Forms electricityForm, Model model, HttpSession session) throws UnirestException {
+    public String processElectricityForm(@ModelAttribute("electricityForm") TransactionForms electricityForm, Model model, HttpSession session) throws UnirestException {
         session.setAttribute("electricityForm", electricityForm);
         String gotvBiller = "GOTV";
         String dstvBiller = "DSTV";
@@ -232,14 +232,14 @@ public class PayBillsController {
         model.addAttribute("dstvBillerPlan", dstvBillerPlan.getBillers());
         model.addAttribute("electricityBillers", electricityBiller.getBiller());
 
-        model.addAttribute("gotvForm", new Forms());
-        model.addAttribute("gotvFormPin", new Forms());
-        model.addAttribute("dstvForm", new Forms());
-        model.addAttribute("dstvFormPin", new Forms());
-        model.addAttribute("electricityForm", new Forms());
-        model.addAttribute("electricityFormPin", new Forms());
+        model.addAttribute("gotvForm", new TransactionForms());
+        model.addAttribute("gotvFormPin", new TransactionForms());
+        model.addAttribute("dstvForm", new TransactionForms());
+        model.addAttribute("dstvFormPin", new TransactionForms());
+        model.addAttribute("electricityForm", new TransactionForms());
+        model.addAttribute("electricityFormPin", new TransactionForms());
 
-        Forms electricityTxnData = (Forms) session.getAttribute("electricityForm");
+        TransactionForms electricityTxnData = (TransactionForms) session.getAttribute("electricityForm");
         String bouquet = "";
         if (electricityTxnData != null) {
             String[] bouquetSplitted = electricityTxnData.getElectricityBillerSelect().split(",");
@@ -255,7 +255,7 @@ public class PayBillsController {
 
     @PostMapping("/electricity")
     @ResponseBody
-    public String processElectricity(Model model, Forms electricityFormPin, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
+    public String processElectricity(Model model, TransactionForms electricityFormPin, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
         session.setAttribute("electricityFormPin", electricityFormPin);
         payBillsService.electricityPayment(session);
         final GeneralResponsePayload electricityPaymentResponse = (GeneralResponsePayload) session.getAttribute("electricityPaymentResponse");

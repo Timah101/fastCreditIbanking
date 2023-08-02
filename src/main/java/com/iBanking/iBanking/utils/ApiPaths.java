@@ -14,7 +14,7 @@ public interface ApiPaths {
     String CUSTOMER_REGISTER = "customerService/register";
 
     String CUSTOMER_CREATE = "customerService/create/individual";
-    String CUSTOMER_LOGIN = "customerService/authenticate/user";
+    String CUSTOMER_AUTH = "customerService/authenticate/user";
 
     String ACCOUNT_DETAILS = "customerService/account/details";
 

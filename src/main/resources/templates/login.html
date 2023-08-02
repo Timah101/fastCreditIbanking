@@ -31,13 +31,13 @@
         </div>
         <div class="col-md-4 col-sm-12 col-lg-4 col-xl-4 col-xs-12">
             <div class="" th:object="${loginForm}">
-                <div th:if="${errorMessage}" class="alert-fast" role="alert">
-                    <span th:text="${errorMessage}">Error message</span>
-                </div>
                 <div class="text-center mb-4">
                     <a><img th:src="@{/images/logo.svg}" alt="Fast Credit" width="200" height="100"></a>
                 </div>
                 <form method="post" th:action="@{/login}" id="loginForm">
+                    <div th:if="${errorMessage}" class="alert-fast" role="alert">
+                        <span th:text="${errorMessage}">Error message</span>
+                    </div>
                     <div th:if="${param.timeout}" class="alert-fast" role="alert">
                         <span>Your session has timed out due to inactivity.</span>
                     </div>

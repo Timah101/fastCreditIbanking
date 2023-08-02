@@ -1,7 +1,7 @@
 package com.iBanking.iBanking.services;
 
 import com.google.gson.Gson;
-import com.iBanking.iBanking.Forms.Forms;
+import com.iBanking.iBanking.Forms.TransactionForms;
 import com.iBanking.iBanking.payload.customer.LoginRequestPayload;
 import com.iBanking.iBanking.payload.customer.LoginResponsePayload;
 import com.iBanking.iBanking.payload.generics.DecryptRequestPayload;
@@ -35,7 +35,7 @@ public class LoginServiceImpl implements LoginService {
         LoginRequestPayload loginRequestPayload = new LoginRequestPayload();
         new LoginResponsePayload();
         LoginResponsePayload loginResponsePayload;
-        Forms loginForm = (Forms) session.getAttribute("loginForm");
+        TransactionForms loginForm = (TransactionForms) session.getAttribute("loginForm");
         loginRequestPayload.setMobileNumber(loginForm.getMobileNumber()); //
         loginRequestPayload.setAuthValue(loginForm.getPassword()); //
         loginRequestPayload.setDeviceId("dv123456");
@@ -47,7 +47,8 @@ public class LoginServiceImpl implements LoginService {
         //CALL THE LOGIN ENDPOINT
         String requestPayloadJson = gson.toJson(encryptResponsePayload1);
         log.info("LOGIN DETAILS PAYLOAD {}", requestPayload);
-        HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + CUSTOMER_LOGIN)
+        log.info("LOGIN DETAILS ENCRYPTED PAYLOAD {}", requestPayloadJson);
+        HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + CUSTOMER_AUTH)
                 .header("accept", "application/json")
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + accessToken)
@@ -58,7 +59,10 @@ public class LoginServiceImpl implements LoginService {
             loginResponsePayload = new LoginResponsePayload();
 //            customerDetailsResponse.setResponseCode("500");
 //            customerDetailsResponse.setResponseMessage("Error Occured");
-            log.info(" ERROR WHILE GETTING PROCESSING LOGIN {}", jsonResponse.getStatus());
+            log.info(" ERROR WHILE PROCESSING LOGIN {}", jsonResponse.getStatus());
+            loginResponsePayload.setResponseCode("199");
+            loginResponsePayload.setResponseMessage("Error occurred");
+            session.setAttribute("loginResponse", loginResponsePayload);
             return loginResponsePayload;
         }
 
@@ -68,6 +72,7 @@ public class LoginServiceImpl implements LoginService {
         loginResponsePayload = gson.fromJson(decrypt, LoginResponsePayload.class);
         //LOG REQUEST AND RESPONSE
         log.info("LOGIN RESPONSE PAYLOAD : {}", gson.toJson(loginResponsePayload));
+        session.setAttribute("loginResponse", loginResponsePayload);
         return loginResponsePayload;
     }
 

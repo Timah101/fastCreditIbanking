@@ -1,7 +1,7 @@
 package com.iBanking.iBanking.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.iBanking.iBanking.Forms.Forms;
+import com.iBanking.iBanking.Forms.TransactionForms;
 import com.iBanking.iBanking.payload.accout.AccountDetailsListResponsePayload;
 import com.iBanking.iBanking.payload.customer.CustomerDetailsResponsePayload;
 import com.iBanking.iBanking.services.AccountService;
@@ -33,8 +33,8 @@ public class DashboardController {
     @GetMapping("/dashboard")
     public String dashboard(Model model, HttpSession session) throws UnirestException, JsonProcessingException {
 
-        model.addAttribute("airtimeForm", new Forms());
-        model.addAttribute("sendMoneyLocalForm", new Forms());
+        model.addAttribute("airtimeForm", new TransactionForms());
+        model.addAttribute("sendMoneyLocalForm", new TransactionForms());
 
         CustomerDetailsResponsePayload customerDetails = (CustomerDetailsResponsePayload) session.getAttribute("customerDetailsResponse");
         AccountDetailsListResponsePayload accountBalanceResponse = accountService.getAccountBalances(session);
@@ -52,8 +52,8 @@ public class DashboardController {
     @GetMapping("/dashboard-main")
     public String dashboardMain(Model model, HttpSession session) throws UnirestException, JsonProcessingException {
 
-        model.addAttribute("airtimeForm", new Forms());
-        model.addAttribute("sendMoneyLocalForm", new Forms());
+        model.addAttribute("airtimeForm", new TransactionForms());
+        model.addAttribute("sendMoneyLocalForm", new TransactionForms());
 
         CustomerDetailsResponsePayload customerDetails = (CustomerDetailsResponsePayload) session.getAttribute("customerDetailsResponse");
         AccountDetailsListResponsePayload accountBalanceResponse = accountService.getAccountBalances(session);

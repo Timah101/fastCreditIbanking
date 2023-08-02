@@ -1,6 +1,6 @@
 package com.iBanking.iBanking.controller;
 
-import com.iBanking.iBanking.Forms.Forms;
+import com.iBanking.iBanking.Forms.TransactionForms;
 import com.iBanking.iBanking.payload.accout.AccountDetailsListResponsePayload;
 import com.iBanking.iBanking.payload.accout.AccountDetailsResponsePayload;
 import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
@@ -34,27 +34,27 @@ public class SendMoneyController {
         GetBankListPResponsePayload bankList = (GetBankListPResponsePayload) session.getAttribute("getBankListResponse");
         model.addAttribute("bankListResponse", bankList.getBankList());
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
-        model.addAttribute("sendMoneyLocalForm", new Forms());
-        model.addAttribute("sendMoneyLocalFormPin", new Forms());
-        model.addAttribute("sendMoneyOthersPin", new Forms());
-        model.addAttribute("sendMoneyOthersForm", new Forms());
+        model.addAttribute("sendMoneyLocalForm", new TransactionForms());
+        model.addAttribute("sendMoneyLocalFormPin", new TransactionForms());
+        model.addAttribute("sendMoneyOthersPin", new TransactionForms());
+        model.addAttribute("sendMoneyOthersForm", new TransactionForms());
         model.addAttribute("mobileView", true);
         return "transactions/send-money";
     }
 
     //Reload to Confirm OTP div on same page
     @PostMapping("/local-form")
-    public String processSendMoneyLocalFormSubmit(@ModelAttribute("sendMoneyLocalForm") Forms sendMoneyLocalForm, HttpSession session, Model model) throws UnirestException {
+    public String processSendMoneyLocalFormSubmit(@ModelAttribute("sendMoneyLocalForm") TransactionForms sendMoneyLocalForm, HttpSession session, Model model) throws UnirestException {
         session.setAttribute("sendMoneyLocalForm", sendMoneyLocalForm);
 
         AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
-        model.addAttribute("sendMoneyLocalForm", new Forms());
-        model.addAttribute("sendMoneyLocalFormPin", new Forms());
-        model.addAttribute("sendMoneyOthersPin", new Forms());
-        model.addAttribute("sendMoneyOthersForm", new Forms());
+        model.addAttribute("sendMoneyLocalForm", new TransactionForms());
+        model.addAttribute("sendMoneyLocalFormPin", new TransactionForms());
+        model.addAttribute("sendMoneyOthersPin", new TransactionForms());
+        model.addAttribute("sendMoneyOthersForm", new TransactionForms());
 
-        Forms localTxnData = (Forms) session.getAttribute("sendMoneyLocalForm");
+        TransactionForms localTxnData = (TransactionForms) session.getAttribute("sendMoneyLocalForm");
         model.addAttribute("localTxnData", localTxnData);
         model.addAttribute("submitted", true);
         model.addAttribute("mobileView", false);
@@ -65,7 +65,7 @@ public class SendMoneyController {
     //Process Send Money and return error if any
     @PostMapping("/send-money/local")
     @ResponseBody
-    public String processSendMoneyLocal(@ModelAttribute Forms sendMoneyLocalFormPin, HttpSession session, RedirectAttributes redirectAttributes, Model model) throws UnirestException {
+    public String processSendMoneyLocal(@ModelAttribute TransactionForms sendMoneyLocalFormPin, HttpSession session, RedirectAttributes redirectAttributes, Model model) throws UnirestException {
         session.setAttribute("sendMoneyLocalFormPin", sendMoneyLocalFormPin);
         GeneralResponsePayload sendMoneyLocal = sendMoneyService.sendMoneyLocal(session);
         if (sendMoneyLocal.getResponseCode().equals("00")) {
@@ -99,17 +99,17 @@ public class SendMoneyController {
 
     //Reload to Confirm OTP div on same page
     @PostMapping("/others-form")
-    public String processSendMoneyOthersFormSubmit(@ModelAttribute("sendMoneyLocalForm") Forms sendMoneyLocalForm, HttpSession session, Model model) throws UnirestException {
+    public String processSendMoneyOthersFormSubmit(@ModelAttribute("sendMoneyLocalForm") TransactionForms sendMoneyLocalForm, HttpSession session, Model model) throws UnirestException {
         session.setAttribute("sendMoneyOthersForm", sendMoneyLocalForm);
 
         AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
-        model.addAttribute("sendMoneyLocalForm", new Forms());
-        model.addAttribute("sendMoneyLocalFormPin", new Forms());
-        model.addAttribute("sendMoneyOthersPin", new Forms());
-        model.addAttribute("sendMoneyOthersForm", new Forms());
+        model.addAttribute("sendMoneyLocalForm", new TransactionForms());
+        model.addAttribute("sendMoneyLocalFormPin", new TransactionForms());
+        model.addAttribute("sendMoneyOthersPin", new TransactionForms());
+        model.addAttribute("sendMoneyOthersForm", new TransactionForms());
 
-        Forms othersTxnData = (Forms) session.getAttribute("sendMoneyOthersForm");
+        TransactionForms othersTxnData = (TransactionForms) session.getAttribute("sendMoneyOthersForm");
         model.addAttribute("othersTxnData", othersTxnData);
         model.addAttribute("submittedOthers", true);
         model.addAttribute("mobileView", false);
@@ -120,7 +120,7 @@ public class SendMoneyController {
     //Process Send Money to Other Banks and return errors if any
     @PostMapping("/send-money/others")
     @ResponseBody
-    public String processSendMoneyOthers(@ModelAttribute Forms sendMoneyOthersFormPin, HttpSession session, RedirectAttributes redirectAttributes, Model model) throws UnirestException {
+    public String processSendMoneyOthers(@ModelAttribute TransactionForms sendMoneyOthersFormPin, HttpSession session, RedirectAttributes redirectAttributes, Model model) throws UnirestException {
         session.setAttribute("sendMoneyOthersFormPin", sendMoneyOthersFormPin);
         GeneralResponsePayload sendMoneyOthers = sendMoneyService.sendMoneyOthers(session);
         if (sendMoneyOthers.getResponseCode().equals("00")) {

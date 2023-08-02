@@ -1,7 +1,7 @@
 package com.iBanking.iBanking.controller;
 
 
-import com.iBanking.iBanking.Forms.Forms;
+import com.iBanking.iBanking.Forms.TransactionForms;
 import com.iBanking.iBanking.payload.SendOtpResponsePayload;
 import com.iBanking.iBanking.payload.customer.CreateCustomerResponsePayload;
 import com.iBanking.iBanking.payload.customer.CustomerDetailsResponsePayload;
@@ -34,15 +34,15 @@ public class CreateAccountController {
 
     @GetMapping("/open-account")
     public String showCreateAccount1(Model model) {
-        model.addAttribute("createAccountForm1", new Forms());
+        model.addAttribute("createAccountForm1", new TransactionForms());
         return "create-account/create-account-1";
     }
 
     @PostMapping("/open-account")
-    public String processCreateAccount1(Model model, Forms createAccountForm1, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
+    public String processCreateAccount1(Model model, TransactionForms createAccountForm1, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
         session.setAttribute("createAccountForm1", createAccountForm1);
 
-        Forms mobileNumberForm = (Forms) session.getAttribute("createAccountForm1");
+        TransactionForms mobileNumberForm = (TransactionForms) session.getAttribute("createAccountForm1");
         String purpose = "AO";
         CustomerDetailsResponsePayload customerDetails = customerService.getCustomerDetails(session, mobileNumberForm.getMobileNumber());
         if (customerDetails.getResponseCode().equals("00")) {
@@ -50,7 +50,7 @@ public class CreateAccountController {
             redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
             return "redirect:/open-account";
         } else {
-            Forms formCreate = (Forms) session.getAttribute("createAccountForm1");
+            TransactionForms formCreate = (TransactionForms) session.getAttribute("createAccountForm1");
             final SendOtpResponsePayload sendOtp = otpService.sendOtp(session, purpose, formCreate.getMobileNumber());
             if (sendOtp.getResponseCode().equals("00")) {
                 return "redirect:/confirm-otp";
@@ -64,15 +64,15 @@ public class CreateAccountController {
 
     @GetMapping("/confirm-otp")
     public String showConfirmOtp(Model model, HttpSession session) {
-        model.addAttribute("confirmOtp", new Forms());
-        Forms mobileNumberForm = (Forms) session.getAttribute("createAccountForm1");
+        model.addAttribute("confirmOtp", new TransactionForms());
+        TransactionForms mobileNumberForm = (TransactionForms) session.getAttribute("createAccountForm1");
         model.addAttribute("mobileNumberForm", mobileNumberForm);
         return "create-account/create-account-otp";
     }
 
     @PostMapping("/confirm-otp")
     public String processConfirmOtp(@RequestParam("otp") String otp,
-                                    Model model, Forms confirmOtp, HttpSession session) {
+                                    Model model, TransactionForms confirmOtp, HttpSession session) {
         session.setAttribute("confirmOtp", otp);
 
         return "redirect:/open-account-2";
@@ -80,12 +80,12 @@ public class CreateAccountController {
 
     @GetMapping("/open-account-2")
     public String showCreateAccount2(Model model) {
-        model.addAttribute("createAccountForm2", new Forms());
+        model.addAttribute("createAccountForm2", new TransactionForms());
         return "create-account/create-account-2";
     }
 
     @PostMapping("/open-account-2")
-    public String processCreateAccount2(Model model, Forms createAccountForm2, HttpSession session) {
+    public String processCreateAccount2(Model model, TransactionForms createAccountForm2, HttpSession session) {
         session.setAttribute("createAccountForm2", createAccountForm2);
 
         return "redirect:/open-account-3";
@@ -93,7 +93,7 @@ public class CreateAccountController {
 
     @GetMapping("/open-account-3")
     public String showCreateAccount3(Model model) {
-        model.addAttribute("createAccountForm3", new Forms());
+        model.addAttribute("createAccountForm3", new TransactionForms());
         return "create-account/create-account-3";
     }
 
@@ -101,7 +101,7 @@ public class CreateAccountController {
     public String processCreateAccount3(@RequestParam("passport") MultipartFile passport,
                                         @RequestParam("signature") MultipartFile signature,
                                         @RequestParam("utility") MultipartFile utility,
-                                        Model model, Forms createAccountForm3, HttpSession session) throws IOException {
+                                        Model model, TransactionForms createAccountForm3, HttpSession session) throws IOException {
         session.setAttribute("createAccountForm3", createAccountForm3);
 
         try {
@@ -121,7 +121,7 @@ public class CreateAccountController {
 
     @GetMapping("/open-account-4")
     public String showCreateAccount4(Model model) {
-        model.addAttribute("createAccountForm4", new Forms());
+        model.addAttribute("createAccountForm4", new TransactionForms());
         return "create-account/create-account-4";
     }
 
@@ -143,7 +143,7 @@ public class CreateAccountController {
                                 @RequestParam("retirementDate") String retirementDate,
                                 @RequestParam("referredBy") String referredBy,
                                 @RequestParam("otp") String otp,
-                                Forms createAccountForm4, HttpSession session) throws UnirestException {
+                                TransactionForms createAccountForm4, HttpSession session) throws UnirestException {
         session.setAttribute("createAccountForm4", createAccountForm4);
         session.setAttribute("createOtpLastPage", otp);
         final CreateCustomerResponsePayload customer = customerService.createCustomer(session);
@@ -173,7 +173,7 @@ public class CreateAccountController {
     @ResponseBody
     public String sendOtp(HttpSession session) throws UnirestException {
         String purpose = "AO";
-        Forms formCreate = (Forms) session.getAttribute("createAccountForm1");
+        TransactionForms formCreate = (TransactionForms) session.getAttribute("createAccountForm1");
         final SendOtpResponsePayload sendOtp = otpService.sendOtp(session, purpose, formCreate.getMobileNumber());
         return sendOtp.getResponseMessage();
     }

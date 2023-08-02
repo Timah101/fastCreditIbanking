@@ -1,7 +1,7 @@
 package com.iBanking.iBanking.services;
 
 import com.google.gson.Gson;
-import com.iBanking.iBanking.Forms.Forms;
+import com.iBanking.iBanking.Forms.TransactionForms;
 import com.iBanking.iBanking.payload.customer.*;
 import com.iBanking.iBanking.payload.generics.DecryptRequestPayload;
 import com.iBanking.iBanking.payload.generics.EncryptResponsePayload;
@@ -79,10 +79,10 @@ public class CustomerServiceImpl implements CustomerService {
         String accessToken = (String) session.getAttribute("accessTokenCustomer");
         RegisterCustomerResponsePayload registerCustomer;
         RegisterCustomerRequestPayload requestPayload = new RegisterCustomerRequestPayload();
-        Forms registerForm1 = (Forms) session.getAttribute("registerForm1");
-        Forms registerForm2 = (Forms) session.getAttribute("registerForm2");
-        Forms registerForm3 = (Forms) session.getAttribute("registerForm3");
-        Forms registerFormPassword = (Forms) session.getAttribute("registerFormPassword");
+        TransactionForms registerForm1 = (TransactionForms) session.getAttribute("registerForm1");
+        TransactionForms registerForm2 = (TransactionForms) session.getAttribute("registerForm2");
+        TransactionForms registerForm3 = (TransactionForms) session.getAttribute("registerForm3");
+        TransactionForms registerFormPassword = (TransactionForms) session.getAttribute("registerFormPassword");
         requestPayload.setMobileNumber(registerForm1.getMobileNumber());
         requestPayload.setSecurityQuestion(registerFormPassword.getSecurityQuestion());
         requestPayload.setSecurityAnswer(registerFormPassword.getSecurityAnswer());
@@ -130,10 +130,10 @@ public class CustomerServiceImpl implements CustomerService {
         String accessToken = authenticationApi.getAccessToken();
         CreateCustomerResponsePayload createCustomer;
         CreateCustomerWithoutBvnRequestPayload requestPayload = new CreateCustomerWithoutBvnRequestPayload();
-        Forms createForm1 = (Forms) session.getAttribute("createAccountForm1");
-        Forms createForm2 = (Forms) session.getAttribute("createAccountForm2");
-        Forms createForm3 = (Forms) session.getAttribute("createAccountForm3");
-        Forms createForm4 = (Forms) session.getAttribute("createAccountForm4");
+        TransactionForms createForm1 = (TransactionForms) session.getAttribute("createAccountForm1");
+        TransactionForms createForm2 = (TransactionForms) session.getAttribute("createAccountForm2");
+        TransactionForms createForm3 = (TransactionForms) session.getAttribute("createAccountForm3");
+        TransactionForms createForm4 = (TransactionForms) session.getAttribute("createAccountForm4");
         String passport = (String) session.getAttribute("passportSession");
         String signature = (String) session.getAttribute("signatureSession");
         String utility = (String) session.getAttribute("utilitySession");
@@ -221,9 +221,9 @@ public class CustomerServiceImpl implements CustomerService {
         session.setAttribute("accessTokenCustomer", accessToken);
         GeneralResponsePayload resetPassword;
         ResetPasswordRequestPayload requestPayload = new ResetPasswordRequestPayload();
-        Forms resetForm1 = (Forms) session.getAttribute("resetForm1");
-        Forms resetOtp = (Forms) session.getAttribute("resetOtpForm");
-        Forms resetForm2 = (Forms) session.getAttribute("resetForm2");
+        TransactionForms resetForm1 = (TransactionForms) session.getAttribute("resetForm1");
+        TransactionForms resetOtp = (TransactionForms) session.getAttribute("resetOtpForm");
+        TransactionForms resetForm2 = (TransactionForms) session.getAttribute("resetForm2");
 
         requestPayload.setMobileNumber(resetForm1.getMobileNumber());
         requestPayload.setOtp(resetOtp.getOtp());

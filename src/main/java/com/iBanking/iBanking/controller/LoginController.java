@@ -1,7 +1,7 @@
 package com.iBanking.iBanking.controller;
 
 
-import com.iBanking.iBanking.Forms.Forms;
+import com.iBanking.iBanking.Forms.TransactionForms;
 import com.iBanking.iBanking.payload.accout.AccountDetailsListResponsePayload;
 import com.iBanking.iBanking.payload.customer.CustomerDetailsResponsePayload;
 import com.iBanking.iBanking.payload.customer.LoginResponsePayload;
@@ -36,23 +36,24 @@ public class LoginController {
     //Load the Login Page
     @GetMapping("/login")
     public String showLogin(@RequestParam(value = "timeout", required = false) boolean timeout, Model model) {
-        model.addAttribute("loginForm", new Forms());
+        model.addAttribute("loginForm", new TransactionForms());
         model.addAttribute("timeout", timeout);
         return "login";
     }
 
     //Process the Login Page, call the customer and account details as well
     @PostMapping("/login")
-    public String processLogin(@ModelAttribute Forms loginForm, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException, ExecutionException, InterruptedException {
+    public String processLogin(@ModelAttribute TransactionForms loginForm, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException, ExecutionException, InterruptedException {
         session.setAttribute("loginForm", loginForm);
         try {
-            LoginResponsePayload login = loginService.login(session);
+            loginService.login(session);
+            LoginResponsePayload login = (LoginResponsePayload) session.getAttribute("loginResponse");
             if (login.getResponseCode().equals("00")) {
                 session.setAttribute("loggedIn", true);
 
                 CompletableFuture<CustomerDetailsResponsePayload> customerDetailsFuture = CompletableFuture.supplyAsync(() -> {
                     try {
-                        Forms loginFormMobileNumber = (Forms) session.getAttribute("loginForm");
+                        TransactionForms loginFormMobileNumber = (TransactionForms) session.getAttribute("loginForm");
                         return customerService.getCustomerDetails(session, loginFormMobileNumber.getMobileNumber());
                     } catch (UnirestException e) {
                         throw new RuntimeException("Error while getting customer details", e);

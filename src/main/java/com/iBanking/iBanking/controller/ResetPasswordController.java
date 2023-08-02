@@ -1,6 +1,6 @@
 package com.iBanking.iBanking.controller;
 
-import com.iBanking.iBanking.Forms.Forms;
+import com.iBanking.iBanking.Forms.TransactionForms;
 import com.iBanking.iBanking.payload.SendOtpResponsePayload;
 import com.iBanking.iBanking.payload.customer.CustomerDetailsResponsePayload;
 import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
@@ -30,16 +30,16 @@ public class ResetPasswordController {
     @GetMapping("/reset")
     public String showReset1(Model model) {
 
-        model.addAttribute("resetForm1", new Forms());
+        model.addAttribute("resetForm1", new TransactionForms());
 
         return "profile/reset-password-1";
     }
 
     @PostMapping("/reset")
-    public String processReset1(Model model, Forms resetForm1, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
+    public String processReset1(Model model, TransactionForms resetForm1, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
         session.setAttribute("resetForm1", resetForm1);
         String purpose = "PR";
-        Forms formPasswordReset = (Forms) session.getAttribute("resetForm1");
+        TransactionForms formPasswordReset = (TransactionForms) session.getAttribute("resetForm1");
         CustomerDetailsResponsePayload customerDetails = customerService.getCustomerDetails(session, formPasswordReset.getMobileNumber());
         if (customerDetails.getResponseCode().equals("00")) {
             final SendOtpResponsePayload sendOtp = sendOtpService.sendOtp(session, purpose, formPasswordReset.getMobileNumber());
@@ -59,18 +59,18 @@ public class ResetPasswordController {
 
     @GetMapping("/otp")
     public String showOtp(Model model, HttpSession session) {
-        Forms formPasswordReset = (Forms) session.getAttribute("resetForm1");
+        TransactionForms formPasswordReset = (TransactionForms) session.getAttribute("resetForm1");
         model.addAttribute("mobileNumberForm", formPasswordReset);
-        model.addAttribute("resetOtpForm", new Forms());
+        model.addAttribute("resetOtpForm", new TransactionForms());
 
         return "profile/reset-otp";
     }
 
 
     @PostMapping("/otp")
-    public String processOtp(Model model, Forms resetOtpForm, HttpSession session) {
+    public String processOtp(Model model, TransactionForms resetOtpForm, HttpSession session) {
         session.setAttribute("resetOtpForm", resetOtpForm);
-        model.addAttribute("resetOtp", new Forms());
+        model.addAttribute("resetOtp", new TransactionForms());
 
         return "redirect:/reset-2";
     }
@@ -79,13 +79,13 @@ public class ResetPasswordController {
     public String showReset2(Model model, HttpSession session) {
 
         CustomerDetailsResponsePayload customer = (CustomerDetailsResponsePayload) session.getAttribute("customerDetailsResponse");
-        model.addAttribute("resetForm2", new Forms());
+        model.addAttribute("resetForm2", new TransactionForms());
         model.addAttribute("securityQuestion", customer);
         return "profile/reset-password-2";
     }
 
     @PostMapping("/reset-2")
-    public String processReset2(Model model, Forms resetForm2, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
+    public String processReset2(Model model, TransactionForms resetForm2, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
 
         session.setAttribute("resetForm2", resetForm2);
 
@@ -107,7 +107,7 @@ public class ResetPasswordController {
     @GetMapping("/profile")
     public String showProfile(Model model) {
 
-//        model.addAttribute("resetForm2", new Forms());
+//        model.addAttribute("resetForm2", new TransactionForms());
 
         return "profile/profile";
     }

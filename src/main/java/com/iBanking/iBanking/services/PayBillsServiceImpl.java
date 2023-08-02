@@ -1,12 +1,10 @@
 package com.iBanking.iBanking.services;
 
 import com.google.gson.Gson;
-import com.iBanking.iBanking.Forms.Forms;
+import com.iBanking.iBanking.Forms.TransactionForms;
 import com.iBanking.iBanking.payload.generics.DecryptRequestPayload;
 import com.iBanking.iBanking.payload.generics.EncryptResponsePayload;
 import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
-import com.iBanking.iBanking.payload.transactions.airtimeData.DataPlansList;
-import com.iBanking.iBanking.payload.transactions.airtimeData.DataPlansResponsePayload;
 import com.iBanking.iBanking.payload.transactions.cableTv.*;
 import com.iBanking.iBanking.utils.AuthenticationApi;
 import com.mashape.unirest.http.HttpResponse;
@@ -146,24 +144,24 @@ public class PayBillsServiceImpl implements PayBillsService {
             CableTvPaymentResponse cableTvPayment = new CableTvPaymentResponse();
             CableTvPaymentRequestPayload requestPayload = new CableTvPaymentRequestPayload();
 
-            Forms form;
-            Forms formPin;
+            TransactionForms form;
+            TransactionForms formPin;
             String billerId;
             ValidateCableTvResponsePayload customerName;
 
             if (biller.equalsIgnoreCase("GOTV")) {
-                form = (Forms) session.getAttribute("gotvForm");
-                formPin = (Forms) session.getAttribute("gotvFormPin");
+                form = (TransactionForms) session.getAttribute("gotvForm");
+                formPin = (TransactionForms) session.getAttribute("gotvFormPin");
                 customerName = (ValidateCableTvResponsePayload) session.getAttribute("validateCableTvResponse");
                 billerId = form.getDataPlans();
             } else if (biller.equalsIgnoreCase("DSTV")) {
-                form = (Forms) session.getAttribute("dstvForm");
-                formPin = (Forms) session.getAttribute("dstvFormPin");
+                form = (TransactionForms) session.getAttribute("dstvForm");
+                formPin = (TransactionForms) session.getAttribute("dstvFormPin");
                 customerName = (ValidateCableTvResponsePayload) session.getAttribute("validateCableTvResponse");
                 billerId = form.getDataPlans();
             } else {
-                form = new Forms();
-                formPin = new Forms();
+                form = new TransactionForms();
+                formPin = new TransactionForms();
                 billerId = "";
                 customerName = new ValidateCableTvResponsePayload();
             }
@@ -345,8 +343,8 @@ public class PayBillsServiceImpl implements PayBillsService {
             GeneralResponsePayload electricityPayment = new GeneralResponsePayload();
             ElectricityPaymentRequestPayload requestPayload = new ElectricityPaymentRequestPayload();
 
-            Forms form = (Forms) session.getAttribute("electricityForm");
-            Forms formPin = (Forms) session.getAttribute("electricityFormPin");
+            TransactionForms form = (TransactionForms) session.getAttribute("electricityForm");
+            TransactionForms formPin = (TransactionForms) session.getAttribute("electricityFormPin");
             ValidateElectricityResponsePayload customerName = (ValidateElectricityResponsePayload) session.getAttribute("validateElectricityResponse");
             String billerId = "";
             if (form != null) {

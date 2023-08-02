@@ -795,7 +795,9 @@ header {
 }
 
 .card-balance {
-    background-color: #9cba9c;
+    /*background-color: #9cba9c;*/
+    background: linear-gradient(to right, #ff0000, #00ff00, #0000ff);
+
 }
 
 .card-fast.loaded {

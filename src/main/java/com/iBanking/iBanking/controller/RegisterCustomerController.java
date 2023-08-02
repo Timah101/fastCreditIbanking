@@ -1,6 +1,6 @@
 package com.iBanking.iBanking.controller;
 
-import com.iBanking.iBanking.Forms.Forms;
+import com.iBanking.iBanking.Forms.TransactionForms;
 import com.iBanking.iBanking.payload.customer.CustomerDetailsResponsePayload;
 import com.iBanking.iBanking.payload.SendOtpResponsePayload;
 import com.iBanking.iBanking.services.CustomerService;
@@ -31,18 +31,18 @@ public class RegisterCustomerController {
 
     @GetMapping("/register")
     public String showRegister1(Model model) {
-        model.addAttribute("registerForm1", new Forms());
+        model.addAttribute("registerForm1", new TransactionForms());
         return "register/register-1";
     }
 
     @PostMapping("/register")
-    public String processRegister1(@ModelAttribute Forms registerForm1, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
+    public String processRegister1(@ModelAttribute TransactionForms registerForm1, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
         session.setAttribute("registerForm1", registerForm1);
 
         //CHECK IF CUSTOMER EXISTING FIRST
-        Forms formMobileNumber = (Forms) session.getAttribute("registerForm1");
+        TransactionForms formMobileNumber = (TransactionForms) session.getAttribute("registerForm1");
         CustomerDetailsResponsePayload customerDetails = customerService.getCustomerDetails(session, formMobileNumber.getMobileNumber());
-        Forms registerForm11 = (Forms) session.getAttribute("registerForm1");
+        TransactionForms registerForm11 = (TransactionForms) session.getAttribute("registerForm1");
         if (customerDetails.getResponseCode().equals("03")) {
             String customErrorMessage = customerDetails.getResponseMessage();
             redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
@@ -54,7 +54,7 @@ public class RegisterCustomerController {
                 return "redirect:/register";
             } else {
                 String purpose = "RE";
-                Forms formRegister = (Forms) session.getAttribute("registerForm1");
+                TransactionForms formRegister = (TransactionForms) session.getAttribute("registerForm1");
                 SendOtpResponsePayload sendOtp = sendOtpService.sendOtp(session, purpose, formRegister.getMobileNumber());
                 if (sendOtp.getResponseCode().equals("00")) {
                     return "redirect:/register/confirm-otp";
@@ -70,15 +70,15 @@ public class RegisterCustomerController {
 
     @GetMapping("/register/confirm-otp")
     public String showRegister2(Model model, HttpSession session) {
-        model.addAttribute("registerForm2", new Forms());
+        model.addAttribute("registerForm2", new TransactionForms());
 
-        Forms mobileNumberForm = (Forms) session.getAttribute("registerForm1");
+        TransactionForms mobileNumberForm = (TransactionForms) session.getAttribute("registerForm1");
         model.addAttribute("mobileNumberForm", mobileNumberForm);
         return "register/register-2";
     }
 
     @PostMapping("/register/confirm-otp")
-    public String processRegister2(@ModelAttribute Forms registerForm2, HttpSession session) {
+    public String processRegister2(@ModelAttribute TransactionForms registerForm2, HttpSession session) {
         session.setAttribute("registerForm2", registerForm2);
 
         return "redirect:/register/create-password";
@@ -86,25 +86,25 @@ public class RegisterCustomerController {
 
     @GetMapping("/register/create-password")
     public String showRegisterPassword(Model model) {
-        model.addAttribute("registerFormPassword", new Forms());
+        model.addAttribute("registerFormPassword", new TransactionForms());
         return "register/register-3-password";
     }
 
     @PostMapping("/register/create-password")
-    public String processRegisterPassword(@ModelAttribute Forms registerFormPassword, HttpSession session) {
+    public String processRegisterPassword(@ModelAttribute TransactionForms registerFormPassword, HttpSession session) {
         session.setAttribute("registerFormPassword", registerFormPassword);
         return "redirect:/register/create-profile";
     }
 
     @GetMapping("/register/create-profile")
     public String showRegister3(Model model) {
-        model.addAttribute("registerForm3", new Forms());
+        model.addAttribute("registerForm3", new TransactionForms());
         return "register/register-3";
     }
 
     @PostMapping("/register/create-profile")
     @ResponseBody
-    public String processRegister3(@ModelAttribute Forms registerForm3, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String processRegister3(@ModelAttribute TransactionForms registerForm3, HttpSession session, RedirectAttributes redirectAttributes) {
         session.setAttribute("registerForm3", registerForm3);
         try {
             customerService.registerCustomer(session);
@@ -127,7 +127,7 @@ public class RegisterCustomerController {
     @ResponseBody
     public String sendOtp(HttpSession session) throws UnirestException {
         String purpose = "RE";
-        Forms formCreate = (Forms) session.getAttribute("registerForm1");
+        TransactionForms formCreate = (TransactionForms) session.getAttribute("registerForm1");
         final SendOtpResponsePayload sendOtp = otpService.sendOtp(session, purpose, formCreate.getMobileNumber());
         return sendOtp.getResponseMessage();
     }

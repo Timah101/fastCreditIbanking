@@ -1,7 +1,7 @@
 package com.iBanking.iBanking.services;
 
 import com.google.gson.Gson;
-import com.iBanking.iBanking.Forms.Forms;
+import com.iBanking.iBanking.Forms.TransactionForms;
 import com.iBanking.iBanking.payload.accout.AccountDetailsListResponsePayload;
 import com.iBanking.iBanking.payload.accout.AccountDetailsRequestPayload;
 import com.iBanking.iBanking.payload.accout.AccountDetailsResponsePayload;
@@ -36,7 +36,7 @@ public class AccountServiceImpl implements AccountService {
     public AccountDetailsResponsePayload getAccountDetailsLocal(HttpSession session, String accountNumber) {
         try {
             String accessToken = (String) session.getAttribute("accessToken");
-            Forms loginForm = (Forms) session.getAttribute("loginForm");
+            TransactionForms loginForm = (TransactionForms) session.getAttribute("loginForm");
             AccountDetailsResponsePayload accountDetailsResponse;
             AccountDetailsRequestPayload accountDetailsRequestPayload = new AccountDetailsRequestPayload();
             accountDetailsRequestPayload.setMobileNumber(loginForm.getMobileNumber());
@@ -92,7 +92,7 @@ public class AccountServiceImpl implements AccountService {
             String accessToken = (String) session.getAttribute("accessToken");
             AccountDetailsListResponsePayload accountBalanceResponse;
             MobileNumberRequestPayload requestPayload = new MobileNumberRequestPayload();
-            Forms loginForm = (Forms) session.getAttribute("loginForm");
+            TransactionForms loginForm = (TransactionForms) session.getAttribute("loginForm");
             requestPayload.setMobileNumber(loginForm.getMobileNumber());
             String requestPayloadJson = gson.toJson(requestPayload);
             //Call the Encrypt API

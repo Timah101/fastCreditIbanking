@@ -3063,28 +3063,29 @@ textarea.form-control {
     border: 0.0625rem solid red;
     width: 100%;
     color: #6e6e6e;
-    border-radius: 0.5rem;
+    background: #fff;
+    border-radius: 0.3rem;
     padding: 0.3125rem 1.25rem;
     height: 2.6rem;
 }
 
 .input-error:focus {
-    background: #f8f8f8;
+    background: #fff;
     /*border: 0.0625rem solid #0f0e0e;*/
     border: 1px solid green;
     padding: 0.3125rem 1.25rem;
     color: #6e6e6e;
     height: 2.6rem;
-    border-radius: 0.5rem;
+    border-radius: 0.3rem;
 }
 
 .input-control {
-    background: #f8f8f8;
+    background: #fff;
     border: 0.0625rem solid #029247;
     padding: 1.3125rem 1.2rem;
     color: #6e6e6e;
     height: 2.6rem;
-    border-radius: 5px;
+    border-radius: 0.3rem;
     width: 350px;
 }
 

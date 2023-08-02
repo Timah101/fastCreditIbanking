@@ -13,10 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -25,6 +27,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 
+import static ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray;
 import static com.iBanking.iBanking.utils.ApiPaths.*;
 
 
@@ -39,8 +42,8 @@ public class AuthenticationApi {
     public String getAccessToken() throws UnirestException {
         AccessTokenRequestPayload accessTokenRequestPayload = new AccessTokenRequestPayload();
         AccessTokenResponsePayload accessTokenResponsePayload = new AccessTokenResponsePayload();
-        String userName = fastCreditConfig.userName();
-        String passWord = fastCreditConfig.password();
+        String userName = System.getenv("fast-credit.user-name");
+        String passWord = System.getenv("fast-credit.password");
         accessTokenRequestPayload.setUserName(userName);
         accessTokenRequestPayload.setPassword(passWord);
         String requestPayload = gson.toJson(accessTokenRequestPayload);
@@ -59,31 +62,61 @@ public class AuthenticationApi {
 
     public String encryptPayload(String requestPayloads) throws UnirestException {
 
+
         try {
-            String secret = fastCreditConfig.secretKey();
-            byte[] IV = new byte[16];
-            byte[] key = secret.getBytes("UTF-8");
+            String secret = System.getenv("fast-credit.secret-key");
+            String iv = System.getenv("fast-credit.iv");
+            String padding = System.getenv("fast-credit-padding");
+            byte[] key = secret.getBytes(StandardCharsets.UTF_8);
             SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
-            //Get Cipher Instance
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-
-            //Create SecretKeySpec
+            Cipher cipher = Cipher.getInstance(padding);
             SecretKeySpec keySpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
-
-            //Create IvParameterSpec
-            IvParameterSpec ivSpec = new IvParameterSpec(IV);
-
-            //Initialize Cipher for ENCRYPT_MODE
+            IvParameterSpec ivSpec = new IvParameterSpec(hexStringToByteArray(iv));
             cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);
 
             //Perform Encryption
-            return Base64.getEncoder()
-                    .encodeToString(cipher.doFinal(requestPayloads.getBytes("UTF-8")));
-        } catch (UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException |
-                 InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException |
-                 BadPaddingException unsupportedEncodingException) {
+            return Base64.getEncoder().encodeToString(cipher.doFinal(requestPayloads.getBytes(StandardCharsets.UTF_8)));
+        } catch (InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException |
+                 BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException ex) {
+//            Logger.getLogger(AesServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+
+    //OLD ENCRYPTION
+
+//        try
+//
+//    {
+//        String secret = fastCreditConfig.secretKey();
+//        byte[] IV = new byte[16];
+//        byte[] key = secret.getBytes("UTF-8");
+//        SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
+//        //Get Cipher Instance
+//        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+//
+//        //Create SecretKeySpec
+//        SecretKeySpec keySpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
+//
+//        //Create IvParameterSpec
+//        IvParameterSpec ivSpec = new IvParameterSpec(IV);
+//
+//        //Initialize Cipher for ENCRYPT_MODE
+//        cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);
+//
+//        //Perform Encryption
+//        return Base64.getEncoder()
+//                .encodeToString(cipher.doFinal(requestPayloads.getBytes("UTF-8")));
+//    } catch(UnsupportedEncodingException |NoSuchAlgorithmException |NoSuchPaddingException |
+//    InvalidKeyException |InvalidAlgorithmParameterException |IllegalBlockSizeException |
+//    BadPaddingException unsupportedEncodingException)
+//
+//    {
+//    }
+//        return null;
+
+
 //
 //        HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + ENCRYPT_PAYLOAD)
 //                .header("accept", "application/json")
@@ -95,34 +128,58 @@ public class AuthenticationApi {
 ////        log.info("ENCRYPTION RESPONSE FROM ENCRYPT METHOD {}", encryptResponsePayload);
 //        return encryptResponsePayload;
 
-    }
+//}
 
     public String decryptPayload(String cipherText) {
+
+
         try {
-            String secret = fastCreditConfig.secretKey();
-            byte[] IV = new byte[16];
-            byte[] key = secret.getBytes("UTF-8");
+            String secret = System.getenv("fast-credit.secret-key");
+            String iv = System.getenv("fast-credit.iv");
+            String padding = System.getenv("fast-credit-padding");
+            byte[] key = secret.getBytes(StandardCharsets.UTF_8);
             SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
-            //Get Cipher Instance
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-
-            //Create SecretKeySpec
+            Cipher cipher = Cipher.getInstance(padding);
             SecretKeySpec keySpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
-
-            //Create IvParameterSpec
-            IvParameterSpec ivSpec = new IvParameterSpec(IV);
-
-            //Initialize Cipher for DECRYPT_MODE
+            IvParameterSpec ivSpec = new IvParameterSpec(hexStringToByteArray(iv));
             cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
 
             //Perform Decryption
             return new String(cipher.doFinal(Base64.getDecoder().decode(cipherText)));
-        } catch (UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException |
-                 InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException |
-                 BadPaddingException unsupportedEncodingException) {
+        } catch (IllegalBlockSizeException | BadPaddingException | InvalidKeyException |
+                 InvalidAlgorithmParameterException | NoSuchAlgorithmException | NoSuchPaddingException ex) {
+//            Logger.getLogger(AesServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
+
+
+//
+//        try {
+//            String secret = fastCreditConfig.secretKey();
+//            byte[] IV = new byte[16];
+//            byte[] key = secret.getBytes("UTF-8");
+//            SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
+//            //Get Cipher Instance
+//            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+//
+//            //Create SecretKeySpec
+//            SecretKeySpec keySpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
+//
+//            //Create IvParameterSpec
+//            IvParameterSpec ivSpec = new IvParameterSpec(IV);
+//
+//            //Initialize Cipher for DECRYPT_MODE
+//            cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
+//
+//            //Perform Decryption
+//            return new String(cipher.doFinal(Base64.getDecoder().decode(cipherText)));
+//        } catch (UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException |
+//                 InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException |
+//                 BadPaddingException unsupportedEncodingException) {
+//        }
+//        return null;
+//    }
 
     //OLD DECRYPTION API
 //    public <T, R> R decryptPayload(T request, Class<R> responseType) throws UnirestException {
@@ -170,8 +227,6 @@ public class AuthenticationApi {
 //        }
 //        return null;
 //    }
-
-
 
 
     public static void main(String[] args) throws UnirestException {

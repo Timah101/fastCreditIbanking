@@ -17,7 +17,7 @@
 
     .submit-send-money {
         background-color: #029247;
-        width: 300px;
+        width: 100%;
         border: 0.0625rem solid #029247;
         padding: 0.3125rem 1.25rem;
         color: #fff;
@@ -206,7 +206,10 @@
         fill: white;
         /*position: absolute;*/
     }
-
+    .no-button{
+        border: none;
+        background: none;
+    }
     .send-money-mini {
         /*width: 300px;*/
         padding-top: 17px;

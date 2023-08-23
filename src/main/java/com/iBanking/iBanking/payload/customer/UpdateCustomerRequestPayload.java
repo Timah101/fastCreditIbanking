@@ -15,6 +15,4 @@ public class UpdateCustomerRequestPayload {
     private String passportPhoto;
     private String emailAddress;
     private String requestId;
-    private String deviceId;
-
 }

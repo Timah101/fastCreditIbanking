@@ -16,4 +16,6 @@ public interface CustomerService {
     CreateCustomerResponsePayload createCustomer(HttpSession session) throws UnirestException;
 
     GeneralResponsePayload resetPassword(HttpSession session) throws UnirestException;
+    GeneralResponsePayload resetPin(HttpSession session) throws UnirestException;
+    GeneralResponsePayload updateCustomerDetails(HttpSession session) throws UnirestException;
 }

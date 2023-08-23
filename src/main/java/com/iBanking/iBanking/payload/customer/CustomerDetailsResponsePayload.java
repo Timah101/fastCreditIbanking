@@ -2,6 +2,8 @@ package com.iBanking.iBanking.payload.customer;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class CustomerDetailsResponsePayload {
     private String responseCode;
@@ -27,4 +29,7 @@ public class CustomerDetailsResponsePayload {
     private String pinTries;
     private String registered;
     private String bvn;
+    private String ippisNumber;
+    private List<MissingFieldsPayload> missingFields;
+    private String remark;
 }

@@ -6,7 +6,7 @@ import com.iBanking.iBanking.payload.generics.EncryptResponsePayload;
 import com.iBanking.iBanking.payload.SendOtpPayloadRequest;
 import com.iBanking.iBanking.payload.SendOtpResponsePayload;
 import com.iBanking.iBanking.utils.AuthenticationApi;
-import com.iBanking.iBanking.config.FastCreditConfig;
+
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -23,8 +23,7 @@ import static com.iBanking.iBanking.utils.ApiPaths.*;
 public class SendOtpServiceImpl implements SendOtpService {
 
     Gson gson = new Gson();
-    @Autowired
-    FastCreditConfig fastCreditConfig;
+
     @Autowired
     AuthenticationApi authenticationApi;
 
@@ -55,10 +54,11 @@ public class SendOtpServiceImpl implements SendOtpService {
                 .header("Authorization", "Bearer " + accessToken)
                 .body(requestPayloadJsonString).asString();
         String requestBody = jsonResponse.getBody();
+        log.info(" ERROR WHILE SENDING SEND OTP  {}", requestBody);
         if (jsonResponse.getStatus() != 200) {
             sendOtp = new SendOtpResponsePayload();
-//            customerDetailsResponse.setResponseCode("500");
-//            customerDetailsResponse.setResponseMessage("Error Occured");
+            sendOtp.setResponseCode("500");
+            sendOtp.setResponseMessage("Error Occurred");
             log.info(" ERROR WHILE SENDING SEND OTP  {}", jsonResponse.getStatus());
             return sendOtp;
         }
@@ -74,14 +74,4 @@ public class SendOtpServiceImpl implements SendOtpService {
         return sendOtp;
     }
 
-    @Override
-    public String testSecretKeys() {
-        String userName = fastCreditConfig.userName();
-        String password = fastCreditConfig.password();
-        String encryptionKey = System.getenv("password");
-        System.out.println("Encryption Key: " + encryptionKey);
-        System.out.println("userName Key: " + userName);
-        System.out.println("password Key: " + password);
-        return userName;
-    }
 }

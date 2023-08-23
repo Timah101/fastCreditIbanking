@@ -6,38 +6,33 @@
     <title>Create Account</title></head>
 <body>
 
+<div class="loader" id="loader">
+    <div class="loader-inner"></div>
+</div>
+
 <div class="container-fluid">
 
     <div class="row">
         <div class="col-xl-2 col-lg-2">
-            <div class="banner">
+<!--            <div class="banner">-->
 
-            </div>
+<!--            </div>-->
         </div>
         <div class="col-xl-8 col-lg-8">
             <div class="card">
-<!--                <div class="card-header">-->
-<!--                    Customer Information-->
-<!--&lt;!&ndash;                    <h1 class="card-title-create"></h1>&ndash;&gt;-->
-<!--                </div>-->
+                <!--                <div class="card-header">-->
+                <!--                    Customer Information-->
+                <!--&lt;!&ndash;                    <h1 class="card-title-create"></h1>&ndash;&gt;-->
+                <!--                </div>-->
                 <div class="card-body">
                     <div class="basic-form">
-                        <form method="post" th:object="${createAccountForm2}" th:action="@{/open-account-2}">
+                        <form method="post" th:object="${createAccountForm2}" th:action="@{/open-account-2}"
+                              enctype="multipart/form-data" id="myForm">
+                            <div th:if="${errorMessage}" class="alert-fast" role="alert">
+                                <span th:text="${errorMessage}">Error message</span>
+                            </div>
+                            <div id="resultMessage" class="alert-fast" style="display:none; background: red"></div>
                             <div class="row mb-4">
-                                <div class="col-sm-6">
-                                    <label for="title"> Title</label>
-                                    <select id="title" class="default-select form-control wide mb-3" th:field="*{title}"
-                                            required>
-                                        <option value=""> -- select an option --</option>
-                                        <option value="Mr">Mr</option>
-                                        <option value="Mrs">Mrs</option>
-                                        <option value="Miss">Miss</option>
-                                        <option value="Doctor">Doctor</option>
-                                        <option value="Alhaji">Alhaji</option>
-                                        <option value="Alhaja">Alhaja</option>
-                                        <option value="Pastor">Pastor</option>
-                                    </select>
-                                </div>
                                 <div class="col-sm-6 mt-2 mt-sm-0">
                                     <label for="gender"> Gender</label>
                                     <select id="gender" class="default-select form-control wide mb-3"
@@ -47,17 +42,10 @@
                                         <option value="Female">Female</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div class="row mb-4">
                                 <div class="col-sm-6">
                                     <label for="first-name"> First Name</label>
                                     <input id="first-name" type="text" class="form-control" placeholder=""
                                            th:field="*{firstName}">
-                                </div>
-                                <div class="col-sm-6 mt-2 mt-sm-0">
-                                    <label for="last-name"> Last Name</label>
-                                    <input id="last-name" type="text" class="form-control" placeholder=""
-                                           th:field="*{lastName}">
                                 </div>
                             </div>
                             <div class="row mb-4">
@@ -66,6 +54,13 @@
                                     <input id="other" type="text" class="form-control" placeholder=""
                                            th:field="*{otherName}">
                                 </div>
+                                <div class="col-sm-6 mt-2 mt-sm-0">
+                                    <label for="last-name"> Last Name</label>
+                                    <input id="last-name" type="text" class="form-control" placeholder=""
+                                           th:field="*{lastName}">
+                                </div>
+                            </div>
+                            <div class="row mb-4">
                                 <div class="col-sm-6">
                                     <label for="marital"> Marital Status</label>
                                     <select id="marital" class="default-select form-control wide mb-3"
@@ -76,16 +71,34 @@
                                         <option value="Female">Divorced</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div class="row mb-5">
                                 <div class="col-sm-6">
                                     <label for="dob"> Date Of Birth</label>
                                     <input id="dob" type="date" class="form-control" placeholder="" th:field="*{dob}">
                                 </div>
+                            </div>
+                            <div class="row mb-4">
                                 <div class="col-sm-6">
-                                    <label for="nationality"> Nationality</label>
-                                    <input id="nationality" type="text" class="form-control" placeholder=""
-                                           th:field="*{nationality}">
+                                    <label for="identification">Identification Type</label>
+                                    <select id="identification" class="default-select form-control wide mb-3"
+                                            th:field="*{idType}" required>
+                                        <option value=""> -- select an option --</option>
+                                        <option value="National ID">NIN</option>
+                                        <option value="Driver's License">Driver's License</option>
+                                        <option value="PVC">Permanent Voter's Card</option>
+                                        <option value="International Passport">International Passport</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-6 mt-2 mt-sm-0">
+                                    <label for="id">Identification Number</label>
+                                    <input id="id" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row mb-4 text-center">
+                                <div class="">
+                                    <label for="img"> Upload Passport</label>
+                                    <input id="img" name="passport" type="file" class="form-control" placeholder=""
+                                           accept="image/*">
                                 </div>
                             </div>
                             <div class="text-center">
@@ -98,11 +111,10 @@
 
         </div>
         <div class="col-xl-2 col-lg-2">
-            <div class="banner">
+<!--            <div class="banner">-->
 
-            </div>
+<!--            </div>-->
         </div>
-
 
     </div>
 </div>

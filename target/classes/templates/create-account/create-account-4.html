@@ -17,9 +17,9 @@
         <div class="col-xl-2 col-lg-2"></div>
         <div class="col-xl-8 col-lg-8">
             <div class="card">
-                <div class="card-header">
-                    <h1 class="card-title-create">Customer Information</h1>
-                </div>
+<!--                <div class="card-header">-->
+<!--                    <h1 class="card-title-create">Customer Information</h1>-->
+<!--                </div>-->
                 <div class="card-body">
                     <div class="basic-form">
                         <form id="myForm" method="post" th:object="${createAccountForm4}"
@@ -67,7 +67,7 @@
                                            placeholder="">
                                 </div>
                                 <div class="col-sm-6">
-                                    <label for="nationality"> Referred By</label>
+                                    <label for="nationality"> Referred By (Optional)</label>
                                     <input id="nationality" type="text" name="referredBy" class="form-control"
                                            placeholder="">
                                 </div>
@@ -104,103 +104,7 @@
     </div>
 </div>
 
-<script>
-    $(document).ready(function () {
-        $('#myForm').submit(function (event) {
-            event.preventDefault();
-            const form = $(this);
-            showLoader();
-            $.ajax({
-                type: 'POST',
-                url: form.attr('action'),
-                data: form.serialize(),
-                success: function (response) {
-                    if (response === "00") {
-                        window.location.href = '/register';
-                    } else if (response === "03") {
-                        hideLoader();
-                        showResendButton();
-                        const resultSection = $('#resultSection');
-                        const resultMessage = $('#resultMessage');
-                        const retryButton = $('#retryButton');
-                        showErrorMessage();
-                        resultMessage.text("The OTP  is invalid. Enter a valid OTP");
-                        resultSection.show();
-                        retryButton.show();
-                    } else {
-                        console.log(response + " the message")
-                        hideLoader();
-                        showErrorMessage();
-                        const resultMessage = $('#resultMessage');
-                        resultMessage.text(response);
-                    }
-                },
-                error: function (xhr) {
-                    hideLoader();
-                    const resultSection = $('#resultSection');
-                    const resultMessage = $('#resultMessage');
-                    const retryButton = $('#retryButton');
-                    resultMessage.text(xhr.responseText);
-                    resultSection.show();
-                    retryButton.show();
-                }
-            });
-        });
 
-        $('#resendButton').click(function (event) {
-            event.preventDefault();
-            hideResendButton();
-            hideErrorMessage();
-            showLoader();
-            sendOTP();
-        });
-    });
-
-    function showResendButton() {
-        const resendButton = $('#resendButton');
-        resendButton.show();
-    }
-
-    function hideErrorMessage() {
-        const resultMessage = $('#resultMessage')
-        resultMessage.hide();
-    }
-
-    function showErrorMessage() {
-        const resultMessage = $('#resultMessage')
-        resultMessage.show();
-    }
-
-    function hideResendButton() {
-        const resendButton = $('#resendButton');
-        resendButton.hide();
-    }
-
-    function showLoader() {
-        const loader = $('#loader');
-        loader.show();
-    }
-
-    function hideLoader() {
-        const loader = $('#loader');
-        loader.hide();
-    }
-
-
-    //This function resends OTP
-    function sendOTP() {
-        showLoader();
-        $.ajax({
-            type: 'POST',
-            url: '/resend-otp',
-            success: function (response) {
-                hideLoader()
-            },
-            error: function (xhr) {
-            }
-        });
-    }
-</script>
 
 </body>
 </html>

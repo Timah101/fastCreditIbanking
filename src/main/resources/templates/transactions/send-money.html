@@ -26,32 +26,59 @@
             <div class="send-money-module">
                 <div class="send-money-title">Send Money</div>
                 <div id="send-money-min" class="send-money-mini">
-                    <a class="" onclick="toggleSendMoneyLocal()">
-                    <span class="send-money-span">
-                    Send Money to Fast Credit</span>
-                        <span class="send-money-mini-svg"> <svg viewBox="0 0 129 129" version="1.1"
-                                                                xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                                xmlns="http://www.w3.org/2000/svg">
+                    <form method="post" th:action="@{/toggle-local}">
+                        <button class="no-button" onclick="toggleSendMoneyLocal()"><span
+                                class="send-money-span">Send Money to Fast Credit</span>
+                            <span class="send-money-mini-svg"> <svg viewBox="0 0 129 129" version="1.1"
+                                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                    xmlns="http://www.w3.org/2000/svg">
                             <g>
                                 <path fill="#fff"
                                       d="m40.4,121.3c-0.8,0.8-1.8,1.2-2.9,1.2s-2.1-0.4-2.9-1.2c-1.6-1.6-1.6-4.2 0-5.8l51-51-51-51c-1.6-1.6-1.6-4.2 0-5.8 1.6-1.6 4.2-1.6 5.8,0l53.9,53.9c1.6,1.6 1.6,4.2 0,5.8l-53.9,53.9z"></path>
                             </g>
                         </svg> </span>
-                    </a>
+                        </button>
+                    </form>
+<!--                    <a class="" onclick="toggleSendMoneyLocal()">-->
+<!--                    <span class="send-money-span">-->
+<!--                    Send Money to Fast Credit</span>-->
+<!--                        <span class="send-money-mini-svg"> <svg viewBox="0 0 129 129" version="1.1"-->
+<!--                                                                xmlns:xlink="http://www.w3.org/1999/xlink"-->
+<!--                                                                xmlns="http://www.w3.org/2000/svg">-->
+<!--                            <g>-->
+<!--                                <path fill="#fff"-->
+<!--                                      d="m40.4,121.3c-0.8,0.8-1.8,1.2-2.9,1.2s-2.1-0.4-2.9-1.2c-1.6-1.6-1.6-4.2 0-5.8l51-51-51-51c-1.6-1.6-1.6-4.2 0-5.8 1.6-1.6 4.2-1.6 5.8,0l53.9,53.9c1.6,1.6 1.6,4.2 0,5.8l-53.9,53.9z"></path>-->
+<!--                            </g>-->
+<!--                        </svg> </span>-->
+<!--                    </a>-->
                 </div>
                 <div id="send-money-min-1" class="send-money-mini">
-                    <a class="" onclick="toggleSendMoneyOthers()">
-                    <span class="send-money-span">
-                    Send Money to Others</span>
-                        <span class="send-money-mini-svg"> <svg viewBox="0 0 129 129" version="1.1"
-                                                                xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                                xmlns="http://www.w3.org/2000/svg">
+                    <form method="post" th:action="@{/toggle-others}">
+                        <button class="no-button" onclick="toggleSendMoneyOthers()"><span
+                                class="send-money-span">Send Money to Others</span>
+                            <span class="send-money-mini-svg"> <svg viewBox="0 0 129 129" version="1.1"
+                                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                    xmlns="http://www.w3.org/2000/svg">
                             <g>
                                 <path fill="#fff"
                                       d="m40.4,121.3c-0.8,0.8-1.8,1.2-2.9,1.2s-2.1-0.4-2.9-1.2c-1.6-1.6-1.6-4.2 0-5.8l51-51-51-51c-1.6-1.6-1.6-4.2 0-5.8 1.6-1.6 4.2-1.6 5.8,0l53.9,53.9c1.6,1.6 1.6,4.2 0,5.8l-53.9,53.9z"></path>
                             </g>
                         </svg> </span>
-                    </a>
+                        </button>
+                    </form>
+
+<!--                    <a class="" onclick="toggleSendMoneyOthers()">-->
+<!--                    <span class="send-money-span">-->
+<!--                    Send Money to Others</span>-->
+<!--                        <span class="send-money-mini-svg"> <svg viewBox="0 0 129 129" version="1.1"-->
+<!--                                                                xmlns:xlink="http://www.w3.org/1999/xlink"-->
+<!--                                                                xmlns="http://www.w3.org/2000/svg">-->
+<!--                            <g>-->
+<!--                                <path fill="#fff"-->
+<!--                                      d="m40.4,121.3c-0.8,0.8-1.8,1.2-2.9,1.2s-2.1-0.4-2.9-1.2c-1.6-1.6-1.6-4.2 0-5.8l51-51-51-51c-1.6-1.6-1.6-4.2 0-5.8 1.6-1.6 4.2-1.6 5.8,0l53.9,53.9c1.6,1.6 1.6,4.2 0,5.8l-53.9,53.9z"></path>-->
+<!--                            </g>-->
+<!--                        </svg> </span>-->
+<!--                    </a>-->
                 </div>
 
 
@@ -72,7 +99,7 @@
                         </a>
                     </div>
                     <div id="receive-money-min-1" class="send-money-mini">
-                        <a class="" onclick="toggleSendMoneyDiv2()">
+                        <a class="" onclick="toggleSendMoneyOthers()">
                     <span class="send-money-span">
                     Receive Money via Card</span>
                             <span class="send-money-mini-svg"> <svg viewBox="0 0 129 129" version="1.1"
@@ -133,7 +160,7 @@
 
 
         <!--        THE SEND TRANSFER TO LOCAL DIV-->
-        <div id="send-money-local" class="col-md-5 col-sm-12 col-xs-12" style="display: none">
+        <div id="send-money-local" class="col-md-5 col-sm-12 col-xs-12" th:if="${showLocal}">
 
             <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
 
@@ -166,17 +193,29 @@
                                             <label for="account_local" class="label-span">Account Number</label> <span
                                                 id="localName" class="float-right" th:field="*{beneficiaryName}"></span>
                                             <input id="account_local" class="form-control-send-money" maxlength="10"
-                                                   placeholder="" th:field="*{creditAccount}">
+                                                   placeholder="" th:field="*{creditAccount}"
+                                                   th:classappend="${#fields.hasErrors('creditAccount')?'input-error':'form-control-send-money'}">
+                                            <div class="input-warning"
+                                                 th:if="${#fields.hasErrors('creditAccount')}"
+                                                 th:errors="*{creditAccount}"></div>
                                         </div>
                                         <div class="mb-4">
                                             <label for="amount" class="label-span">Amount</label>
                                             <input id="amount" class="form-control-send-money" placeholder=""
-                                                   th:field="*{amount}">
+                                                   th:field="*{amount}"
+                                                   th:classappend="${#fields.hasErrors('amount')?'input-error':'form-control-send-money'}">
+                                            <div class="input-warning"
+                                                 th:if="${#fields.hasErrors('amount')}"
+                                                 th:errors="*{amount}"></div>
                                         </div>
                                         <div class="mb-4">
                                             <label for="narration" class="label-span">Narration</label>
                                             <input id="narration" class="form-control-send-money" placeholder=""
-                                                   th:field="*{narration}">
+                                                   th:field="*{narration}"
+                                                   th:classappend="${#fields.hasErrors('narration')?'input-error':'form-control-send-money'}">
+                                            <div class="input-warning"
+                                                 th:if="${#fields.hasErrors('narration')}"
+                                                 th:errors="*{narration}"></div>
                                         </div>
                                         <div class="mb-4">
                                             <input id="submit-local" class="submit-send-money" type="submit"
@@ -199,7 +238,7 @@
 
 
         <!--        THE SEND TRANSFER TO OTHERS DIV-->
-        <div id="send-money-others" class="col-md-5 col-sm-12 col-xs-12" style="display: none">
+        <div id="send-money-others" class="col-md-5 col-sm-12 col-xs-12" th:if="${showOthers}">
 
             <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
 
@@ -246,34 +285,39 @@
                                                 id="othersName" class="float-right"
                                                 th:field="*{beneficiaryName}"></span>
                                             <input id="account_others" class="form-control-send-money" maxlength="10"
-                                                   placeholder="" th:field="*{creditAccount}">
+                                                   placeholder="" th:field="*{creditAccount}"
+                                                   th:classappend="${#fields.hasErrors('creditAccount')?'input-error':'form-control-send-money'}">
+                                            <div class="input-warning"
+                                                 th:if="${#fields.hasErrors('creditAccount')}"
+                                                 th:errors="*{creditAccount}"></div>
                                         </div>
                                         <div class="mb-4">
                                             <label for="amount-others" class="label-span">Amount</label>
                                             <input id="amount-others" class="form-control-send-money" placeholder=""
-                                                   th:field="*{amount}">
+                                                   th:field="*{amount}"th:classappend="${#fields.hasErrors('amount')?'input-error':'form-control-send-money'}">
+                                            <div class="input-warning"
+                                                 th:if="${#fields.hasErrors('amount')}"
+                                                 th:errors="*{amount}"></div>
                                         </div>
                                         <div class="mb-4">
                                             <label for="narration-others" class="label-span">Narration</label>
                                             <input id="narration-others" class="form-control-send-money" placeholder=""
-                                                   th:field="*{narration}">
+                                                   th:field="*{narration}"
+                                                   th:classappend="${#fields.hasErrors('narration')?'input-error':'form-control-send-money'}">
+                                            <div class="input-warning"
+                                                 th:if="${#fields.hasErrors('narration')}"
+                                                 th:errors="*{narration}"></div>
                                         </div>
                                         <div class="mb-4">
                                             <input id="submit-others" class="submit-send-money" type="submit"
                                                    placeholder="Proceed">
                                         </div>
-
                                     </form>
                                 </div>
                             </div>
-
                         </div>
                     </div>
-
-
                 </div>
-
-
             </div>
         </div>
 
@@ -317,7 +361,7 @@
                                             <label for="pin" class="confirm-pin">Enter PIN</label>
                                             <input id="pin" type="password" class=""
                                                    style="align-items: center; text-align: center; width: 200px"
-                                                   maxlength="6"
+                                                   maxlength="4"
                                                    placeholder="" th:field="*{pin}">
                                         </div>
                                         <div class="mb-4">
@@ -377,7 +421,7 @@
                                             <label for="pin" class="confirm-pin">Enter PIN</label>
                                             <input id="pin-others" type="password" class=""
                                                    style="align-items: center; text-align: center; width: 200px"
-                                                   maxlength="6"
+                                                   maxlength="4"
                                                    placeholder="" th:field="*{pin}">
                                         </div>
                                         <div class="mb-4">
@@ -391,8 +435,6 @@
 
                         </div>
                     </div>
-
-
                 </div>
 
             </div>
@@ -631,6 +673,7 @@
     }
 
     function toggleSendMoneyLocal() {
+        showLoader();
         hideConfirmLocal();
         hideConfirmOthers();
         const contentDiv = document.getElementById("send-money-local");
@@ -645,6 +688,7 @@
     }
 
     function toggleSendMoneyOthers() {
+        showLoader();
         hideConfirmLocal();
         hideConfirmOthers();
         const contentDiv = document.getElementById("send-money-others");

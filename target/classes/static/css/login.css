@@ -7,7 +7,15 @@
     height: 100vh; /* Set the height of the body to the full viewport height */
     margin: 0;
 }
-
+.award-login{
+    position: relative;
+    bottom: 700px;
+    left: 300px;
+}
+.microfinance-img{
+    position: relative;
+    bottom: 300px;
+}
 .test {
     background-color: red;
     height: 100px;
@@ -27,7 +35,10 @@
     width: 450px;
     border: 2px solid #029247;
     height: 40px;
-    border-radius: 10px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    padding-left: 15px;
+
 }
 
 .input-fast-txn {
@@ -130,13 +141,29 @@ input:checked + .slider:before {
 .button-fast {
     background-color: #029247;
     border: 2px solid #029247;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
     height: 40px;
     color: white;
+    position: relative;
+    width: 55px;
+    top: 12px;
+    left: -5px;
+    cursor: pointer;
+}
+
+.img-search-fast {
+    height: 41px;
+    color: white;
+    position: relative;
+    width: 55px;
+    left: -65px;
+    cursor: pointer;
 }
 
 .dashboard-container-main {
     /*border: 1px solid green;*/
-    width: 260px;
+    width: 300px;
     height: 200px;
     display: flex;
     align-items: center;
@@ -187,7 +214,8 @@ input:checked + .slider:before {
     display: inline;
     align-items: center;
     height: 200px;
-    color: #029247
+    color: #fff;
+    font-weight: bolder;
 }
 
 .show-bal {
@@ -352,6 +380,7 @@ header {
 .navbar-icons {
     display: flex;
     align-items: center;
+    margin-right: 60px;
 }
 
 .navbar-icons a {
@@ -695,6 +724,7 @@ header {
     font-size: 18px;
     font-weight: bold;
 }
+
 .security-question {
     display: flex;
     margin-left: -2px;
@@ -702,6 +732,7 @@ header {
     font-size: 13px;
     font-weight: bold;
 }
+
 .register-left-2 {
     margin-left: -100px;
     color: black;
@@ -780,7 +811,7 @@ header {
     border: 0px solid transparent;
     border-radius: 8px;
     box-shadow: 0px 5px 4px 0px #888888;
-    height: calc(100% - 90px);
+    height: 220px;
     /*padding: 20px;*/
     display: flex;
     flex-direction: column;
@@ -795,8 +826,8 @@ header {
 }
 
 .card-balance {
-    /*background-color: #9cba9c;*/
-    background: linear-gradient(to right, #ff0000, #00ff00, #0000ff);
+    /*background-color: #9cba9c; 07542b*/
+    background: linear-gradient(to top right, #66cc33, #07542b);
 
 }
 
@@ -810,9 +841,17 @@ header {
         display: none;
     }
 
+    .navbar-icons {
+        display: flex;
+        align-items: center;
+    }
+
     .navbar-toggle {
         display: flex;
         align-items: center;
+    }
+    .navbar-logo{
+        width: 200px;
     }
 
     .navbar-toggle .toggle-icon {

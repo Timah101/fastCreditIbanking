@@ -43,7 +43,7 @@ public class RegisterCustomerController {
         TransactionForms formMobileNumber = (TransactionForms) session.getAttribute("registerForm1");
         CustomerDetailsResponsePayload customerDetails = customerService.getCustomerDetails(session, formMobileNumber.getMobileNumber());
         TransactionForms registerForm11 = (TransactionForms) session.getAttribute("registerForm1");
-        if (customerDetails.getResponseCode().equals("03")) {
+        if (!customerDetails.getResponseCode().equals("00")) {
             String customErrorMessage = customerDetails.getResponseMessage();
             redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
             return "redirect:/register";

@@ -41,24 +41,15 @@ public class CreateAccountController {
     @PostMapping("/open-account")
     public String processCreateAccount1(Model model, TransactionForms createAccountForm1, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
         session.setAttribute("createAccountForm1", createAccountForm1);
-
         TransactionForms mobileNumberForm = (TransactionForms) session.getAttribute("createAccountForm1");
-        String purpose = "AO";
         CustomerDetailsResponsePayload customerDetails = customerService.getCustomerDetails(session, mobileNumberForm.getMobileNumber());
         if (customerDetails.getResponseCode().equals("00")) {
             String customErrorMessage = "Customer exists already, create a profile or proceed to login";
             redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
             return "redirect:/open-account";
         } else {
-            TransactionForms formCreate = (TransactionForms) session.getAttribute("createAccountForm1");
-            final SendOtpResponsePayload sendOtp = otpService.sendOtp(session, purpose, formCreate.getMobileNumber());
-            if (sendOtp.getResponseCode().equals("00")) {
-                return "redirect:/confirm-otp";
-            } else {
-                String customErrorMessage = sendOtp.getResponseMessage();
-                redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
-                return "redirect:/open-account";
-            }
+
+            return "redirect:/open-account-2";
         }
     }
 
@@ -85,10 +76,21 @@ public class CreateAccountController {
     }
 
     @PostMapping("/open-account-2")
-    public String processCreateAccount2(Model model, TransactionForms createAccountForm2, HttpSession session) {
+//    @ResponseBody
+    public String processCreateAccount2(@RequestParam("passport") MultipartFile passport,
+                                        TransactionForms createAccountForm2, HttpSession session, RedirectAttributes redirectAttributes) throws IOException, UnirestException {
         session.setAttribute("createAccountForm2", createAccountForm2);
-
-        return "redirect:/open-account-3";
+        String passportBase64 = processImageToBase64(passport);
+        session.setAttribute("passportSession", passportBase64);
+        customerService.createCustomer(session);
+        final CreateCustomerResponsePayload customer = customerService.createCustomer(session);
+        if (customer.getResponseCode().equals("00")) {
+            return "redirect:/register";
+        } else {
+            String customErrorMessage = customer.getResponseMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
+            return "redirect:/open-account-2";
+        }
     }
 
     @GetMapping("/open-account-3")

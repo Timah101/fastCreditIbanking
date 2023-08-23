@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 @Slf4j
-public class ResetPasswordController {
+public class ProfileController {
 
     @Autowired
     SendOtpService sendOtpService;
@@ -110,6 +110,86 @@ public class ResetPasswordController {
 //        model.addAttribute("resetForm2", new TransactionForms());
 
         return "profile/profile";
+    }
+
+
+//    *********************************************** RESET OTP
+
+    @GetMapping("/reset-pin")
+    public String showResetOtp1(Model model) {
+
+        model.addAttribute("pinResetForm1", new TransactionForms());
+
+        return "profile/reset-pin-1";
+    }
+
+    @PostMapping("/reset-pin")
+    public String processResetOtp1(Model model, TransactionForms pinResetForm1, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
+        session.setAttribute("pinResetForm1", pinResetForm1);
+        String purpose = "PI";
+        TransactionForms formPinReset = (TransactionForms) session.getAttribute("pinResetForm1");
+        CustomerDetailsResponsePayload customerDetails = customerService.getCustomerDetails(session, formPinReset.getMobileNumber());
+        if (customerDetails.getResponseCode().equals("00")) {
+            final SendOtpResponsePayload sendOtp = sendOtpService.sendOtp(session, purpose, formPinReset.getMobileNumber());
+            if (sendOtp.getResponseCode().equals("00")) {
+                return "redirect:/otp-pin";
+            } else {
+                String customErrorMessage = sendOtp.getResponseMessage();
+                redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
+                return "redirect:/reset-pin";
+            }
+        } else {
+            String customErrorMessage = customerDetails.getResponseMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
+            return "redirect:/reset-pin";
+        }
+    }
+
+    @GetMapping("/otp-pin")
+    public String showPinOtp(Model model, HttpSession session) {
+        TransactionForms formPasswordReset = (TransactionForms) session.getAttribute("pinResetForm1");
+        model.addAttribute("mobileNumberForm", formPasswordReset);
+        model.addAttribute("resetOtpForm", new TransactionForms());
+
+        return "profile/reset-pin-otp";
+    }
+
+
+    @PostMapping("/otp-pin")
+    public String processOtpPin(Model model, TransactionForms resetOtpPinForm, HttpSession session) {
+        session.setAttribute("resetOtpPinForm", resetOtpPinForm);
+        model.addAttribute("resetOtp", new TransactionForms());
+
+        return "redirect:/reset-pin-2";
+    }
+
+    @GetMapping("/reset-pin-2")
+    public String showResetPin2(Model model, HttpSession session) {
+
+        CustomerDetailsResponsePayload customer = (CustomerDetailsResponsePayload) session.getAttribute("customerDetailsResponse");
+        model.addAttribute("resetForm2", new TransactionForms());
+        model.addAttribute("securityQuestion", customer);
+        return "profile/reset-pin-2";
+    }
+
+    @PostMapping("/reset-pin-2")
+    public String processResetPin2(Model model, TransactionForms resetForm2, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
+
+        session.setAttribute("resetPinForm2", resetForm2);
+
+        final GeneralResponsePayload resetPin = customerService.resetPin(session);
+        if (resetPin.getResponseCode().equals("00")) {
+            return "redirect:/dashboard";
+        } else if (resetPin.getResponseCode().equals("03")) {
+            String customErrorMessage = resetPin.getResponseMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
+            return "redirect:/otp";
+        } else {
+            String customErrorMessage = resetPin.getResponseMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
+            return "redirect:/reset-pin-2";
+        }
+
     }
 
 }

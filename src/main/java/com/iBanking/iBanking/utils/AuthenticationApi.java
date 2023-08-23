@@ -1,8 +1,7 @@
 package com.iBanking.iBanking.utils;
 
 import com.google.gson.Gson;
-import com.iBanking.iBanking.config.FastCreditConfig;
-import com.iBanking.iBanking.payload.accout.AccountDetailsRequestPayload;
+
 import com.iBanking.iBanking.payload.generics.AccessTokenRequestPayload;
 import com.iBanking.iBanking.payload.generics.AccessTokenResponsePayload;
 import com.mashape.unirest.http.HttpResponse;
@@ -10,6 +9,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
@@ -36,14 +36,17 @@ import static com.iBanking.iBanking.utils.ApiPaths.*;
 public class AuthenticationApi {
     static Gson gson = new Gson();
 
+//    @Autowired
+//    FastCreditConfig fastCreditConfig;
+
     @Autowired
-    FastCreditConfig fastCreditConfig;
+    Environment env;
 
     public String getAccessToken() throws UnirestException {
         AccessTokenRequestPayload accessTokenRequestPayload = new AccessTokenRequestPayload();
         AccessTokenResponsePayload accessTokenResponsePayload = new AccessTokenResponsePayload();
-        String userName = System.getenv("fast-credit.user-name");
-        String passWord = System.getenv("fast-credit.password");
+        String userName = env.getProperty("fast-credit.user-name");
+        String passWord = env.getProperty("fast-credit.password");
         accessTokenRequestPayload.setUserName(userName);
         accessTokenRequestPayload.setPassword(passWord);
         String requestPayload = gson.toJson(accessTokenRequestPayload);
@@ -61,14 +64,14 @@ public class AuthenticationApi {
 
 
     public String encryptPayload(String requestPayloads) throws UnirestException {
-
-
         try {
-            String secret = System.getenv("fast-credit.secret-key");
-            String iv = System.getenv("fast-credit.iv");
-            String padding = System.getenv("fast-credit-padding");
+            String secret = env.getProperty("fast-credit.secret-key");
+            String iv = env.getProperty("fast-credit.iv");
+            String padding = env.getProperty("fast-credit-padding");
+            assert secret != null;
             byte[] key = secret.getBytes(StandardCharsets.UTF_8);
             SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
+            assert padding != null;
             Cipher cipher = Cipher.getInstance(padding);
             SecretKeySpec keySpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
             IvParameterSpec ivSpec = new IvParameterSpec(hexStringToByteArray(iv));
@@ -78,67 +81,21 @@ public class AuthenticationApi {
             return Base64.getEncoder().encodeToString(cipher.doFinal(requestPayloads.getBytes(StandardCharsets.UTF_8)));
         } catch (InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException |
                  BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException ex) {
-//            Logger.getLogger(AesServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
 
 
-    //OLD ENCRYPTION
-
-//        try
-//
-//    {
-//        String secret = fastCreditConfig.secretKey();
-//        byte[] IV = new byte[16];
-//        byte[] key = secret.getBytes("UTF-8");
-//        SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
-//        //Get Cipher Instance
-//        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-//
-//        //Create SecretKeySpec
-//        SecretKeySpec keySpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
-//
-//        //Create IvParameterSpec
-//        IvParameterSpec ivSpec = new IvParameterSpec(IV);
-//
-//        //Initialize Cipher for ENCRYPT_MODE
-//        cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);
-//
-//        //Perform Encryption
-//        return Base64.getEncoder()
-//                .encodeToString(cipher.doFinal(requestPayloads.getBytes("UTF-8")));
-//    } catch(UnsupportedEncodingException |NoSuchAlgorithmException |NoSuchPaddingException |
-//    InvalidKeyException |InvalidAlgorithmParameterException |IllegalBlockSizeException |
-//    BadPaddingException unsupportedEncodingException)
-//
-//    {
-//    }
-//        return null;
-
-
-//
-//        HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + ENCRYPT_PAYLOAD)
-//                .header("accept", "application/json")
-//                .header("Content-Type", "application/json")
-//                .header("Authorization", "Bearer " + getAccessToken())
-//                .body(requestPayloads).asString();
-//        String requestBody = jsonResponse.getBody();
-//        String encryptResponsePayload = gson.fromJson(requestBody, EncryptResponsePayload.class);
-////        log.info("ENCRYPTION RESPONSE FROM ENCRYPT METHOD {}", encryptResponsePayload);
-//        return encryptResponsePayload;
-
-//}
-
     public String decryptPayload(String cipherText) {
 
-
         try {
-            String secret = System.getenv("fast-credit.secret-key");
-            String iv = System.getenv("fast-credit.iv");
-            String padding = System.getenv("fast-credit-padding");
+            String secret = env.getProperty("fast-credit.secret-key");
+            String iv = env.getProperty("fast-credit.iv");
+            String padding = env.getProperty("fast-credit-padding");
+            assert secret != null;
             byte[] key = secret.getBytes(StandardCharsets.UTF_8);
             SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
+            assert padding != null;
             Cipher cipher = Cipher.getInstance(padding);
             SecretKeySpec keySpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
             IvParameterSpec ivSpec = new IvParameterSpec(hexStringToByteArray(iv));
@@ -148,90 +105,8 @@ public class AuthenticationApi {
             return new String(cipher.doFinal(Base64.getDecoder().decode(cipherText)));
         } catch (IllegalBlockSizeException | BadPaddingException | InvalidKeyException |
                  InvalidAlgorithmParameterException | NoSuchAlgorithmException | NoSuchPaddingException ex) {
-//            Logger.getLogger(AesServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
 
-
-//
-//        try {
-//            String secret = fastCreditConfig.secretKey();
-//            byte[] IV = new byte[16];
-//            byte[] key = secret.getBytes("UTF-8");
-//            SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
-//            //Get Cipher Instance
-//            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-//
-//            //Create SecretKeySpec
-//            SecretKeySpec keySpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
-//
-//            //Create IvParameterSpec
-//            IvParameterSpec ivSpec = new IvParameterSpec(IV);
-//
-//            //Initialize Cipher for DECRYPT_MODE
-//            cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
-//
-//            //Perform Decryption
-//            return new String(cipher.doFinal(Base64.getDecoder().decode(cipherText)));
-//        } catch (UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException |
-//                 InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException |
-//                 BadPaddingException unsupportedEncodingException) {
-//        }
-//        return null;
-//    }
-
-    //OLD DECRYPTION API
-//    public <T, R> R decryptPayload(T request, Class<R> responseType) throws UnirestException {
-//        String requestPayload = gson.toJson(request);
-////        log.info("DECRYPT REQUEST PAYLOAD INSIDE HERE {}", request);
-//        HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + DECRYPT_PAYLOAD)
-//                .header("accept", "application/json")
-//                .header("Content-Type", "application/json")
-//                .header("Authorization", "Bearer " + getAccessToken())
-//                .body(requestPayload).asString();
-//        String requestBody = jsonResponse.getBody();
-////        log.info("DECRYPTION RESPONSE {}", requestBody);
-//
-//        AccountDetailsResponsePayload configurations;
-//        gson.fromJson(requestBody, responseType);
-////        log.info("DECRYPTED RESPONSE INSIDE FROM DECRYPT METHOD {}", gson.fromJson(requestBody, responseType));
-//        return gson.fromJson(requestBody, responseType);
-//    }
-
-
-//    public String encrypt(String plaintext) {
-//        try {
-//            String secret = fastCreditConfig.secretKey();
-//            byte[] IV = new byte[16];
-//            byte[] key = secret.getBytes("UTF-8");
-//            SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
-//            //Get Cipher Instance
-//            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-//
-//            //Create SecretKeySpec
-//            SecretKeySpec keySpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
-//
-//            //Create IvParameterSpec
-//            IvParameterSpec ivSpec = new IvParameterSpec(IV);
-//
-//            //Initialize Cipher for ENCRYPT_MODE
-//            cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);
-//
-//            //Perform Encryption
-//            return Base64.getEncoder()
-//                    .encodeToString(cipher.doFinal(plaintext.getBytes("UTF-8")));
-//        } catch (UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException |
-//                 InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException |
-//                 BadPaddingException unsupportedEncodingException) {
-//        }
-//        return null;
-//    }
-
-
-    public static void main(String[] args) throws UnirestException {
-//        encryptPayload(HttpSession session);
-        AccountDetailsRequestPayload getAccountDetails = new AccountDetailsRequestPayload();
-//        System.out.println(getAccountDetails(getAccountDetails));
-    }
 }

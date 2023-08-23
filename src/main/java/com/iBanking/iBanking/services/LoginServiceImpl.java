@@ -31,6 +31,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public LoginResponsePayload login(HttpSession session) throws UnirestException {
         String accessToken = authenticationApi.getAccessToken();
+        System.out.println(accessToken);
         session.setAttribute("accessToken", accessToken);
         LoginRequestPayload loginRequestPayload = new LoginRequestPayload();
         new LoginResponsePayload();
@@ -57,8 +58,6 @@ public class LoginServiceImpl implements LoginService {
         log.info(" LOGIN RESPONSE BODY {}", requestBody);
         if (jsonResponse.getStatus() != 200) {
             loginResponsePayload = new LoginResponsePayload();
-//            customerDetailsResponse.setResponseCode("500");
-//            customerDetailsResponse.setResponseMessage("Error Occured");
             log.info(" ERROR WHILE PROCESSING LOGIN {}", jsonResponse.getStatus());
             loginResponsePayload.setResponseCode("199");
             loginResponsePayload.setResponseMessage("Error occurred");

@@ -58,7 +58,6 @@ public class AirtimeDataController {
     public String processAirtimeFormSubmit(@Valid @ModelAttribute("airtimeForm") AirtimeDataTransactionForms airtimeForm, BindingResult result, HttpSession session, Model model) {
         session.setAttribute("airtimeForm", airtimeForm);
         if (result.hasErrors()) {
-            System.out.println("TRIED TO VALIDATE THE NUMBER HERE ");
             System.out.println(result.getAllErrors());
             AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
 
@@ -68,7 +67,7 @@ public class AirtimeDataController {
             model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
             String selectedOption = "";
             model.addAttribute("selectedOptionGotv", selectedOption);
-            model.addAttribute("mobileView", true);
+//            model.addAttribute("mobileView", true);
             model.addAttribute("showAirtime", true);
             return "transactions/airtime-data";
         }
@@ -113,11 +112,10 @@ public class AirtimeDataController {
     public String processDataFormSubmit(@Valid @ModelAttribute("dataForm") DataTransactionForms dataForm, BindingResult result, HttpSession session, Model model) throws UnirestException {
         session.setAttribute("dataForm", dataForm);
         if (result.hasErrors()) {
-            System.out.println("TRIED TO VALIDATE THE NUMBER HERE ");
             System.out.println(result.getAllErrors());
             AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
             model.addAttribute("showData", true);
-            model.addAttribute("dataForm", new DataTransactionForms());
+//            model.addAttribute("dataForm", new DataTransactionForms());
             model.addAttribute("accountBalanceResponse", new AccountDetailsListResponsePayload());
             model.addAttribute("customerDetails", new CustomerDetailsResponsePayload());
             model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());

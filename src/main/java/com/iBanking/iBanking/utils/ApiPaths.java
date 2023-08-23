@@ -10,8 +10,10 @@ public interface ApiPaths {
     String CUSTOMER_DETAILS = "customerService/details";
 
     String PASSWORD_RESET = "customerService/update/customer";
+    String PIN_RESET = "customerService/update";
 
     String CUSTOMER_REGISTER = "customerService/register";
+    String CUSTOMER_UPDATE = "customerService/update/customer/fields";
 
     String CUSTOMER_CREATE = "customerService/create/individual";
     String CUSTOMER_AUTH = "customerService/authenticate/user";

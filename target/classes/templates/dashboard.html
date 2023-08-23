@@ -17,18 +17,19 @@
         </div>
         <div class="navbar-logo">
             <!-- Your logo here -->
-            <a href="#home"> <img th:src="@{/images/logo.svg}" alt="Fast Credit"></a>
+            <a href="#home"> <img th:src="@{/images/logo.svg}" width="200" alt="Fast Credit"></a>
         </div>
         <div class="navbar-search">
             <!-- Search bar here -->
             <input class="input-fast" type="text" placeholder="Search">
-            <button class="button-fast" type="submit">Search</button>
+            <button class="button-fast" type="submit"></button>
+            <img class="img-search-fast" th:src="@{/images/search.png}">
         </div>
         <div class="navbar-icons">
-            <a th:href="@{/profile}" onclick="showLoader()">
-                <i class="fas fa-bell"></i>
-                <span>Notification</span>
-            </a>
+            <!--            <a th:href="@{/profile}" onclick="showLoader()">-->
+            <!--                <i class="fas fa-bell"></i>-->
+            <!--                <span>Notification</span>-->
+            <!--            </a>-->
             <!--            th:text="${'Hi, ' + customerDetails.getFirstName()}"-->
             <a th:href="@{/profile}" onclick="showLoader()">
                 <i class="fas fa-user"></i>
@@ -107,14 +108,14 @@
         <!--            </a>-->
         <!--        </li>-->
         <li>
-            <a th:href="@{/}">
+            <a th:href="@{/login}">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 25 24">
                     <path stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="white"
                           d="M20.2119 3.36361L2.74367 8.29055C2.59671 8.332 2.46591 8.41731 2.36874 8.53509C2.27157 8.65287 2.21266 8.79751 2.19989 8.94966C2.18712 9.10182 2.2211 9.25424 2.29728 9.38657C2.37346 9.5189 2.48821 9.62483 2.6262 9.69019L10.6522 13.492C10.8088 13.5661 10.9348 13.6922 11.009 13.8487L14.8107 21.8747C14.8761 22.0127 14.982 22.1275 15.1144 22.2037C15.2467 22.2798 15.3991 22.3138 15.5513 22.301C15.7034 22.2883 15.8481 22.2294 15.9658 22.1322C16.0836 22.035 16.1689 21.9042 16.2104 21.7573L21.1373 4.28904C21.1735 4.16073 21.1749 4.02509 21.1412 3.89609C21.1075 3.76709 21.0401 3.64939 20.9458 3.55512C20.8515 3.46085 20.7339 3.39341 20.6048 3.35975C20.4758 3.32609 20.3402 3.32742 20.2119 3.36361Z"></path>
                     <path stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="white"
                           d="M10.8931 13.6067L15.1357 9.36401"></path>
                 </svg>
-                <span>Invite Friends</span>
+                <span>Logout</span>
             </a>
         </li>
     </ul>
@@ -166,37 +167,36 @@
 
 
 <div class="content-dashboard" id="content-dashboard">
-    <div class="row">
-        <div class="col-xl-12">
-            <div class="card">
-                <div class="card-body">
-                    <p class="card-text">Access Quick Loans
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!--    <div class="row">-->
+    <!--        <div class="col-xl-12">-->
+    <!--            <div class="card">-->
+    <!--                <div class="card-body">-->
+    <!--                    <p class="card-text">Access Quick Loans-->
+    <!--                    </p>-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
 
     <!--    I COMMENTED HERE -->
     <div class="row">
         <div class="col-md-6 col-sm-12 col-lg-6 col-xl-4 col-xs-12" id="card-fast"
              th:each="accountBalance : ${accountBalanceResponse}">
-            <div class="card card-balance invoice-card">
+            <div class="card-dashboard card-balance invoice-card">
                 <div class="balance">
                     <div class="show-bal">
                         <span style="float: left" th:text="*{'₦ ' +accountBalance.getAvailableBalance}">N0.00</span>
-                        <span
-                                style="float: right; color: #029247; font-weight: bolder"
-                                th:text="${'Tier ' + customerDetails.getKycTier()}"></span>
+
                     </div>
                     <div class="show-card">
-                        <span style="color: #029247; font-stretch: expanded;"
+                        <span style="color: #fff; font-stretch: expanded;"
                               th:text="${accountBalance.getAccountNumber}"></span>
                     </div>
                     <div class="show-name">
                                 <span style="font-weight: bolder"
                                       th:text="${customerDetails.getFirstName() + ' ' + customerDetails.getMiddleName() + ' ' + customerDetails.getLastName()}"> "></span>
-                        <span style="float: right">12/50</span>
+                        <span style="float: right; font-weight: bolder"
+                              th:text="${'Tier ' + customerDetails.getKycTier()}"></span>
                     </div>
                 </div>
 

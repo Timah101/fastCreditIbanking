@@ -1,6 +1,6 @@
 package com.iBanking.iBanking.controller;
 
-import com.iBanking.iBanking.Forms.TransactionForms;
+import com.iBanking.iBanking.Forms.SendMoneyForms;
 import com.iBanking.iBanking.payload.accout.AccountDetailsListResponsePayload;
 import com.iBanking.iBanking.payload.accout.AccountDetailsResponsePayload;
 import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
@@ -13,10 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @Controller
 @Slf4j
@@ -34,27 +36,41 @@ public class SendMoneyController {
         GetBankListPResponsePayload bankList = (GetBankListPResponsePayload) session.getAttribute("getBankListResponse");
         model.addAttribute("bankListResponse", bankList.getBankList());
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
-        model.addAttribute("sendMoneyLocalForm", new TransactionForms());
-        model.addAttribute("sendMoneyLocalFormPin", new TransactionForms());
-        model.addAttribute("sendMoneyOthersPin", new TransactionForms());
-        model.addAttribute("sendMoneyOthersForm", new TransactionForms());
+        model.addAttribute("sendMoneyLocalForm", new SendMoneyForms());
+        model.addAttribute("sendMoneyLocalFormPin", new SendMoneyForms());
+        model.addAttribute("sendMoneyOthersPin", new SendMoneyForms());
+        model.addAttribute("sendMoneyOthersForm", new SendMoneyForms());
         model.addAttribute("mobileView", true);
+        model.addAttribute("showLocal", true);
         return "transactions/send-money";
     }
 
     //Reload to Confirm OTP div on same page
     @PostMapping("/local-form")
-    public String processSendMoneyLocalFormSubmit(@ModelAttribute("sendMoneyLocalForm") TransactionForms sendMoneyLocalForm, HttpSession session, Model model) throws UnirestException {
+    public String processSendMoneyLocalFormSubmit(@Valid @ModelAttribute("sendMoneyLocalForm") SendMoneyForms sendMoneyLocalForm,  BindingResult result,
+                                                  HttpSession session, Model model) throws UnirestException {
         session.setAttribute("sendMoneyLocalForm", sendMoneyLocalForm);
-
+        if (result.hasErrors()) {
+            AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
+            sendMoneyService.getBankList(session);
+            GetBankListPResponsePayload bankList = (GetBankListPResponsePayload) session.getAttribute("getBankListResponse");
+            model.addAttribute("bankListResponse", bankList.getBankList());
+            model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
+            model.addAttribute("sendMoneyLocalFormPin", new SendMoneyForms());
+            model.addAttribute("sendMoneyOthersPin", new SendMoneyForms());
+            model.addAttribute("sendMoneyOthersForm", new SendMoneyForms());
+            model.addAttribute("mobileView", true);
+            model.addAttribute("showLocal", true);
+            return "transactions/send-money";
+        }
         AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
-        model.addAttribute("sendMoneyLocalForm", new TransactionForms());
-        model.addAttribute("sendMoneyLocalFormPin", new TransactionForms());
-        model.addAttribute("sendMoneyOthersPin", new TransactionForms());
-        model.addAttribute("sendMoneyOthersForm", new TransactionForms());
+        model.addAttribute("sendMoneyLocalForm", new SendMoneyForms());
+        model.addAttribute("sendMoneyLocalFormPin", new SendMoneyForms());
+        model.addAttribute("sendMoneyOthersPin", new SendMoneyForms());
+        model.addAttribute("sendMoneyOthersForm", new SendMoneyForms());
 
-        TransactionForms localTxnData = (TransactionForms) session.getAttribute("sendMoneyLocalForm");
+        SendMoneyForms localTxnData = (SendMoneyForms) session.getAttribute("sendMoneyLocalForm");
         model.addAttribute("localTxnData", localTxnData);
         model.addAttribute("submitted", true);
         model.addAttribute("mobileView", false);
@@ -65,9 +81,12 @@ public class SendMoneyController {
     //Process Send Money and return error if any
     @PostMapping("/send-money/local")
     @ResponseBody
-    public String processSendMoneyLocal(@ModelAttribute TransactionForms sendMoneyLocalFormPin, HttpSession session, RedirectAttributes redirectAttributes, Model model) throws UnirestException {
+    public String processSendMoneyLocal(@ModelAttribute SendMoneyForms sendMoneyLocalFormPin,
+                                        HttpSession session, RedirectAttributes redirectAttributes, Model model) throws UnirestException {
         session.setAttribute("sendMoneyLocalFormPin", sendMoneyLocalFormPin);
-        GeneralResponsePayload sendMoneyLocal = sendMoneyService.sendMoneyLocal(session);
+        sendMoneyService.sendMoneyLocal(session);
+
+        GeneralResponsePayload sendMoneyLocal = (GeneralResponsePayload) session.getAttribute("sendMoneyLocalResponse");
         if (sendMoneyLocal.getResponseCode().equals("00")) {
             return "00";
         } else {
@@ -99,17 +118,30 @@ public class SendMoneyController {
 
     //Reload to Confirm OTP div on same page
     @PostMapping("/others-form")
-    public String processSendMoneyOthersFormSubmit(@ModelAttribute("sendMoneyLocalForm") TransactionForms sendMoneyLocalForm, HttpSession session, Model model) throws UnirestException {
-        session.setAttribute("sendMoneyOthersForm", sendMoneyLocalForm);
-
+    public String processSendMoneyOthersFormSubmit(@Valid @ModelAttribute("sendMoneyOthersForm") SendMoneyForms sendMoneyOthersForm, BindingResult result,
+                                                   HttpSession session, Model model) throws UnirestException {
+        session.setAttribute("sendMoneyOthersForm", sendMoneyOthersForm);
+        if (result.hasErrors()) {
+            AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
+            sendMoneyService.getBankList(session);
+            GetBankListPResponsePayload bankList = (GetBankListPResponsePayload) session.getAttribute("getBankListResponse");
+            model.addAttribute("bankListResponse", bankList.getBankList());
+            model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
+            model.addAttribute("sendMoneyLocalFormPin", new SendMoneyForms());
+            model.addAttribute("sendMoneyOthersPin", new SendMoneyForms());
+            model.addAttribute("sendMoneyLocalForm", new SendMoneyForms());
+            model.addAttribute("mobileView", true);
+            model.addAttribute("showOthers", true);
+            return "transactions/send-money";
+        }
         AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
-        model.addAttribute("sendMoneyLocalForm", new TransactionForms());
-        model.addAttribute("sendMoneyLocalFormPin", new TransactionForms());
-        model.addAttribute("sendMoneyOthersPin", new TransactionForms());
-        model.addAttribute("sendMoneyOthersForm", new TransactionForms());
+        model.addAttribute("sendMoneyLocalForm", new SendMoneyForms());
+        model.addAttribute("sendMoneyLocalFormPin", new SendMoneyForms());
+        model.addAttribute("sendMoneyOthersPin", new SendMoneyForms());
+        model.addAttribute("sendMoneyOthersForm", new SendMoneyForms());
 
-        TransactionForms othersTxnData = (TransactionForms) session.getAttribute("sendMoneyOthersForm");
+        SendMoneyForms othersTxnData = (SendMoneyForms) session.getAttribute("sendMoneyOthersForm");
         model.addAttribute("othersTxnData", othersTxnData);
         model.addAttribute("submittedOthers", true);
         model.addAttribute("mobileView", false);
@@ -120,7 +152,7 @@ public class SendMoneyController {
     //Process Send Money to Other Banks and return errors if any
     @PostMapping("/send-money/others")
     @ResponseBody
-    public String processSendMoneyOthers(@ModelAttribute TransactionForms sendMoneyOthersFormPin, HttpSession session, RedirectAttributes redirectAttributes, Model model) throws UnirestException {
+    public String processSendMoneyOthers(@ModelAttribute SendMoneyForms sendMoneyOthersFormPin, HttpSession session, RedirectAttributes redirectAttributes, Model model) throws UnirestException {
         session.setAttribute("sendMoneyOthersFormPin", sendMoneyOthersFormPin);
         GeneralResponsePayload sendMoneyOthers = sendMoneyService.sendMoneyOthers(session);
         if (sendMoneyOthers.getResponseCode().equals("00")) {
@@ -148,5 +180,37 @@ public class SendMoneyController {
             return "invalid";
         }
 
+    }
+
+    @PostMapping("/toggle-local")
+    public String toggleLocal(Model model, HttpSession session) throws UnirestException {
+        AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
+        sendMoneyService.getBankList(session);
+        GetBankListPResponsePayload bankList = (GetBankListPResponsePayload) session.getAttribute("getBankListResponse");
+        model.addAttribute("bankListResponse", bankList.getBankList());
+        model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
+        model.addAttribute("sendMoneyLocalForm", new SendMoneyForms());
+        model.addAttribute("sendMoneyLocalFormPin", new SendMoneyForms());
+        model.addAttribute("sendMoneyOthersPin", new SendMoneyForms());
+        model.addAttribute("sendMoneyOthersForm", new SendMoneyForms());
+        model.addAttribute("mobileView", true);
+        model.addAttribute("showLocal", true);
+        return "transactions/send-money";
+    }
+
+    @PostMapping("/toggle-others")
+    public String toggleOthers(Model model, HttpSession session) throws UnirestException {
+        AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
+        sendMoneyService.getBankList(session);
+        GetBankListPResponsePayload bankList = (GetBankListPResponsePayload) session.getAttribute("getBankListResponse");
+        model.addAttribute("bankListResponse", bankList.getBankList());
+        model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
+        model.addAttribute("sendMoneyLocalForm", new SendMoneyForms());
+        model.addAttribute("sendMoneyLocalFormPin", new SendMoneyForms());
+        model.addAttribute("sendMoneyOthersPin", new SendMoneyForms());
+        model.addAttribute("sendMoneyOthersForm", new SendMoneyForms());
+        model.addAttribute("mobileView", true);
+        model.addAttribute("showOthers", true);
+        return "transactions/send-money";
     }
 }

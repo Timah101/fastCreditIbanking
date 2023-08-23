@@ -9,5 +9,4 @@ public interface SendOtpService {
 
     SendOtpResponsePayload sendOtp(HttpSession session, String purpose, String mobileNumber) throws UnirestException;
 
-    String testSecretKeys();
 }

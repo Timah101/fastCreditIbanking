@@ -1,6 +1,7 @@
 package com.iBanking.iBanking.services;
 
 import com.google.gson.Gson;
+import com.iBanking.iBanking.Forms.SendMoneyForms;
 import com.iBanking.iBanking.Forms.TransactionForms;
 import com.iBanking.iBanking.payload.accout.AccountDetailsResponsePayload;
 import com.iBanking.iBanking.payload.customer.CustomerDetailsResponsePayload;
@@ -38,7 +39,8 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
             GeneralResponsePayload sendMoney;
             SendMoneyLocalRequestPayload requestPayload = new SendMoneyLocalRequestPayload();
 
-            TransactionForms sendMoneyLocalForm = (TransactionForms) session.getAttribute("sendMoneyLocalForm");
+            SendMoneyForms sendMoneyLocalForm = (SendMoneyForms) session.getAttribute("sendMoneyLocalForm");
+            SendMoneyForms sendMoneyLocalFormPin = (SendMoneyForms) session.getAttribute("sendMoneyLocalFormPin");
             CustomerDetailsResponsePayload customerDetails = (CustomerDetailsResponsePayload) session.getAttribute("customerDetailsResponse");
             AccountDetailsResponsePayload accountDetails = (AccountDetailsResponsePayload) session.getAttribute("nameEnquiryLocalResponse");
             TransactionForms login = (TransactionForms) session.getAttribute("loginForm");
@@ -49,7 +51,7 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
             requestPayload.setCreditAccount(sendMoneyLocalForm.getCreditAccount());
             requestPayload.setDebitAccount(sendMoneyLocalForm.getDebitAccount());
             requestPayload.setSecurityAnswer("");
-            requestPayload.setPin(sendMoneyLocalForm.getPin());
+            requestPayload.setPin(sendMoneyLocalFormPin.getPin());
             requestPayload.setBeneficiaryName(accountDetails.getAccountName());
             requestPayload.setNarration(sendMoneyLocalForm.getNarration());
             String requestPayloadJson = gson.toJson(requestPayload);
@@ -104,13 +106,15 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
             GeneralResponsePayload sendMoney;
             SendMoneyOthersRequestPayload requestPayload = new SendMoneyOthersRequestPayload();
 
-            TransactionForms sendMoneyOthersForm = (TransactionForms) session.getAttribute("sendMoneyOthersForm");
-            TransactionForms sendMoneyOthersFormPin = (TransactionForms) session.getAttribute("sendMoneyOthersFormPin");
+            SendMoneyForms sendMoneyOthersForm = (SendMoneyForms) session.getAttribute("sendMoneyOthersForm");
+            SendMoneyForms sendMoneyOthersFormPin = (SendMoneyForms) session.getAttribute("sendMoneyOthersFormPin");
 
             OtherBanksNameEnquiryResponsePayload nameEnquiry = (OtherBanksNameEnquiryResponsePayload) session.getAttribute("otherBanksNameEnquiryResponse");
 
             TransactionForms login = (TransactionForms) session.getAttribute("loginForm");
             requestPayload.setMobileNumber(login.getMobileNumber());
+//            requestPayload.setCre
+            requestPayload.setDebitAccountNumber(sendMoneyOthersForm.getDebitAccount());
             requestPayload.setDestinationBankCode(nameEnquiry.getDestinationInstitutionCode());
             requestPayload.setBeneficiaryAccountNumber(sendMoneyOthersForm.getCreditAccount());
             requestPayload.setAmount(sendMoneyOthersForm.getAmount());

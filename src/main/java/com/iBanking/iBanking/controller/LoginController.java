@@ -48,7 +48,7 @@ public class LoginController {
         try {
             loginService.login(session);
             LoginResponsePayload login = (LoginResponsePayload) session.getAttribute("loginResponse");
-            if (login.getResponseCode().equals("00")) {
+            if (login.getResponseCode().equals("00") || login.getResponseCode().equals("11")) {
                 session.setAttribute("loggedIn", true);
 
                 CompletableFuture<CustomerDetailsResponsePayload> customerDetailsFuture = CompletableFuture.supplyAsync(() -> {

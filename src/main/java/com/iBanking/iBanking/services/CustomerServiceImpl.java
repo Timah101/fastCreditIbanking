@@ -53,11 +53,12 @@ public class CustomerServiceImpl implements CustomerService {
                 .header("Authorization", "Bearer " + accessToken)
                 .body(requestPayloadJson).asString();
         String requestBody = jsonResponse.getBody();
+        log.info("CUSTOMER DETAILS DECRYPTED RESPONSE PAYLOAD : {}", requestBody);
         if (jsonResponse.getStatus() != 200) {
             customerDetailsResponse = new CustomerDetailsResponsePayload();
             customerDetailsResponse.setResponseCode("99");
             customerDetailsResponse.setRegistered("99");
-            customerDetailsResponse.setResponseMessage("99");
+            customerDetailsResponse.setResponseMessage("Error Occurred");
             log.info(" ERROR WHILE GETTING CUSTOMER DETAILS {}", jsonResponse.getStatus());
             return customerDetailsResponse;
         }
@@ -107,6 +108,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .header("Authorization", "Bearer " + accessToken)
                 .body(requestPayloadJsonString).asString();
         String requestBody = jsonResponse.getBody();
+        log.info("REGISTER CUSTOMER RESPONSE DECRYPTED PAYLOAD : {}", requestBody);
         if (jsonResponse.getStatus() != 200) {
             registerCustomer = new RegisterCustomerResponsePayload();
 //            customerDetailsResponse.setResponseCode("500");
@@ -132,53 +134,20 @@ public class CustomerServiceImpl implements CustomerService {
         CreateCustomerWithoutBvnRequestPayload requestPayload = new CreateCustomerWithoutBvnRequestPayload();
         TransactionForms createForm1 = (TransactionForms) session.getAttribute("createAccountForm1");
         TransactionForms createForm2 = (TransactionForms) session.getAttribute("createAccountForm2");
-        TransactionForms createForm3 = (TransactionForms) session.getAttribute("createAccountForm3");
-        TransactionForms createForm4 = (TransactionForms) session.getAttribute("createAccountForm4");
         String passport = (String) session.getAttribute("passportSession");
-        String signature = (String) session.getAttribute("signatureSession");
-        String utility = (String) session.getAttribute("utilitySession");
+
         requestPayload.setMobileNumber(createForm1.getMobileNumber());
         requestPayload.setEmailAddress(createForm1.getEmail());
-        String createOtpLastPage = (String) session.getAttribute("createOtpLastPage");
-        String createOtpFirstPage = (String) session.getAttribute("confirmOtp");
-        String otp;
-        System.out.println(" OTP IN FIRST PAGE : " + createOtpFirstPage);
-        System.out.println(" OTP IN LAST PAGE : " + createOtpLastPage);
-        if (createOtpLastPage.isEmpty()) {
-            otp = createOtpFirstPage;
-        } else {
-            otp = createOtpLastPage;
-        }
-        requestPayload.setOtp(otp);
-        requestPayload.setTitle(createForm2.getTitle());
         requestPayload.setGender(createForm2.getGender());
         requestPayload.setFirstName(createForm2.getFirstName());
         requestPayload.setLastName(createForm2.getLastName());
-        requestPayload.setOtherName(createForm2.getOtherName());
         requestPayload.setMaritalStatus(createForm2.getMaritalStatus());
         requestPayload.setDob(createForm2.getDob());
-        requestPayload.setNationality(createForm2.getNationality());
-        requestPayload.setPassportPhoto(passport);
-        requestPayload.setSignatureImage(signature);
-        requestPayload.setIdType(createForm3.getIdType());
-        requestPayload.setIdNumber(createForm3.getIdNumber());
-        String utilityBill = "";
-        if (utility != null) {
-            utilityBill = "yes";
-        }
-        requestPayload.setUtilityBill(utilityBill);
-        requestPayload.setUtilityBillImage(utility);
-        requestPayload.setIppisNumber(createForm3.getIppisNumber());
-        requestPayload.setResidenceState(createForm3.getResidenceState());
-        requestPayload.setResidenceCity(createForm3.getResidenceCity());
-        requestPayload.setEmploymentStatus(createForm4.getEmploymentStatus());
-        requestPayload.setEmployerName(createForm4.getEmployerName());
-        requestPayload.setEmployerAddress(createForm4.getEmployerAddress());
-        requestPayload.setEmployerCity(createForm4.getEmployerCity());
-        requestPayload.setOccupation(createForm4.getOccupation());
-        requestPayload.setEmploymentDate(createForm4.getEmploymentDate());
-        requestPayload.setRetirementAge(createForm4.getRetirementAge());
-        requestPayload.setReferredBy(createForm4.getReferredBy());
+        requestPayload.setPassportPhoto("passport");
+        requestPayload.setIdType(createForm2.getIdType());
+        requestPayload.setIdNumber(createForm2.getIdNumber());
+        requestPayload.setSector("1000");
+        requestPayload.setIndustry("1");
 
 
         String requestPayloadJson = gson.toJson(requestPayload);
@@ -196,11 +165,14 @@ public class CustomerServiceImpl implements CustomerService {
                 .header("Authorization", "Bearer " + accessToken)
                 .body(requestPayloadJsonString).asString();
         String requestBody = jsonResponse.getBody();
+
+        log.info("CREATE CUSTOMER DECRYPTED RESPONSE PAYLOAD : {}", requestBody);
         if (jsonResponse.getStatus() != 200) {
             createCustomer = new CreateCustomerResponsePayload();
-//            customerDetailsResponse.setResponseCode("500");
-//            customerDetailsResponse.setResponseMessage("Error Occured");
+            createCustomer.setResponseCode("500");
+            createCustomer.setResponseMessage("Error Occured");
             log.info(" ERROR WHILE CREATE CUSTOMER {}", jsonResponse.getStatus());
+            session.setAttribute("registerCustomerResponse", createCustomer);
             return createCustomer;
         }
 
@@ -263,10 +235,96 @@ public class CustomerServiceImpl implements CustomerService {
         return resetPassword;
     }
 
-    public static void main(String[] args) throws UnirestException {
+    @Override
+    public GeneralResponsePayload resetPin(HttpSession session) throws UnirestException {
+        String accessToken = authenticationApi.getAccessToken();
+        session.setAttribute("accessTokenCustomer", accessToken);
+        GeneralResponsePayload resetPin;
+        ResetPasswordRequestPayload requestPayload = new ResetPasswordRequestPayload();
+        TransactionForms resetForm1 = (TransactionForms) session.getAttribute("pinResetForm1");
+        TransactionForms resetOtp = (TransactionForms) session.getAttribute("resetOtpPinForm");
+        TransactionForms resetForm2 = (TransactionForms) session.getAttribute("resetPinForm2");
 
-        CustomerService customerService1 = new CustomerServiceImpl();
-        CustomerDetailsRequestPayload requestPayload = new CustomerDetailsRequestPayload();
-//        customerService1.registerCustomer();
+        requestPayload.setMobileNumber(resetForm1.getMobileNumber());
+        requestPayload.setOtp(resetOtp.getOtp());
+        requestPayload.setSecurityQuestion(resetForm2.getSecurityQuestion());
+        requestPayload.setSecurityAnswer(resetForm2.getSecurityAnswer());
+        requestPayload.setNewPassword(resetForm2.getPin());
+        String requestPayloadJson = gson.toJson(requestPayload);
+
+        //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
+        String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
+        log.info("PIN RESET REQUEST PAYLOAD : {}", requestPayloadJson);
+        //CALL THE CUSTOMER DETAILS ENDPOINT
+        String requestPayloadString = gson.toJson(encryptResponsePayload1);
+        HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + PIN_RESET)
+                .header("accept", "application/json")
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + accessToken)
+                .body(requestPayloadString).asString();
+        String requestBody = jsonResponse.getBody();
+        if (jsonResponse.getStatus() != 200) {
+            resetPin = new GeneralResponsePayload();
+            resetPin.setResponseCode("99");
+            resetPin.setResponseMessage("error");
+            log.info(" ERROR WHILE RESETTING PIN {}", jsonResponse.getStatus());
+            session.setAttribute("resetPinResponse", resetPin);
+            return resetPin;
+        }
+
+        // PASS ENCRYPTED RESPONSE FROM CUSTOMER DETAILS TO DECRYPT API
+        DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
+        String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+        resetPin = gson.fromJson(decrypt, GeneralResponsePayload.class);
+        //LOG REQUEST AND RESPONSE
+        log.info("RESET PIN RESPONSE PAYLOAD : {}", gson.toJson(resetPin));
+        session.setAttribute("resetPinResponse", resetPin);
+        return resetPin;
     }
+
+    @Override
+    public GeneralResponsePayload updateCustomerDetails(HttpSession session) throws UnirestException {
+        String accessToken = authenticationApi.getAccessToken();
+        session.setAttribute("accessTokenCustomer", accessToken);
+        GeneralResponsePayload updateCustomer;
+        UpdateCustomerRequestPayload requestPayload = new UpdateCustomerRequestPayload();
+        TransactionForms resetForm1 = (TransactionForms) session.getAttribute("pinResetForm1");
+        TransactionForms resetOtp = (TransactionForms) session.getAttribute("resetOtpPinForm");
+        TransactionForms resetForm2 = (TransactionForms) session.getAttribute("resetPinForm2");
+
+        requestPayload.setMobileNumber(resetForm1.getMobileNumber());
+        String requestPayloadJson = gson.toJson(requestPayload);
+
+        //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
+        String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
+        EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
+        log.info("CUSTOMER UPDATE REQUEST PAYLOAD : {}", requestPayloadJson);
+        //CALL THE CUSTOMER DETAILS ENDPOINT
+        String requestPayloadString = gson.toJson(encryptResponsePayload1);
+        HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + CUSTOMER_UPDATE)
+                .header("accept", "application/json")
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + accessToken)
+                .body(requestPayloadString).asString();
+        String requestBody = jsonResponse.getBody();
+        if (jsonResponse.getStatus() != 200) {
+            updateCustomer = new GeneralResponsePayload();
+            updateCustomer.setResponseCode("99");
+            updateCustomer.setResponseMessage("error");
+            log.info(" ERROR WHILE PROCESSING CUSTOMER UPDATE {}", jsonResponse.getStatus());
+            session.setAttribute("updateCustomerResponse", updateCustomer);
+            return updateCustomer;
+        }
+
+        // PASS ENCRYPTED RESPONSE FROM CUSTOMER DETAILS TO DECRYPT API
+        DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
+        String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+        updateCustomer = gson.fromJson(decrypt, GeneralResponsePayload.class);
+        //LOG REQUEST AND RESPONSE
+        log.info("CUSTOMER UPDATE RESPONSE PAYLOAD : {}", gson.toJson(updateCustomer));
+        session.setAttribute("updateCustomerResponse", updateCustomer);
+        return updateCustomer;
+    }
+
 }

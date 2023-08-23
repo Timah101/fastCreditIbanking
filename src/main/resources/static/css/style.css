@@ -36226,6 +36226,20 @@ select {
     -webkit-appearance: listbox !important;
 }
 
+.card-dashboard {
+    /*width : 300px;*/
+    background-position: center;
+    margin-bottom: 1.875rem;
+    background-color: white;
+    transition: all .5s ease-in-out;
+    position: relative;
+    border: 1px solid white;
+    border-radius: 5px;
+    box-shadow: 0px 5px 5px 0px gray;
+    height: 220px;
+    padding: 20px;
+}
+
 .card {
     /*width : 300px;*/
     background-position: center;
@@ -36236,7 +36250,7 @@ select {
     border: 1px solid white;
     border-radius: 5px;
     box-shadow: 0px 5px 5px 0px gray;
-    height: calc(100% - 50px);
+    /*height: 220px;*/
     padding: 20px;
 }
 

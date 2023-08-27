@@ -23,6 +23,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Base64;
 
+import static com.iBanking.iBanking.utils.Generics.encodeMultipartFileToBase64;
+
 @Slf4j
 @Controller
 public class CreateAccountController {
@@ -80,7 +82,7 @@ public class CreateAccountController {
     public String processCreateAccount2(@RequestParam("passport") MultipartFile passport,
                                         TransactionForms createAccountForm2, HttpSession session, RedirectAttributes redirectAttributes) throws IOException, UnirestException {
         session.setAttribute("createAccountForm2", createAccountForm2);
-        String passportBase64 = processImageToBase64(passport);
+        String passportBase64 = encodeMultipartFileToBase64(passport);
         session.setAttribute("passportSession", passportBase64);
         customerService.createCustomer(session);
         final CreateCustomerResponsePayload customer = customerService.createCustomer(session);

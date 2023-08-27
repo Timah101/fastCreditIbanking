@@ -3,6 +3,7 @@ package com.iBanking.iBanking.services;
 import com.iBanking.iBanking.payload.customer.CreateCustomerResponsePayload;
 import com.iBanking.iBanking.payload.customer.CustomerDetailsResponsePayload;
 import com.iBanking.iBanking.payload.customer.RegisterCustomerResponsePayload;
+import com.iBanking.iBanking.payload.customer.UpdateCustomerRequestPayload;
 import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
@@ -17,5 +18,5 @@ public interface CustomerService {
 
     GeneralResponsePayload resetPassword(HttpSession session) throws UnirestException;
     GeneralResponsePayload resetPin(HttpSession session) throws UnirestException;
-    GeneralResponsePayload updateCustomerDetails(HttpSession session) throws UnirestException;
+    GeneralResponsePayload updateCustomerDetails(HttpSession session, UpdateCustomerRequestPayload requestPayload) throws UnirestException;
 }

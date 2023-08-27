@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpSession;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.iBanking.iBanking.utils.ApiPaths.*;
@@ -49,7 +50,6 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
             requestPayload.setAmount(airtimeForm.getAmount());
             requestPayload.setPin(airtimeFormPin.getPin());
             requestPayload.setChannelName("ibank");
-            requestPayload.setToken("ttyuioknnnm");
             String requestPayloadJson = gson.toJson(requestPayload);
 
             //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
@@ -152,9 +152,9 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
 
     @Override
     public GeneralResponsePayload dataTopUp(HttpSession session) {
+        GeneralResponsePayload dataTopUp = null;
         try {
             String accessToken = (String) session.getAttribute("accessToken");
-            GeneralResponsePayload dataTopUp;
             DataRequestPayload requestPayload = new DataRequestPayload();
             DataTransactionForms dataForm = (DataTransactionForms) session.getAttribute("dataForm");
             PinForm dataFormPin = (PinForm) session.getAttribute("dataFormPin");
@@ -164,6 +164,7 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
             if (dataForm != null) {
                 if (dataForm.getDataPlans() != null) {
                     String[] dataFormSplit = dataForm.getDataPlans().split(",");
+                    System.out.println("Data Form " + Arrays.toString(dataFormSplit));
                     if (dataFormSplit.length > 1) {
                         dataPlanId = dataFormSplit;
                     }
@@ -176,7 +177,7 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
             requestPayload.setTelco(dataForm.getTelco());
             requestPayload.setAmount(dataForm.getAmount());
             requestPayload.setPin(dataFormPin.getPin());
-            requestPayload.setDataPlanId(dataPlanId[1]);
+            requestPayload.setDataPlanId(dataPlanId[0]);
             requestPayload.setToken("ttyuioknnnm");
             String requestPayloadJson = gson.toJson(requestPayload);
 
@@ -185,7 +186,8 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
             EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
             encryptResponsePayload1.setRequest(encryptResponsePayload);
 
-            String requestPayloadJsonString = gson.toJson(encryptResponsePayload);
+            encryptResponsePayload1.setRequest(encryptResponsePayload);
+            String requestPayloadJsonString = gson.toJson(encryptResponsePayload1);
             log.info("DATA TOP UP REQUEST PAYLOAD : {}", requestPayloadJson);
             log.info("DATA TOP UP ENCRYPTED REQUEST PAYLOAD : {}", requestPayloadJsonString);
             HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + DATA_TOP_UP)
@@ -198,13 +200,7 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
             if (jsonResponse.getStatus() == 200 && responseBody != null && responseBody.contains("response")) {
                 DecryptRequestPayload decryptRequestPayload = gson.fromJson(responseBody, DecryptRequestPayload.class);
                 String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
-                if (decrypt != null) {
-                    dataTopUp = gson.fromJson(decrypt, GeneralResponsePayload.class);
-                } else {
-                    dataTopUp = new GeneralResponsePayload();
-                    dataTopUp.setResponseCode("199");
-                    dataTopUp.setResponseMessage("error occurred");
-                }
+                dataTopUp = gson.fromJson(decrypt, GeneralResponsePayload.class);
                 log.info("DECRYPTED DATA TOP UP RESPONSE API : {}", decrypt);
             } else {
                 dataTopUp = new GeneralResponsePayload();
@@ -216,7 +212,9 @@ public class AirtimeDataServiceImpl implements AirtimeDataService {
             return dataTopUp;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Error occurred");
+            log.info("ERROR IN CATCH {}", e.getMessage());
+            session.setAttribute("dataTopUpResponse", dataTopUp);
+            return dataTopUp;
         }
     }
 }

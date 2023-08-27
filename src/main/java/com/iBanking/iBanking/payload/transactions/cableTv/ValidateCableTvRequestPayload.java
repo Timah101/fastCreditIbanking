@@ -7,5 +7,5 @@ import lombok.Data;
 public class ValidateCableTvRequestPayload {
     private String biller;
     private String requestId = Generics.generateRequestId();
-    private String customerNo;
+    private String smartCard;
 }

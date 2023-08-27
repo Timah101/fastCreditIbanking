@@ -30,6 +30,6 @@ public class CustomerDetailsResponsePayload {
     private String registered;
     private String bvn;
     private String ippisNumber;
-    private List<MissingFieldsPayload> missingFields;
+    private String [] missingFields;
     private String remark;
 }

@@ -1,8 +1,12 @@
 package com.iBanking.iBanking.utils;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.security.SecureRandom;
+import java.util.Base64;
 
 @Component
 public class Generics {
@@ -18,5 +22,10 @@ public class Generics {
             uniqueId.append(CHARACTERS.charAt(randomIndex));
         }
         return uniqueId.toString();
+    }
+
+    public static String encodeMultipartFileToBase64(MultipartFile multipartFile) throws IOException {
+        byte[] imageBytes = multipartFile.getBytes();
+        return Base64.getEncoder().encodeToString(imageBytes);
     }
 }

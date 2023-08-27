@@ -88,11 +88,12 @@ public class PayBillsServiceImpl implements PayBillsService {
     public ValidateCableTvResponsePayload validateCableTv(HttpSession session, String biller, String cardNumber) throws UnirestException {
         try {
             String accessToken = (String) session.getAttribute("accessToken");
+            new ValidateCableTvResponsePayload();
             ValidateCableTvResponsePayload validateCableTv;
             ValidateCableTvRequestPayload requestPayload = new ValidateCableTvRequestPayload();
 
             requestPayload.setBiller(biller);
-            requestPayload.setCustomerNo(cardNumber);
+            requestPayload.setSmartCard(cardNumber);
             String requestPayloadJson = gson.toJson(requestPayload);
             //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD TO ENCRYPT
             String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
@@ -109,25 +110,17 @@ public class PayBillsServiceImpl implements PayBillsService {
                     .body(requestPayloadJsonString).asString();
             String responseBody = jsonResponse.getBody();
 
-            log.info("VALIDATE CABLE API RESPONSE PAYLOAD : {}", responseBody);
-
+            log.info("VALIDATE CABLE API ENCRYPTED RESPONSE PAYLOAD : {}", responseBody);
             if (jsonResponse.getStatus() == 200 && responseBody != null && responseBody.contains("response")) {
                 DecryptRequestPayload decryptRequestPayload = gson.fromJson(responseBody, DecryptRequestPayload.class);
                 String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
-                if (decrypt != null) {
-                    validateCableTv = gson.fromJson(decrypt, ValidateCableTvResponsePayload.class);
-                } else {
-                    validateCableTv = new ValidateCableTvResponsePayload();
-                    validateCableTv.setResponseCode("199");
-                    validateCableTv.setCardHolderName("error occurred");
-                }
-                log.info("DECRYPTED VALIDATE CABLE RESPONSE API : {}", decrypt);
+                log.info("VALIDATE CABLE API DECRYPTED RESPONSE PAYLOAD : {}", decrypt);
+                validateCableTv = gson.fromJson(decrypt, ValidateCableTvResponsePayload.class);
             } else {
                 validateCableTv = new ValidateCableTvResponsePayload();
                 validateCableTv.setResponseCode("199");
-                validateCableTv.setCardHolderName("error occurred");
+                validateCableTv.setCardholderName("error occurred");
             }
-            log.info("VALIDATE CABLE RESPONSE PAYLOAD : {}", gson.toJson(validateCableTv));
             session.setAttribute("validateCableTvResponse", validateCableTv);
             return validateCableTv;
         } catch (Exception e) {
@@ -141,13 +134,14 @@ public class PayBillsServiceImpl implements PayBillsService {
     public CableTvPaymentResponse cableTvPayment(HttpSession session, String biller) throws UnirestException {
         try {
             String accessToken = (String) session.getAttribute("accessToken");
-            CableTvPaymentResponse cableTvPayment = new CableTvPaymentResponse();
+            CableTvPaymentResponse cableTvPayment;
             CableTvPaymentRequestPayload requestPayload = new CableTvPaymentRequestPayload();
 
             TransactionForms form;
             TransactionForms formPin;
             String billerId;
             ValidateCableTvResponsePayload customerName;
+            TransactionForms loginForm = (TransactionForms) session.getAttribute("loginForm");
 
             if (biller.equalsIgnoreCase("GOTV")) {
                 form = (TransactionForms) session.getAttribute("gotvForm");
@@ -172,11 +166,11 @@ public class PayBillsServiceImpl implements PayBillsService {
             }
             log.info("Biller Splitted {} ", form.getDataPlans());
             requestPayload.setBillerId(billerIdSplitted);
-            requestPayload.setMobileNumber(form.getMobileNumber());
+            requestPayload.setMobileNumber(loginForm.getMobileNumber());
             requestPayload.setSmartCard(form.getSmartCardNumber());
             requestPayload.setDebitAccount(form.getDebitAccount());
             requestPayload.setAmount(form.getAmount());
-            requestPayload.setCustomerName(String.valueOf(customerName));
+            requestPayload.setCustomerName(customerName.getCardholderName());
             requestPayload.setPin(formPin.getPin());
 
             String requestPayloadJson = gson.toJson(requestPayload);

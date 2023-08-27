@@ -116,7 +116,7 @@ public class PayBillsController {
         ValidateCableTvResponsePayload validateCableTv = payBillsService.validateCableTv(session, biller, cardNumber);
         if (validateCableTv.getResponseCode().equals("00")) {
             log.info("NAME ENQUIRY GOTV {}", validateCableTv);
-            String name = validateCableTv.getCardHolderName();
+            String name = validateCableTv.getCardholderName();
             model.addAttribute("name", name);
             return name;
         } else {
@@ -205,7 +205,7 @@ public class PayBillsController {
         ValidateCableTvResponsePayload validateCableTv = payBillsService.validateCableTv(session, biller, cardNumber);
         if (validateCableTv.getResponseCode().equals("00")) {
             log.info("NAME ENQUIRY DSTV {}", validateCableTv);
-            String name = validateCableTv.getCardHolderName();
+            String name = validateCableTv.getCardholderName();
             model.addAttribute("name", name);
             return name;
         } else {

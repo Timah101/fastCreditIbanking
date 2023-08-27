@@ -18,8 +18,8 @@ public class SuccessController {
     }
 
     @PostMapping("/success")
-    public String processSuccess(Model model, HttpSession session) throws UnirestException {
+    public String submitForm() {
 
-        return "redirect:/dashboard";
+        return "redirect:/success";
     }
 }

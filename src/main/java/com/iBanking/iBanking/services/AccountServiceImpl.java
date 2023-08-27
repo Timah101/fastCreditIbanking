@@ -121,6 +121,10 @@ public class AccountServiceImpl implements AccountService {
                         accountBalanceResponse = new AccountDetailsListResponsePayload();
                         AccountList accountList = new AccountList();
                         List<AccountList> accountListArrayList = new ArrayList<>();
+                        accountList.setAccountName("");
+                        accountList.setAccountNumber("");
+                        accountList.setAvailableBalance("");
+                        accountList.setStatus("");
                         accountListArrayList.add(accountList);
                         accountBalanceResponse.setResponseCode("00");
                         accountBalanceResponse.setAccountList(accountListArrayList);
@@ -129,6 +133,10 @@ public class AccountServiceImpl implements AccountService {
                     accountBalanceResponse = new AccountDetailsListResponsePayload();
                     AccountList accountList = new AccountList();
                     List<AccountList> accountListArrayList = new ArrayList<>();
+                    accountList.setAccountName("");
+                    accountList.setAccountNumber("");
+                    accountList.setAvailableBalance("");
+                    accountList.setStatus("");
                     accountListArrayList.add(accountList);
                     accountBalanceResponse.setAccountList(accountListArrayList);
                     accountBalanceResponse.setResponseCode("199");
@@ -139,6 +147,10 @@ public class AccountServiceImpl implements AccountService {
                 accountBalanceResponse = new AccountDetailsListResponsePayload();
                 AccountList accountList = new AccountList();
                 List<AccountList> accountListArrayList = new ArrayList<>();
+                accountList.setAccountName("");
+                accountList.setAccountNumber("");
+                accountList.setAvailableBalance("");
+                accountList.setStatus("");
                 accountListArrayList.add(accountList);
                 accountBalanceResponse.setAccountList(accountListArrayList);
                 accountBalanceResponse.setResponseCode("199");

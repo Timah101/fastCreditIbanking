@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 public class ValidateCableTvResponsePayload {
     private String responseCode;
-    private String cardHolderName;
+    private String cardholderName;
     private String otherCustomerInfo;
+    private String responseMessage;
 }

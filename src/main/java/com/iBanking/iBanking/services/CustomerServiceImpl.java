@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 
+import java.util.Map;
+
 import static com.iBanking.iBanking.utils.ApiPaths.*;
 
 @Slf4j
@@ -31,48 +33,57 @@ public class CustomerServiceImpl implements CustomerService {
     //GET CUSTOMER DETAILS
     @Override
     public CustomerDetailsResponsePayload getCustomerDetails(HttpSession session, String mobileNUmber) throws UnirestException {
-        String accessToken = authenticationApi.getAccessToken();
-        session.setAttribute("accessTokenCustomer", accessToken);
         CustomerDetailsResponsePayload customerDetailsResponse;
-        CustomerDetailsRequestPayload customerDetailsRequestPayload = new CustomerDetailsRequestPayload();
-        customerDetailsRequestPayload.setMobileNumber(mobileNUmber);
-        String requestPayload = gson.toJson(customerDetailsRequestPayload);
+        try {
+            String accessToken = authenticationApi.getAccessToken();
+            session.setAttribute("accessTokenCustomer", accessToken);
+            CustomerDetailsRequestPayload customerDetailsRequestPayload = new CustomerDetailsRequestPayload();
+            customerDetailsRequestPayload.setMobileNumber(mobileNUmber);
+            String requestPayload = gson.toJson(customerDetailsRequestPayload);
 
-        //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
-        String encryptResponsePayload = authenticationApi.encryptPayload(requestPayload);
-        EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
-        encryptResponsePayload1.setRequest(encryptResponsePayload);
-        log.info("CUSTOMER DETAILS REQUEST PAYLOAD : {}", requestPayload);
+            //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
+            String encryptResponsePayload = authenticationApi.encryptPayload(requestPayload);
+            EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
+            encryptResponsePayload1.setRequest(encryptResponsePayload);
+            log.info("CUSTOMER DETAILS REQUEST PAYLOAD : {}", requestPayload);
 
-        //CALL THE CUSTOMER DETAILS ENDPOINT
-        String requestPayloadJson = gson.toJson(encryptResponsePayload1);
+            //CALL THE CUSTOMER DETAILS ENDPOINT
+            String requestPayloadJson = gson.toJson(encryptResponsePayload1);
 
-        HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + CUSTOMER_DETAILS)
-                .header("accept", "application/json")
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + accessToken)
-                .body(requestPayloadJson).asString();
-        String requestBody = jsonResponse.getBody();
-        log.info("CUSTOMER DETAILS DECRYPTED RESPONSE PAYLOAD : {}", requestBody);
-        if (jsonResponse.getStatus() != 200) {
+            HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + CUSTOMER_DETAILS)
+                    .header("accept", "application/json")
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", "Bearer " + accessToken)
+                    .body(requestPayloadJson).asString();
+            String requestBody = jsonResponse.getBody();
+            log.info("CUSTOMER DETAILS DECRYPTED RESPONSE PAYLOAD : {}", requestBody);
+            if (jsonResponse.getStatus() != 200) {
+                customerDetailsResponse = new CustomerDetailsResponsePayload();
+                customerDetailsResponse.setResponseCode("99");
+                customerDetailsResponse.setRegistered("99");
+                customerDetailsResponse.setResponseMessage("Error Occurred");
+                log.info(" ERROR WHILE GETTING CUSTOMER DETAILS {}", jsonResponse.getStatus());
+                return customerDetailsResponse;
+            }
+
+            // PASS ENCRYPTED RESPONSE TO DECRYPT API
+            DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
+            String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+            customerDetailsResponse = gson.fromJson(decrypt, CustomerDetailsResponsePayload.class);
+            //LOG REQUEST AND RESPONSE
+            log.info("CUSTOMER DETAILS RESPONSE PAYLOAD : {}", gson.toJson(customerDetailsResponse));
+            session.setAttribute("customerDetailsResponse", customerDetailsResponse);
+            return customerDetailsResponse;
+        } catch (Exception ex) {
+            ex.printStackTrace();
             customerDetailsResponse = new CustomerDetailsResponsePayload();
             customerDetailsResponse.setResponseCode("99");
             customerDetailsResponse.setRegistered("99");
             customerDetailsResponse.setResponseMessage("Error Occurred");
-            log.info(" ERROR WHILE GETTING CUSTOMER DETAILS {}", jsonResponse.getStatus());
+            session.setAttribute("customerDetailsResponse", customerDetailsResponse);
+            log.info(" ERROR WHILE GETTING CUSTOMER DETAILS {}", ex.getMessage());
             return customerDetailsResponse;
         }
-
-        // PASS ENCRYPTED RESPONSE TO DECRYPT API
-        DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
-        String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
-        customerDetailsResponse = gson.fromJson(decrypt, CustomerDetailsResponsePayload.class);
-
-        //LOG REQUEST AND RESPONSE
-
-        log.info("CUSTOMER DETAILS RESPONSE PAYLOAD : {}", gson.toJson(customerDetailsResponse));
-        session.setAttribute("customerDetailsResponse", customerDetailsResponse);
-        return customerDetailsResponse;
     }
 
     @Override
@@ -284,30 +295,30 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public GeneralResponsePayload updateCustomerDetails(HttpSession session) throws UnirestException {
+    public GeneralResponsePayload updateCustomerDetails(HttpSession session, UpdateCustomerRequestPayload requestPayload) throws UnirestException {
         String accessToken = authenticationApi.getAccessToken();
         session.setAttribute("accessTokenCustomer", accessToken);
         GeneralResponsePayload updateCustomer;
-        UpdateCustomerRequestPayload requestPayload = new UpdateCustomerRequestPayload();
-        TransactionForms resetForm1 = (TransactionForms) session.getAttribute("pinResetForm1");
-        TransactionForms resetOtp = (TransactionForms) session.getAttribute("resetOtpPinForm");
-        TransactionForms resetForm2 = (TransactionForms) session.getAttribute("resetPinForm2");
-
-        requestPayload.setMobileNumber(resetForm1.getMobileNumber());
+        TransactionForms registerForm1 = (TransactionForms) session.getAttribute("registerForm1");
+        requestPayload.setMobileNumber(registerForm1.getMobileNumber());
         String requestPayloadJson = gson.toJson(requestPayload);
 
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
         String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
         EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
+        encryptResponsePayload1.setRequest(encryptResponsePayload);
         log.info("CUSTOMER UPDATE REQUEST PAYLOAD : {}", requestPayloadJson);
         //CALL THE CUSTOMER DETAILS ENDPOINT
         String requestPayloadString = gson.toJson(encryptResponsePayload1);
+        log.info("CUSTOMER UPDATE ENCRYPTED REQUEST PAYLOAD : {}", requestPayloadString);
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + CUSTOMER_UPDATE)
                 .header("accept", "application/json")
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + accessToken)
                 .body(requestPayloadString).asString();
         String requestBody = jsonResponse.getBody();
+        log.info("CUSTOMER UPDATE DECRYPTED RESPONSE PAYLOAD : {}", requestBody);
+        log.info("CUSTOMER UPDATE DECRYPTED RESPONSE STATUS PAYLOAD : {}", jsonResponse.getStatus());
         if (jsonResponse.getStatus() != 200) {
             updateCustomer = new GeneralResponsePayload();
             updateCustomer.setResponseCode("99");

@@ -1,8 +1,12 @@
 package com.iBanking.iBanking.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.iBanking.iBanking.Forms.TransactionForms;
 import com.iBanking.iBanking.payload.customer.CustomerDetailsResponsePayload;
 import com.iBanking.iBanking.payload.SendOtpResponsePayload;
+import com.iBanking.iBanking.payload.customer.UpdateCustomerRequestPayload;
+import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
 import com.iBanking.iBanking.services.CustomerService;
 import com.iBanking.iBanking.payload.customer.RegisterCustomerResponsePayload;
 import com.iBanking.iBanking.services.SendOtpService;
@@ -11,13 +15,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.Reader;
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Map;
+
+import static com.iBanking.iBanking.utils.Generics.encodeMultipartFileToBase64;
 
 @Controller
 @Slf4j
@@ -28,11 +37,63 @@ public class RegisterCustomerController {
     CustomerService customerService;
     @Autowired
     SendOtpService otpService;
+    @Autowired
+    Gson gson;
 
     @GetMapping("/register")
     public String showRegister1(Model model) {
         model.addAttribute("registerForm1", new TransactionForms());
         return "register/register-1";
+    }
+
+    @GetMapping("/update-customer")
+    public String updateCustomer(Model model, HttpSession session) {
+        CustomerDetailsResponsePayload customerDetailsResponse = (CustomerDetailsResponsePayload) session.getAttribute("customerDetailsResponse");
+        model.addAttribute("updateCustomer", customerDetailsResponse.getMissingFields());
+        return "register/update-customer";
+    }
+
+    @PostMapping("/update-customer")
+    public String processUpdateCustomer(@RequestParam Map<String, String> updateCustomerList, @RequestParam(name = "passportPhoto", required = false) MultipartFile passport,
+                                        HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException, IOException {
+        session.setAttribute("updateCustomerRequest", updateCustomerList);
+        UpdateCustomerRequestPayload requestPayload = new UpdateCustomerRequestPayload();
+        for (Map.Entry<String, String> entry : updateCustomerList.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            System.out.println("Key: " + key + " ,Value : " + value);
+            if (key.contains("industry")) {
+                requestPayload.setIndustry(value);
+            } else if (key.contains("bvn")) {
+                requestPayload.setBvn(value);
+            } else if (key.contains("idType")) {
+                requestPayload.setIdType(value);
+            } else if (key.contains("idNumber")) {
+                requestPayload.setIdNumber(value);
+            } else if (key.contains("idImage")) {
+                requestPayload.setIdImage(value);
+            } else if (key.contains("passportPhoto") || passport.getSize() > 0) {
+//                String s = encodeMultipartFileToBase64(passport);
+                requestPayload.setPassportPhoto(value);
+            } else if (key.contains("marital")) {
+                requestPayload.setMaritalStatus(value);
+            } else if (key.contains("sector")) {
+                requestPayload.setSector(value);
+            } else if (key.contains("email")) {
+                requestPayload.setEmailAddress(value);
+            }
+            System.out.println(requestPayload);
+
+        }
+        GeneralResponsePayload updateCustomerDetails = customerService.updateCustomerDetails(session, requestPayload);
+        System.out.println("Update Customer Details Response " + updateCustomerDetails);
+        if (updateCustomerDetails.getResponseCode().equals("00")) {
+            return "redirect:/register/confirm-otp";
+        } else {
+            String customErrorMessage = updateCustomerDetails.getResponseMessage();
+            redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
+            return "redirect:/register/update-customer";
+        }
     }
 
     @PostMapping("/register")
@@ -48,6 +109,9 @@ public class RegisterCustomerController {
             redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);
             return "redirect:/register";
         } else {
+            if (customerDetails.getMissingFields().length > 1) {
+                return "redirect:/update-customer";
+            }
             if (customerDetails.getRegistered().equals("true")) {
                 String customErrorMessage = "Customer with Mobile Number " + registerForm11.getMobileNumber() + " is already registered, kindly proceed to login ";
                 redirectAttributes.addFlashAttribute("errorMessage", customErrorMessage);

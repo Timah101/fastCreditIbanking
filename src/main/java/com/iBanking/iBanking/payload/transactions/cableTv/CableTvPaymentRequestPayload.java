@@ -13,8 +13,8 @@ public class CableTvPaymentRequestPayload {
     private String debitAccount;
     private String amount;
     private String productId;
-    private String invoicePeriod;
+    private String invoicePeriod = "1";
     private String customerName;
     private String pin;
-    private String token = "tyrueieoe";
+
 }

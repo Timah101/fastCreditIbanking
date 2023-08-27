@@ -50,7 +50,6 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
             requestPayload.setAmount(sendMoneyLocalForm.getAmount());
             requestPayload.setCreditAccount(sendMoneyLocalForm.getCreditAccount());
             requestPayload.setDebitAccount(sendMoneyLocalForm.getDebitAccount());
-            requestPayload.setSecurityAnswer("");
             requestPayload.setPin(sendMoneyLocalFormPin.getPin());
             requestPayload.setBeneficiaryName(accountDetails.getAccountName());
             requestPayload.setNarration(sendMoneyLocalForm.getNarration());
@@ -61,11 +60,12 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
             EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
             encryptResponsePayload1.setRequest(encryptResponsePayload);
 
+            encryptResponsePayload1.setRequest(encryptResponsePayload);
             //CALL THE SEND MONEY ENDPOINT AND PASS THE ENCRYPTED PAYLOAD
             String requestPayloadJsonString = gson.toJson(encryptResponsePayload1);
             log.info("SEND MONEY LOCAL REQUEST PAYLOAD : {}", requestPayloadJson);
-            log.info("SEND MONEY LOCAL ENCRYPTED REQUEST PAYLOAD : {}", requestPayloadJson);
-            HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + SEND_MONEY_OTHERS)
+            log.info("SEND MONEY LOCAL ENCRYPTED REQUEST PAYLOAD : {}", requestPayloadJsonString);
+            HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + SEND_MONEY_LOCAL)
                     .header("accept", "application/json")
                     .header("Content-Type", "application/json")
                     .header("Authorization", "Bearer " + accessToken)
@@ -134,7 +134,7 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
             String requestPayloadJsonString = gson.toJson(encryptResponsePayload1);
             log.info("SEND MONEY OTHERS REQUEST PAYLOAD  {}", requestPayloadJson);
             log.info("SEND MONEY OTHERS ENCRYPTED REQUEST PAYLOAD  {}", requestPayloadJsonString);
-            HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + SEND_MONEY_LOCAL)
+            HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + SEND_MONEY_OTHERS)
                     .header("accept", "application/json")
                     .header("Content-Type", "application/json")
                     .header("Authorization", "Bearer " + accessToken)

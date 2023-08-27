@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragments :: header}">
+    <title>Create Account</title></head>
+<body style="background: white">
+<div class="loader" id="loader">
+    <div class="loader-inner"></div>
+</div>
+
+<div class="text-center">
+    <div class="text-center">
+        <div class="card-fast-login">
+            <div class="card-body">
+                <div class="basic-form">
+                    <form method="post" id="myForm" th:action="@{/update-customer}"
+                          enctype="multipart/form-data">
+                        <div th:if="${errorMessage}" class="alert-fast" role="alert">
+                            <span th:text="${errorMessage}">Error message</span>
+                        </div>
+                        <div class="mb-2">
+                            <a><img th:src="@{/images/logo.svg}" alt="Fast Credit" width="150" height="100"></a>
+                        </div>
+                        <div class=" register-left">Please Update Customer Record
+                        </div>
+                        <div class="border-rectangle"></div>
+                        <div class="mb-4" th:each="updateCustomerList, updateCustomerListStat:  ${updateCustomer}">
+                            <label th:text="${updateCustomerList}" class="label-create"></label>
+                            <input th:if="${updateCustomerList.contains('passport')}" type="file"
+                                   th:name="${updateCustomerList}"
+                                   class="form-control"/>
+                            <select th:if="${updateCustomerList.contains('sector')}"
+                                    th:name="${updateCustomerList}"
+                                    class="form-control-send-money mb-3">
+                                <option value="">--Select Sector--</option>
+                                <option value="500">Option 1</option>
+                                <option value="option2">Public Channel</option>
+                                <option value="600">Private Channel</option>
+                            </select>
+                            <select th:if="${updateCustomerList.contains('industry')}"
+                                    th:name="${updateCustomerList}"
+                                    class="form-control-send-money mb-3">
+                                <option value="">--Select Industry--</option>
+                                <option value="100">NSCDC</option>
+                                <option value="101">LASG</option>
+                                <option value="102">TESCOM</option>
+                                <option value="103">NPF</option>
+                                <option value="104">ONDO HMB</option>
+                                <option value="105">FEDERAL</option>
+                                <option value="108">CHAMMSWITCH</option>
+                                <option value="109">Nigeria Customs</option>
+                                <option value="110">FCSG-FCTA</option>
+                                <option value="111">JUDICIARY</option>
+                                <option value="112">OYO HMB</option>
+                                <option value="1083">NSCDC</option>
+                                <option value="1085">Nigerian Prison Service</option>
+                                <option value="1086">Federal MDA</option>
+                                <option value="1087">FRSC</option>
+                                <option value="1082">TESCOM</option>
+                            </select>
+                            <input th:unless="${updateCustomerList.contains('passport') or updateCustomerList.contains('sector') or updateCustomerList.contains('industry')}"
+                                   type="text" class="form-control" placeholder=""
+                                   th:name="${updateCustomerList}">
+                        </div>
+                        <div class="text-center mb-4">
+                            <button class="btn-block btn-login" type="submit">Continue</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

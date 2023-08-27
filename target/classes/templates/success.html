@@ -10,31 +10,30 @@
     <div class="card-fast-login">
         <div class="card-body">
             <div class="basic-form">
-                <!--                    th:action="@{/success}"-->
-                <form method="post">
-                    <div class="mb-2">
-                        <a><img th:src="@{/images/logo.svg}" alt="Fast Credit" width="150" height="100"></a>
+
+                <form method="post" th:action="@{/success}">
+                    <div class="">
+                        <a><img th:src="@{/images/logo.svg}" alt="Fast Credit" width="150" height="30"></a>
                     </div>
-                    <div class="mb-4 success-all">
-                        <div class="mb-2">
-                            <a><img th:src="@{/images/success-icon2.png}" alt="Fast Credit" width="170" height="200"></a>
+                    <div class="success-all">
+                        <div class="">
+                            <a><img th:src="@{/images/success-icon2.png}" alt="Fast Credit" width="130"
+                                    height="150"></a>
                         </div>
                         <span class="txn-successful">Transaction Successful!</span>
                     </div>
-
-
-                    <div class="text-center mb-4">
+                    <div class="text-center">
                         <button class="btn-block btn-login" type="submit">Go Home</button>
                     </div>
 
                 </form>
-
 
             </div>
         </div>
     </div>
 
 </div>
+
 
 </body>
 </html>

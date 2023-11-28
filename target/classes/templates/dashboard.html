@@ -21,9 +21,9 @@
         </div>
         <div class="navbar-search">
             <!-- Search bar here -->
-<!--            <input class="input-fast" type="text" placeholder="Search">-->
-<!--            <button class="button-fast" type="submit"></button>-->
-<!--            <img class="img-search-fast" th:src="@{/images/search.png}">-->
+            <!--            <input class="input-fast" type="text" placeholder="Search">-->
+            <!--            <button class="button-fast" type="submit"></button>-->
+            <!--            <img class="img-search-fast" th:src="@{/images/search.png}">-->
         </div>
         <div class="navbar-icons">
             <!--            <a th:href="@{/profile}" onclick="showLoader()">-->
@@ -62,7 +62,7 @@
                                                                                                         clip-rule="evenodd"
                                                                                                         fill-rule="evenodd"></path></svg></span>
                 </span>
-                <span>Buy Airtime & Data</span>
+                <span>Airtime & Data</span>
             </a>
         </li>
         <li>
@@ -85,7 +85,7 @@
             </a>
         </li>
         <li>
-            <a th:href="@{/}" onclick="showLoader()">
+            <a th:href="@{/dashboard}" onclick="showLoader()">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 29 29">
                     <rect fill="white" rx="6" height="29" width="29"></rect>
                     <path stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="#00425F"
@@ -94,19 +94,6 @@
                 <span>Loan</span>
             </a>
         </li>
-
-        <!--        <li>-->
-        <!--            <a href="#module5">-->
-        <!--                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M42.422 38.954H5.578L24 7.046l18.422 31.908Z"/></svg>-->
-        <!--                <span>Investment</span>-->
-        <!--            </a>-->
-        <!--        </li>-->
-        <!--        <li>-->
-        <!--            <a href="#module6">-->
-        <!--                <i class="fas fa-bell"></i>-->
-        <!--                <span>Balance Enquiry</span>-->
-        <!--            </a>-->
-        <!--        </li>-->
         <li>
             <a th:href="@{/login}">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 25 24">
@@ -167,40 +154,31 @@
 
 
 <div class="content-dashboard" id="content-dashboard">
-    <!--    <div class="row">-->
-    <!--        <div class="col-xl-12">-->
-    <!--            <div class="card">-->
-    <!--                <div class="card-body">-->
-    <!--                    <p class="card-text">Access Quick Loans-->
-    <!--                    </p>-->
-    <!--                </div>-->
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--    </div>-->
-
-    <!--    I COMMENTED HERE -->
     <div class="row">
-        <div class="col-md-6 col-sm-12 col-lg-6 col-xl-4 col-xs-12" id="card-fast"
-             th:each="accountBalance : ${accountBalanceResponse}">
-            <div class="card-dashboard card-balance invoice-card">
-                <div class="balance">
-                    <div class="show-bal">
-                        <span style="float: left" th:text="*{'₦ ' +accountBalance.getAvailableBalance}">N0.00</span>
-                    </div>
-                    <div class="show-card">
-                        <span style="color: #fff; font-stretch: expanded;"
-                              th:text="${accountBalance.getAccountNumber}"></span>
-                    </div>
-                    <div class="show-name">
-                                <span style="font-weight: bolder"
-                                      th:text="${customerDetails.getFirstName() + ' ' + customerDetails.getMiddleName() + ' ' + customerDetails.getLastName()}"> "></span>
-                        <span style="float: right; font-weight: bolder"
-                              th:text="${'Tier ' + customerDetails.getKycTier()}"></span>
-                    </div>
-                </div>
+        <div th:replace="fragments::account-balance">
 
-            </div>
         </div>
+<!--        <div class="col-md-6 col-sm-12 col-lg-6 col-xl-4 col-xs-12" id="card-fast"-->
+<!--             th:each="accountBalance : ${accountBalanceResponse}">-->
+<!--            <div class="card-dashboard card-balance invoice-card">-->
+<!--                <div class="balance">-->
+<!--                    <div class="show-bal">-->
+<!--                        <span style="float: left" th:text="*{'&#8358; ' +accountBalance.getAvailableBalance}">N0.00</span>-->
+<!--                    </div>-->
+<!--                    <div class="show-card">-->
+<!--                        <span style="color: #fff; font-stretch: expanded;"-->
+<!--                              th:text="${accountBalance.getAccountNumber}"></span>-->
+<!--                    </div>-->
+<!--                    <div class="show-name">-->
+<!--                                <span style="font-weight: bolder"-->
+<!--                                      th:text="${customerDetails.getFirstName() + ' ' + customerDetails.getMiddleName() + ' ' + customerDetails.getLastName()}"> "></span>-->
+<!--                        <span style="float: right; font-weight: bolder"-->
+<!--                              th:text="${'Tier ' + customerDetails.getKycTier()}"></span>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--            </div>-->
+<!--        </div>-->
         <div class="col-md-6 col-sm-12 col-lg-6 col-xl-4 col-xs-12">
             <div class="card-fast">
                 <div class="card-header border-0 pb-0">
@@ -469,11 +447,8 @@
                         <a th:href="@{/airtime-data}">
                             <div class="text-center dashboard-container">
                                 <div class="dashboard-container-svg">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 80">
-                                        <path fill="#F9FBFC"
-                                              d="M25.8723 11.2L27.3853 9.74545C31.1678 13.2364 31.1678 18.7636 27.3853 22.1091L25.8723 20.6545C28.5957 17.8909 28.5957 13.8182 25.8723 11.2ZM22.695 14.2545L24.208 12.8C26.0236 14.6909 26.0236 17.3091 24.208 19.0545L22.695 17.6C23.4515 16.5818 23.4515 15.2727 22.695 14.2545ZM3.026 0H18.156C19.8203 0 21.182 1.30909 21.182 2.90909V29.0909C21.182 30.6909 19.8203 32 18.156 32H3.026C1.3617 32 0 30.6909 0 29.0909V2.90909C0 1.30909 1.3617 0 3.026 0ZM3.026 27.6364H18.156V4.36364H3.026V27.6364ZM9.93305 11.7388C9.77004 11.7996 9.6211 11.8907 9.4948 12.0069L6.45357 14.8796C6.19645 15.1268 6.052 15.462 6.052 15.8116C6.052 16.1612 6.19645 16.4965 6.45357 16.7436C6.71069 16.9908 7.05942 17.1297 7.42305 17.1297C7.78667 17.1297 8.1354 16.9908 8.39252 16.7436L9.10967 15.9904V20.5738C9.10967 20.9125 9.24959 21.2372 9.49864 21.4766C9.7477 21.7161 10.0855 21.8506 10.4377 21.8506C10.7899 21.8506 11.1277 21.7161 11.3768 21.4766C11.6258 21.2372 11.7658 20.9125 11.7658 20.5738V15.9904L12.4829 16.7436C12.74 16.9908 13.0888 17.1297 13.4524 17.1297C13.816 17.1297 14.1647 16.9908 14.4219 16.7436C14.679 16.4965 14.8234 16.1612 14.8234 15.8116C14.8234 15.462 14.679 15.1268 14.4219 14.8796L11.3806 12.0069C11.2543 11.8907 11.1054 11.7996 10.9424 11.7388C10.7834 11.6713 10.6115 11.6364 10.4377 11.6364C10.2639 11.6364 10.092 11.6713 9.93305 11.7388Z"
-                                              clip-rule="evenodd" fill-rule="evenodd"></path>
-                                    </svg>
+                                    <svg xml:space="preserve" viewBox="0 0 100 125" y="0px" x="0px" version="1.1"
+                                         xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><path d="M78.008,28.386c-2.343,0-10.913,0.162-16.352,2.25V17.949c0-6.66-17.489-6.998-20.995-6.998 c-3.505,0-20.99,0.337-20.99,6.998v27.999c0,0.406,0.071,0.787,0.191,1.146C14.061,47.267,1,48.295,1,54.053v27.998 c0,6.66,17.484,6.998,20.99,6.998c3.506,0,20.992-0.338,20.992-6.998V71.571c3.608-0.114,9.771-0.57,14.034-2.206v12.686 c0,6.66,17.486,6.998,20.992,6.998S99,88.711,99,82.051V54.053c0,0,0,0,0-0.005c0,0,0,0,0-0.005v-9.324c0-0.002,0-0.002,0-0.004 s0-0.002,0-0.004v-9.327C99,28.723,81.514,28.386,78.008,28.386z M40.662,15.619c8.256,0,13.673,1.329,15.688,2.33 c-2.015,1-7.432,2.33-15.688,2.33c-8.253,0-13.671-1.329-15.684-2.33C26.991,16.948,32.409,15.619,40.662,15.619z M21.99,51.723 c8.256,0,13.671,1.332,15.686,2.33c-2.015,1.003-7.43,2.329-15.686,2.329c-8.253,0-13.671-1.326-15.684-2.329 C8.319,53.055,13.737,51.723,21.99,51.723z M38.314,81.659c-1.208,1.003-6.929,2.722-16.324,2.722 c-9.395,0-15.114-1.719-16.322-2.722v-4.185c5.44,2.078,13.983,2.238,16.322,2.238c2.339,0,10.884-0.16,16.324-2.238V81.659z M38.314,72.323c-1.208,1.003-6.929,2.722-16.324,2.722c-9.395,0-15.114-1.719-16.322-2.722v-4.185 c5.44,2.078,13.983,2.238,16.322,2.238c2.339,0,10.884-0.16,16.324-2.238V72.323z M38.314,62.987 c-1.208,1.003-6.929,2.722-16.324,2.722c-9.395,0-15.114-1.719-16.322-2.722v-4.176c5.44,2.079,13.983,2.238,16.322,2.238 c2.339,0,10.884-0.159,16.324-2.238V62.987z M56.988,64.228c-1.104,0.911-6.011,2.411-14.006,2.667v-4.659 c3.602-0.114,9.744-0.565,14.006-2.192V64.228z M56.988,54.892c-1.104,0.911-6.011,2.411-14.006,2.667v-3.506 c0-0.406-0.07-0.784-0.191-1.145c3.569-0.104,9.858-0.547,14.198-2.201V54.892z M56.988,45.556c-1.208,1-6.931,2.721-16.327,2.721 c-9.395,0-15.114-1.721-16.322-2.721v-4.185c5.44,2.077,13.983,2.238,16.322,2.238c2.339,0,10.883-0.162,16.327-2.238V45.556z M56.988,36.22c-1.208,1-6.931,2.721-16.327,2.721c-9.395,0-15.114-1.721-16.322-2.721v-4.185c5.44,2.077,13.983,2.238,16.322,2.238 c2.339,0,10.883-0.162,16.327-2.238V36.22z M56.988,26.884c-1.208,1-6.931,2.721-16.327,2.721c-9.395,0-15.114-1.721-16.322-2.721 v-4.176c5.44,2.076,13.983,2.238,16.322,2.238c2.339,0,10.883-0.162,16.327-2.238V26.884z M78.008,33.054 c8.256,0,13.671,1.329,15.686,2.329c-2.015,1.001-7.43,2.33-15.686,2.33s-13.671-1.329-15.686-2.33 C64.337,34.382,69.752,33.054,78.008,33.054z M94.332,81.659c-1.208,1.003-6.929,2.722-16.324,2.722s-15.116-1.719-16.324-2.722 v-4.185c5.443,2.078,13.985,2.238,16.324,2.238s10.881-0.16,16.324-2.238V81.659z M94.332,72.323 c-1.208,1.003-6.929,2.722-16.324,2.722s-15.116-1.719-16.324-2.722v-4.185c5.443,2.078,13.985,2.238,16.324,2.238 s10.881-0.16,16.324-2.238V72.323z M94.332,62.987c-1.208,1.003-6.929,2.722-16.324,2.722s-15.116-1.719-16.324-2.722v-4.185 c5.443,2.078,13.985,2.238,16.324,2.238s10.881-0.16,16.324-2.238V62.987z M94.332,53.651c-1.208,1.003-6.929,2.722-16.324,2.722 s-15.116-1.719-16.324-2.722v-4.183c5.443,2.076,13.985,2.236,16.324,2.236s10.881-0.16,16.324-2.236V53.651z M94.332,44.318 c-1.208,1-6.929,2.721-16.324,2.721s-15.116-1.721-16.324-2.721v-4.176c5.443,2.077,13.985,2.238,16.324,2.238 s10.881-0.162,16.324-2.238V44.318z"></path></svg>
                                 </div>
                                 <div class="dashboard-container-text">Data Top Up</div>
                             </div>
@@ -493,7 +468,7 @@
                 </div>
                 <div class="dashboard-container-main">
                     <div class="col-md-6 col-sm-6 col-xs-6">
-                        <a th:href="@{/send-money}">
+                        <a th:href="@{/dashboard}">
                             <div class="text-center dashboard-container">
                                 <div class="dashboard-container-svg">
                                     <svg xml:space="preserve" viewBox="0 0 64 80" y="0px" x="0px" version="1.1"
@@ -704,7 +679,7 @@
                         </a>
                     </div>
                     <div class="col-md-6 col-sm-6 col-xs-6">
-                        <a th:href="@{/send-money}">
+                        <a th:href="@{/dashboard}">
                             <div class="text-center dashboard-container">
                                 <div class="dashboard-container-svg">
                                     <svg xml:space="preserve" viewBox="0 0 64 80" y="0px" x="0px" version="1.1"
@@ -923,11 +898,11 @@
         <div class="col-md-6 col-sm-12 col-lg-6 col-xl-4 col-xs-12">
             <div class="card-fast">
                 <div class="card-header border-0 pb-0">
-                    <h5 class="card-title-fast">Investment</h5>
+                    <h5 class="card-title-fast">Target Savings & Fixed Deposit</h5>
                 </div>
                 <div class="dashboard-container-main">
                     <div class="col-md-6 col-sm-6 col-xs-6">
-                        <a th:href="@{/send-money}">
+                        <a th:href="@{/dashboard}">
                             <div class="text-center dashboard-container">
                                 <div class="dashboard-container-svg">
                                     <svg xml:space="preserve" viewBox="0 0 64 80" y="0px" x="0px" version="1.1"
@@ -1133,12 +1108,12 @@
                                             <path d="M44,14.071H20v24h24V14.071z M29.293,33.061l-5.759-6.035l1.736-1.656l3.985,4.177l9.757-10.683l1.771,1.619L29.293,33.061 z"></path>
                                             <path d="M19.625,64h24.75c4.4,0,8-3.6,8-8V8c0-4.4-3.6-8-8-8h-24.75c-4.4,0-8,3.6-8,8v48C11.625,60.4,15.225,64,19.625,64z M35.391,61.034h-6.783c-0.937,0-1.696-0.758-1.696-1.696c0-0.937,0.758-1.696,1.696-1.696h6.783c0.937,0,1.696,0.758,1.696,1.696 C37.087,60.276,36.329,61.034,35.391,61.034z M32,2.272c0.828,0,1.5,0.672,1.5,1.5s-0.672,1.5-1.5,1.5c-0.828,0-1.5-0.672-1.5-1.5 S31.172,2.272,32,2.272z M14.5,7.552h35v47.115h-35V7.552z"></path></g></svg>
                                 </div>
-                                <div class="dashboard-container-text">Send Money</div>
+                                <div class="dashboard-container-text">Targeted Savings</div>
                             </div>
                         </a>
                     </div>
                     <div class="col-md-6 col-sm-6 col-xs-6">
-                        <a th:href="@{/send-money}">
+                        <a th:href="@{/dashboard}">
                             <div class="text-center dashboard-container">
                                 <div class="dashboard-container-svg">
                                     <svg xml:space="preserve" viewBox="0 0 64 80" y="0px" x="0px" version="1.1"
@@ -1344,7 +1319,7 @@
                                             <path d="M44,14.071H20v24h24V14.071z M29.293,33.061l-5.759-6.035l1.736-1.656l3.985,4.177l9.757-10.683l1.771,1.619L29.293,33.061 z"></path>
                                             <path d="M19.625,64h24.75c4.4,0,8-3.6,8-8V8c0-4.4-3.6-8-8-8h-24.75c-4.4,0-8,3.6-8,8v48C11.625,60.4,15.225,64,19.625,64z M35.391,61.034h-6.783c-0.937,0-1.696-0.758-1.696-1.696c0-0.937,0.758-1.696,1.696-1.696h6.783c0.937,0,1.696,0.758,1.696,1.696 C37.087,60.276,36.329,61.034,35.391,61.034z M32,2.272c0.828,0,1.5,0.672,1.5,1.5s-0.672,1.5-1.5,1.5c-0.828,0-1.5-0.672-1.5-1.5 S31.172,2.272,32,2.272z M14.5,7.552h35v47.115h-35V7.552z"></path></g></svg>
                                 </div>
-                                <div class="dashboard-container-text">Receive Money</div>
+                                <div class="dashboard-container-text">Fixed Deposits</div>
                             </div>
                         </a>
                     </div>

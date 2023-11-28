@@ -125,25 +125,25 @@
                         <div class="payment-block">
                             <div class="send-money-title-mobile text-center">Send Money</div>
                             <div style="padding-bottom: 100px"></div>
-                            <div class="mb-4">
+                            <div class="mb-2">
                                 <button class="submit-send-money" type="button"
                                         onclick="toggleMobileSendMoneyLocal()">Send Money To Fast Credit
                                 </button>
                             </div>
                             <div style="padding-bottom: 100px"></div>
-                            <div class="mb-4">
+                            <div class="mb-2">
                                 <button class="submit-send-money" type="button"
                                         onclick="toggleMobileSendMoneyOthers()">Send Money To Other Banks
                                 </button>
                             </div>
                             <div style="padding-bottom: 100px"></div>
-                            <div class="mb-4">
+                            <div class="mb-2">
                                 <button class="submit-send-money" type="button"
                                         onclick="toggleMobileSendMoneyLocal()">Receive Money via Card
                                 </button>
                             </div>
                             <div style="padding-bottom: 100px"></div>
-                            <div class="mb-4">
+                            <div class="mb-2">
                                 <button class="submit-send-money" type="button"
                                         onclick="toggleMobileSendMoneyOthers()">Receive Money via Transfer
                                 </button>
@@ -177,7 +177,7 @@
                                     <form method="post" th:object="${sendMoneyLocalForm}"
                                           th:action="@{/local-form}">
 
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="select-account" class="label-span">Select Account</label>
                                             <select id="select-account" class="form-control-send-money mb-3"
                                                     th:field="*{debitAccount}">
@@ -189,7 +189,7 @@
                                                         th:value="${accountBalance.getAccountNumber()}"></option>
                                             </select>
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="account_local" class="label-span">Account Number</label> <span
                                                 id="localName" class="float-right" th:field="*{beneficiaryName}"></span>
                                             <input id="account_local" class="form-control-send-money" maxlength="10"
@@ -199,7 +199,7 @@
                                                  th:if="${#fields.hasErrors('creditAccount')}"
                                                  th:errors="*{creditAccount}"></div>
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="amount" class="label-span">Amount</label>
                                             <input id="amount" class="form-control-send-money" placeholder=""
                                                    th:field="*{amount}"
@@ -208,7 +208,7 @@
                                                  th:if="${#fields.hasErrors('amount')}"
                                                  th:errors="*{amount}"></div>
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="narration" class="label-span">Narration</label>
                                             <input id="narration" class="form-control-send-money" placeholder=""
                                                    th:field="*{narration}"
@@ -217,7 +217,7 @@
                                                  th:if="${#fields.hasErrors('narration')}"
                                                  th:errors="*{narration}"></div>
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <input id="submit-local" class="submit-send-money" type="submit"
                                                    placeholder="Proceed">
                                         </div>
@@ -242,7 +242,7 @@
 
             <div class="send-money"> <!-- MAIN SEND MONEY DIV-->
 
-                <div class="transfer-money-title"> <!-- SEND MONEY TITLE-->
+                <div class="text-center"> <!-- SEND MONEY TITLE-->
                     Transfer Money to Other Banks
                 </div>
 
@@ -258,29 +258,29 @@
                                         <div th:if="${errorMessage}" class="alert-fast" role="alert">
                                             <span th:text="${errorMessage}">Error message</span>
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="select-account" class="label-span">Select Account</label>
                                             <select id="select-account-others" class="form-control-send-money mb-3"
                                                     th:field="*{debitAccount}">
                                                 <option selected value="0"> -- Select Account --</option>
-                                                <option style="background-color: #D1D0CE"
+                                                <option style="background-color: #D1D0CE; padding: 2px"
                                                         th:each="accountBalance : ${accountBalanceResponse}"
                                                         th:text="${accountBalance.getAccountNumber()}"
                                                         th:value="${accountBalance.getAccountNumber()}"></option>
                                             </select>
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="select-bank-others" class="label-span">Select Bank</label>
                                             <select id="select-bank-others" class="form-control-send-money mb-3"
                                                     th:field="*{beneficiaryBank}">
                                                 <option selected value="0"> -- Select Bank --</option>
-                                                <option style="background-color: #D1D0CE"
+                                                <option style="background-color: #D1D0CE; padding: 2px"
                                                         th:each="bankList : ${bankListResponse}"
                                                         th:text="${bankList.getBank()}"
                                                         th:value="${bankList.getBankCode()}"></option>
                                             </select>
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="account_others" class="label-span">Account Number</label> <span
                                                 id="othersName" class="float-right"
                                                 th:field="*{beneficiaryName}"></span>
@@ -291,7 +291,7 @@
                                                  th:if="${#fields.hasErrors('creditAccount')}"
                                                  th:errors="*{creditAccount}"></div>
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="amount-others" class="label-span">Amount</label>
                                             <input id="amount-others" class="form-control-send-money" placeholder=""
                                                    th:field="*{amount}"th:classappend="${#fields.hasErrors('amount')?'input-error':'form-control-send-money'}">
@@ -299,7 +299,7 @@
                                                  th:if="${#fields.hasErrors('amount')}"
                                                  th:errors="*{amount}"></div>
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="narration-others" class="label-span">Narration</label>
                                             <input id="narration-others" class="form-control-send-money" placeholder=""
                                                    th:field="*{narration}"
@@ -308,7 +308,7 @@
                                                  th:if="${#fields.hasErrors('narration')}"
                                                  th:errors="*{narration}"></div>
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <input id="submit-others" class="submit-send-money" type="submit"
                                                    placeholder="Proceed">
                                         </div>
@@ -338,7 +338,7 @@
                                     <form id="myForm" method="post" th:object="${sendMoneyLocalFormPin}"
                                           th:action="@{/send-money/local}">
                                         <div id="resultMessage" class="alert-fast" style="display:none;"></div>
-                                        <div class="mb-4" th:object="${localTxnData}">
+                                        <div class="mb-2" th:object="${localTxnData}">
                                             <div class="mb-2"><span>Transaction Type</span> <span class="float-right">Funds Transfer</span>
                                             </div>
                                             <div class="mb-2"><span>Account Number</span> <span class="float-right"
@@ -357,14 +357,14 @@
                                                                                       th:text="${localTxnData.getDate()}"></span>
                                             </div>
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="pin" class="confirm-pin">Enter PIN</label>
                                             <input id="pin" type="password" class=""
                                                    style="align-items: center; text-align: center; width: 200px"
                                                    maxlength="4"
                                                    placeholder="" th:field="*{pin}">
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <input class="submit-comfirm-money" type="submit" placeholder="Submit">
                                         </div>
 
@@ -398,7 +398,7 @@
                                     <form id="formData" method="post" th:object="${sendMoneyOthersPin}"
                                           th:action="@{/send-money/others}">
                                         <div id="resultMessageData" class="alert-fast" style="display:none;"></div>
-                                        <div class="mb-4" th:object="${othersTxnData}">
+                                        <div class="mb-2" th:object="${othersTxnData}">
                                             <div class="mb-2"><span>Transaction Type</span> <span class="float-right">Funds Transfer</span>
                                             </div>
                                             <div class="mb-2"><span>Account Number</span> <span class="float-right"
@@ -417,14 +417,14 @@
                                                                                       th:text="${othersTxnData.getDate()}"></span>
                                             </div>
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="pin" class="confirm-pin">Enter PIN</label>
                                             <input id="pin-others" type="password" class=""
                                                    style="align-items: center; text-align: center; width: 200px"
                                                    maxlength="4"
                                                    placeholder="" th:field="*{pin}">
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <input id="" class="submit-comfirm-money" type="submit"
                                                    placeholder="Submit">
                                         </div>
@@ -460,6 +460,7 @@
 <script>
     //submit local form
     $(document).ready(function () {
+        $("#select-bank-others").select2();
         $('#myForm').submit(function (event) {
             event.preventDefault();
             const form = $(this);
@@ -606,11 +607,9 @@
     //Name Enquiry For Others
     $(document).ready(function () {
         $('#account_others').on('input', function () {
-
             const submitButton = document.getElementById("submit-others");
             const beneficiaryAccountNumber = $(this).val();
             const beneficiaryBankCode = $("#select-bank-others").val();
-
             if (beneficiaryAccountNumber.length === 10) {
                 if (beneficiaryAccountNumber.match(/^[0-9]+$/)) {
                     showLoader();

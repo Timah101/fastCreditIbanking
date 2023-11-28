@@ -123,7 +123,7 @@ public class AccountServiceImpl implements AccountService {
                         List<AccountList> accountListArrayList = new ArrayList<>();
                         accountList.setAccountName("");
                         accountList.setAccountNumber("");
-                        accountList.setAvailableBalance("");
+//                        accountList.setAvailableBalance(Double.valueOf(""));
                         accountList.setStatus("");
                         accountListArrayList.add(accountList);
                         accountBalanceResponse.setResponseCode("00");
@@ -135,7 +135,7 @@ public class AccountServiceImpl implements AccountService {
                     List<AccountList> accountListArrayList = new ArrayList<>();
                     accountList.setAccountName("");
                     accountList.setAccountNumber("");
-                    accountList.setAvailableBalance("");
+//                    accountList.setAvailableBalance(Double.valueOf(""));
                     accountList.setStatus("");
                     accountListArrayList.add(accountList);
                     accountBalanceResponse.setAccountList(accountListArrayList);
@@ -149,7 +149,7 @@ public class AccountServiceImpl implements AccountService {
                 List<AccountList> accountListArrayList = new ArrayList<>();
                 accountList.setAccountName("");
                 accountList.setAccountNumber("");
-                accountList.setAvailableBalance("");
+//                accountList.setAvailableBalance(Double.valueOf(""));
                 accountList.setStatus("");
                 accountListArrayList.add(accountList);
                 accountBalanceResponse.setAccountList(accountListArrayList);

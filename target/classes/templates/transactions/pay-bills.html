@@ -94,7 +94,7 @@
                                     <form method="post" th:object="${gotvForm}"
                                           th:action="@{/gotv-form}">
 
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="select-account" class="label-span">Select Account</label>
                                             <select id="select-account" class="form-control-send-money mb-3"
                                                     th:field="*{debitAccount}">
@@ -107,7 +107,7 @@
                                             </select>
                                         </div>
 
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="my-select" class="label-span">Select Gotv Plan</label>
                                             <select id="my-select" class="form-control-send-money mb-3"
                                                     th:field="*{dataPlans}" onchange="updateInputValueGotv()">
@@ -120,20 +120,20 @@
                                             </select>
                                         </div>
 
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="inputField" class="label-span">Amount</label>
                                             <input id="inputField" class="form-control-send-money" placeholder=""
                                                    readonly
                                                    th:value="${selectedOptionGotv}" th:field="*{amount}">
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="gotv-name-enquiry" class="label-span">SmartCard Number</label>
                                             <span
                                                     id="localName" class="float-right"></span>
                                             <input id="gotv-name-enquiry" class="form-control-send-money" maxlength="10"
                                                    placeholder="" th:field="*{smartCardNumber}">
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <input class="submit-send-money" type="submit" placeholder="Proceed" onclick="showLoader()">
                                         </div>
 
@@ -170,7 +170,7 @@
                                 <div class="payment-block">
                                     <form method="post" th:object="${dstvForm}"
                                           th:action="@{/dstv-form}">
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="select-account" class="label-span">Select Account</label>
                                             <select id="select-account-others" class="form-control-send-money mb-3"
                                                     th:field="*{debitAccount}">
@@ -182,7 +182,7 @@
                                                         th:value="${accountBalance.getAccountNumber()}"></option>
                                             </select>
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="my-select-2" class="label-span">Select Dstv Plan</label>
                                             <select id="my-select-2" class="form-control-send-money mb-3"
                                                     onchange="updateInputValueDstv()"
@@ -196,19 +196,19 @@
                                             </select>
                                         </div>
 
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="amount-others" class="label-span">Amount</label>
                                             <input id="amount-others" class="form-control-send-money" placeholder=""
                                                    readonly th:value="${selectedOptionDstv}"
                                                    th:field="*{amount}">
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="account_others" class="label-span">SmartCard Number</label>
                                             <span id="otherName" class="float-right"></span>
                                             <input id="account_others" class="form-control-send-money" maxlength="10"
                                                    placeholder="" th:field="*{smartCardNumber}">
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <input class="submit-send-money" type="submit" placeholder="Proceed" onclick="showLoader()">
                                         </div>
                                     </form>
@@ -244,7 +244,7 @@
                                     <form method="post" th:object="${electricityForm}"
                                           th:action="@{/electricity-form}">
 
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="select-account" class="label-span">Select Account</label>
                                             <select id="select-electricity" class="form-control-send-money mb-3"
                                                     th:field="*{debitAccount}">
@@ -256,7 +256,7 @@
                                                         th:value="${accountBalance.getAccountNumber()}"></option>
                                             </select>
                                         </div>
-                                        <!--                                        <div class="mb-4">-->
+                                        <!--                                        <div class="mb-2">-->
                                         <!--                                            <label for="select-account" class="label-span">Select Biller</label>-->
                                         <!--                                            <select id="biller" class="form-control-send-money mb-3"-->
                                         <!--                                                    th:field="*{biller}">-->
@@ -283,7 +283,7 @@
                                         <!--                                                </option>-->
                                         <!--                                            </select>-->
                                         <!--                                        </div>-->
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="biller-plan" class="label-span">Select Electricity
                                                 Biller</label>
                                             <select id="biller-plan" class="form-control-send-money mb-3"
@@ -298,19 +298,19 @@
 
                                         </div>
 
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="amount-others" class="label-span">Amount</label>
                                             <input id="amount" class="form-control-send-money" placeholder=""
                                                    th:field="*{amount}">
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="account_others" class="label-span">Meter Number</label>
                                             <span id="electricity-name" class="float-right"></span>
                                             <input id="meter-number" class="form-control-send-money"
                                                    maxlength="10"
                                                    placeholder="" th:field="*{meterNumber}">
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <input class="submit-send-money" type="submit" placeholder="Proceed" onclick="showLoader()">
                                         </div>
 
@@ -341,7 +341,7 @@
                                     <form id="gotvForm" method="post" th:object="${gotvFormPin}"
                                           th:action="@{/gotv}">
                                         <div id="resultMessageGotv" class="alert-fast" style="display:none;"></div>
-                                        <div class="mb-4" th:object="${gotvTxnData}">
+                                        <div class="mb-2" th:object="${gotvTxnData}">
                                             <div class="mb-2"><span>Transaction Type</span> <span class="float-right"> GoTV Top Up</span>
                                             </div>
                                             <div class="mb-2"><span>SmartCard Number</span> <span class="float-right"
@@ -357,14 +357,14 @@
                                                                                       th:text="${gotvTxnData.getDate()}"></span>
                                             </div>
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="pin" class="confirm-pin">Enter PIN</label>
                                             <input id="pin" type="password" class=""
                                                    style="align-items: center; text-align: center; width: 200px"
                                                    maxlength="4"
                                                    placeholder="" th:field="*{pin}">
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <input class="submit-comfirm-money" type="submit" placeholder="Submit">
                                         </div>
 
@@ -397,7 +397,7 @@
                                     <form id="dstvForm" method="post" th:object="${dstvFormPin}"
                                           th:action="@{/dstv}">
                                         <div id="resultMessageDstv" class="alert-fast" style="display:none;"></div>
-                                        <div class="mb-4" th:object="${dstvTxnData}">
+                                        <div class="mb-2" th:object="${dstvTxnData}">
                                             <div class="mb-2"><span>Transaction Type</span> <span class="float-right"> DsTV Top Up</span>
                                             </div>
                                             <div class="mb-2"><span>SmartCard Number</span> <span class="float-right"
@@ -413,14 +413,14 @@
                                                                                       th:text="${dstvTxnData.getDate()}"></span>
                                             </div>
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="pin" class="confirm-pin">Enter PIN</label>
                                             <input id="pin-others" type="password" class=""
                                                    style="align-items: center; text-align: center; width: 200px"
                                                    maxlength="4"
                                                    placeholder="" th:field="*{pin}">
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <input class="submit-comfirm-money" type="submit" placeholder="Submit">
                                         </div>
 
@@ -454,7 +454,7 @@
                                           th:action="@{/electricity}">
                                         <div id="resultMessageElectricity" class="alert-fast"
                                              style="display:none;"></div>
-                                        <div class="mb-4" th:object="${electricityTxnData}">
+                                        <div class="mb-2" th:object="${electricityTxnData}">
                                             <div class="mb-2"><span>Transaction Type</span> <span class="float-right"> Electricity Top Up</span>
                                             </div>
                                             <div class="mb-2"><span>Meter Number</span> <span class="float-right"
@@ -470,14 +470,14 @@
                                                                                       th:text="${electricityTxnData.getDate()}"></span>
                                             </div>
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="pin" class="confirm-pin">Enter PIN</label>
                                             <input id="pin-electricity" type="password" class=""
                                                    style="align-items: center; text-align: center; width: 200px"
                                                    maxlength="4"
                                                    placeholder="" th:field="*{pin}">
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <input class="submit-comfirm-money" type="submit" placeholder="Submit">
                                         </div>
 
@@ -500,6 +500,11 @@
 
     //Name Enquiry for GOTV
     $(document).ready(function () {
+        $("#my-select").select2();
+        $("#my-select-2").select2();
+        $("#biller-plan").select2();
+        $("#biller-plan").select2();
+        $("#biller-plan").select2();
         $('#gotv-name-enquiry').on('input', function () {
             const cardNumber = $(this).val();
             console.log("GOTV " + cardNumber)

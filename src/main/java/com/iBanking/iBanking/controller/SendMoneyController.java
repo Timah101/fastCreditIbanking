@@ -30,9 +30,8 @@ public class SendMoneyController {
 
     //Loan Send Money Page
     @GetMapping("/send-money")
-    public String sendMoneyLocal(Model model, HttpSession session) throws UnirestException {
+    public String sendMoneyLocal(Model model, HttpSession session) {
         AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
-        sendMoneyService.getBankList(session);
         GetBankListPResponsePayload bankList = (GetBankListPResponsePayload) session.getAttribute("getBankListResponse");
         model.addAttribute("bankListResponse", bankList.getBankList());
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
@@ -47,12 +46,12 @@ public class SendMoneyController {
 
     //Reload to Confirm OTP div on same page
     @PostMapping("/local-form")
-    public String processSendMoneyLocalFormSubmit(@Valid @ModelAttribute("sendMoneyLocalForm") SendMoneyForms sendMoneyLocalForm,  BindingResult result,
+    public String processSendMoneyLocalFormSubmit(@Valid @ModelAttribute("sendMoneyLocalForm") SendMoneyForms sendMoneyLocalForm, BindingResult result,
                                                   HttpSession session, Model model) throws UnirestException {
         session.setAttribute("sendMoneyLocalForm", sendMoneyLocalForm);
         if (result.hasErrors()) {
             AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
-            sendMoneyService.getBankList(session);
+//             sendMoneyService.getBankList(session);
             GetBankListPResponsePayload bankList = (GetBankListPResponsePayload) session.getAttribute("getBankListResponse");
             model.addAttribute("bankListResponse", bankList.getBankList());
             model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
@@ -123,7 +122,7 @@ public class SendMoneyController {
         session.setAttribute("sendMoneyOthersForm", sendMoneyOthersForm);
         if (result.hasErrors()) {
             AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
-            sendMoneyService.getBankList(session);
+            // sendMoneyService.getBankList(session);
             GetBankListPResponsePayload bankList = (GetBankListPResponsePayload) session.getAttribute("getBankListResponse");
             model.addAttribute("bankListResponse", bankList.getBankList());
             model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
@@ -185,7 +184,7 @@ public class SendMoneyController {
     @PostMapping("/toggle-local")
     public String toggleLocal(Model model, HttpSession session) throws UnirestException {
         AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
-        sendMoneyService.getBankList(session);
+        // sendMoneyService.getBankList(session);
         GetBankListPResponsePayload bankList = (GetBankListPResponsePayload) session.getAttribute("getBankListResponse");
         model.addAttribute("bankListResponse", bankList.getBankList());
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
@@ -201,7 +200,7 @@ public class SendMoneyController {
     @PostMapping("/toggle-others")
     public String toggleOthers(Model model, HttpSession session) throws UnirestException {
         AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
-        sendMoneyService.getBankList(session);
+        // sendMoneyService.getBankList(session);
         GetBankListPResponsePayload bankList = (GetBankListPResponsePayload) session.getAttribute("getBankListResponse");
         model.addAttribute("bankListResponse", bankList.getBankList());
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());

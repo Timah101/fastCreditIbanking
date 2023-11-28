@@ -19,7 +19,7 @@ public class CustomErrorControllerAdvice implements ErrorController {
         // Add the loggedIn attribute to the model
         model.addAttribute("loggedIn", loggedIn);
         model.addAttribute("errorMessage", "An unexpected error occurred");
-        return "redirect:/login";
+        return "redirect:/inet";
     }
 }
 

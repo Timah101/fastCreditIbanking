@@ -49,35 +49,31 @@ public class DashboardController {
 
         return "dashboard";
     }
-    @GetMapping("/dashboard-main")
-    public String dashboardMain(Model model, HttpSession session) throws UnirestException, JsonProcessingException {
-
-        model.addAttribute("airtimeForm", new TransactionForms());
-        model.addAttribute("sendMoneyLocalForm", new TransactionForms());
-
-        CustomerDetailsResponsePayload customerDetails = (CustomerDetailsResponsePayload) session.getAttribute("customerDetailsResponse");
-        AccountDetailsListResponsePayload accountBalanceResponse = accountService.getAccountBalances(session);
-
-        if (!customerDetails.getResponseCode().equals("00") || !accountBalanceResponse.getResponseCode().equals("00")) {
-            model.addAttribute("accountBalanceResponse", new AccountDetailsListResponsePayload());
-            model.addAttribute("customerDetails", new CustomerDetailsResponsePayload());
-        }
-
-        model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
-        model.addAttribute("customerDetails", customerDetails);
-
-        return "dashboard-2";
-    }
+//    @GetMapping("/dashboard-main")
+//    public String dashboardMain(Model model, HttpSession session) throws UnirestException, JsonProcessingException {
+//
+//        model.addAttribute("airtimeForm", new TransactionForms());
+//        model.addAttribute("sendMoneyLocalForm", new TransactionForms());
+//
+//        CustomerDetailsResponsePayload customerDetails = (CustomerDetailsResponsePayload) session.getAttribute("customerDetailsResponse");
+//        AccountDetailsListResponsePayload accountBalanceResponse = accountService.getAccountBalances(session);
+//
+//        if (!customerDetails.getResponseCode().equals("00") || !accountBalanceResponse.getResponseCode().equals("00")) {
+//            model.addAttribute("accountBalanceResponse", new AccountDetailsListResponsePayload());
+//            model.addAttribute("customerDetails", new CustomerDetailsResponsePayload());
+//        }
+//
+//        model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
+//        model.addAttribute("customerDetails", customerDetails);
+//
+//        return "dashboard-2";
+//    }
 
     @PostMapping("/dashboard")
     public String processDashboard(HttpSession session) {
 
-
         return "/dashboard";
     }
-
-
-
 
 
 }

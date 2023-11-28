@@ -27,12 +27,14 @@ public class PayBillsController {
     public String showPayBills(Model model, HttpSession session) throws UnirestException {
 
 
-        String gotvBiller = "GOTV";
-        String dstvBiller = "DSTV";
-        String biller = "E02E";
-        GetCableTvBillersResponsePayload gotvBillerPlan = payBillsService.getCableTvBillers(session, gotvBiller);
-        GetCableTvBillersResponsePayload dstvBillerPlan = payBillsService.getCableTvBillers(session, dstvBiller);
-        GetElectricityBillerResponsePayload electricityBiller = payBillsService.getElectricityBillers(session, biller);
+        GetCableTvBillersResponsePayload gotvBillerPlan = (GetCableTvBillersResponsePayload) session.getAttribute("cableTvBillersResponse");
+        GetCableTvBillersResponsePayload dstvBillerPlan = (GetCableTvBillersResponsePayload) session.getAttribute("cableTvBillersResponse");
+        GetElectricityBillerResponsePayload electricityBiller = (GetElectricityBillerResponsePayload) session.getAttribute("electricityBillersResponse");
+//                payBillsService.getCableTvBillers(session, gotvBiller);
+
+//                payBillsService.getCableTvBillers(session, dstvBiller);
+
+//                payBillsService.getElectricityBillers(session, biller);
         String selectedOptionGotv = "";
         String selectedOptionDstv = "";
         model.addAttribute("selectedOptionGotv", selectedOptionGotv);
@@ -56,12 +58,10 @@ public class PayBillsController {
     @PostMapping("/gotv-form")
     public String processGotvForm(@ModelAttribute("gotvForm") TransactionForms gotvForm, Model model, HttpSession session) throws UnirestException {
         session.setAttribute("gotvForm", gotvForm);
-        String gotvBiller = "GOTV";
-        String dstvBiller = "DSTV";
-        String biller = "E02E";
-        GetCableTvBillersResponsePayload gotvBillerPlan = payBillsService.getCableTvBillers(session, gotvBiller);
-        GetCableTvBillersResponsePayload dstvBillerPlan = payBillsService.getCableTvBillers(session, dstvBiller);
-        GetElectricityBillerResponsePayload electricityBiller = payBillsService.getElectricityBillers(session, biller);
+
+        GetCableTvBillersResponsePayload gotvBillerPlan = (GetCableTvBillersResponsePayload) session.getAttribute("cableTvBillersResponse");
+        GetCableTvBillersResponsePayload dstvBillerPlan = (GetCableTvBillersResponsePayload) session.getAttribute("cableTvBillersResponse");
+        GetElectricityBillerResponsePayload electricityBiller = (GetElectricityBillerResponsePayload) session.getAttribute("electricityBillersResponse");
 
         AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
@@ -147,9 +147,9 @@ public class PayBillsController {
         String gotvBiller = "GOTV";
         String dstvBiller = "DSTV";
         String biller = "E02E";
-        GetCableTvBillersResponsePayload gotvBillerPlan = payBillsService.getCableTvBillers(session, gotvBiller);
-        GetCableTvBillersResponsePayload dstvBillerPlan = payBillsService.getCableTvBillers(session, dstvBiller);
-        GetElectricityBillerResponsePayload electricityBiller = payBillsService.getElectricityBillers(session, biller);
+        GetCableTvBillersResponsePayload gotvBillerPlan = (GetCableTvBillersResponsePayload) session.getAttribute("cableTvBillersResponse");
+        GetCableTvBillersResponsePayload dstvBillerPlan = (GetCableTvBillersResponsePayload) session.getAttribute("cableTvBillersResponse");
+        GetElectricityBillerResponsePayload electricityBiller = (GetElectricityBillerResponsePayload) session.getAttribute("electricityBillersResponse");
         AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
         model.addAttribute("gotvBillerPlan", gotvBillerPlan.getBillers());
@@ -166,8 +166,8 @@ public class PayBillsController {
 
         String bouquet = "";
         if (dstvTxnData != null) {
-            String[] bouquetSplitted = dstvTxnData.getDataPlans().split(",");
-            bouquet = bouquetSplitted[3];
+            String[] bouquetSplit = dstvTxnData.getDataPlans().split(",");
+            bouquet = bouquetSplit[3];
         }
 
         model.addAttribute("bouquet", bouquet);
@@ -219,12 +219,10 @@ public class PayBillsController {
     @PostMapping("/electricity-form")
     public String processElectricityForm(@ModelAttribute("electricityForm") TransactionForms electricityForm, Model model, HttpSession session) throws UnirestException {
         session.setAttribute("electricityForm", electricityForm);
-        String gotvBiller = "GOTV";
-        String dstvBiller = "DSTV";
-        String biller = "E02E";
-        GetCableTvBillersResponsePayload gotvBillerPlan = payBillsService.getCableTvBillers(session, gotvBiller);
-        GetCableTvBillersResponsePayload dstvBillerPlan = payBillsService.getCableTvBillers(session, dstvBiller);
-        GetElectricityBillerResponsePayload electricityBiller = payBillsService.getElectricityBillers(session, biller);
+
+        GetCableTvBillersResponsePayload gotvBillerPlan = (GetCableTvBillersResponsePayload) session.getAttribute("cableTvBillersResponse");
+        GetCableTvBillersResponsePayload dstvBillerPlan = (GetCableTvBillersResponsePayload) session.getAttribute("cableTvBillersResponse");
+        GetElectricityBillerResponsePayload electricityBiller = (GetElectricityBillerResponsePayload) session.getAttribute("electricityBillersResponse");
 
         AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());

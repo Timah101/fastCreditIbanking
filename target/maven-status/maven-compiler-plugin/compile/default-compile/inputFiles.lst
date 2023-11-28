@@ -17,7 +17,6 @@ C:\Users\takano\Documents\JAVA PROJECTS\FASTCREDIT\FastCredit\src\main\java\com\
 C:\Users\takano\Documents\JAVA PROJECTS\FASTCREDIT\FastCredit\src\main\java\com\iBanking\iBanking\services\AirtimeDataService.java
 C:\Users\takano\Documents\JAVA PROJECTS\FASTCREDIT\FastCredit\src\main\java\com\iBanking\iBanking\payload\transactions\cableTv\ValidateCableTvRequestPayload.java
 C:\Users\takano\Documents\JAVA PROJECTS\FASTCREDIT\FastCredit\src\main\java\com\iBanking\iBanking\services\SendMoneyServiceImplServiceImpl.java
-C:\Users\takano\Documents\JAVA PROJECTS\FASTCREDIT\FastCredit\src\main\java\com\iBanking\iBanking\utils\SecurityEncryption.java
 C:\Users\takano\Documents\JAVA PROJECTS\FASTCREDIT\FastCredit\src\main\java\com\iBanking\iBanking\controller\RegisterCustomerController.java
 C:\Users\takano\Documents\JAVA PROJECTS\FASTCREDIT\FastCredit\src\main\java\com\iBanking\iBanking\services\AirtimeDataServiceImpl.java
 C:\Users\takano\Documents\JAVA PROJECTS\FASTCREDIT\FastCredit\src\main\java\com\iBanking\iBanking\payload\generics\AccessTokenRequestPayload.java
@@ -54,6 +53,7 @@ C:\Users\takano\Documents\JAVA PROJECTS\FASTCREDIT\FastCredit\src\main\java\com\
 C:\Users\takano\Documents\JAVA PROJECTS\FASTCREDIT\FastCredit\src\main\java\com\iBanking\iBanking\payload\transactions\airtimeData\DataPlansList.java
 C:\Users\takano\Documents\JAVA PROJECTS\FASTCREDIT\FastCredit\src\main\java\com\iBanking\iBanking\payload\SendOtpResponsePayload.java
 C:\Users\takano\Documents\JAVA PROJECTS\FASTCREDIT\FastCredit\src\main\java\com\iBanking\iBanking\payload\customer\RegisterCustomerResponsePayload.java
+C:\Users\takano\Documents\JAVA PROJECTS\FASTCREDIT\FastCredit\src\main\java\com\iBanking\iBanking\utils\WebConfig.java
 C:\Users\takano\Documents\JAVA PROJECTS\FASTCREDIT\FastCredit\src\main\java\com\iBanking\iBanking\services\PayBillsServiceImpl.java
 C:\Users\takano\Documents\JAVA PROJECTS\FASTCREDIT\FastCredit\src\main\java\com\iBanking\iBanking\payload\transactions\cableTv\ValidateElectricityRequestPayload.java
 C:\Users\takano\Documents\JAVA PROJECTS\FASTCREDIT\FastCredit\src\main\java\com\iBanking\iBanking\services\CustomerServiceImpl.java

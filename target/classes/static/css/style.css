@@ -335,7 +335,8 @@ body {
     line-height: var(--bs-body-line-height);
     color: var(--bs-body-color);
     text-align: var(--bs-body-text-align);
-    background-color: #f2fcf5;
+    /*background-color: #f2fcf5;*/
+    background: #F6F6F6;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -4642,13 +4643,30 @@ fieldset:disabled .btn {
 }
 
 .navbar {
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
+
+    position: absolute;
+    width: 1110px;
+    height: 80px;
+    left: 170px;
+    top: 0px;
+    background: #FFFFFF;
+    border-bottom: 1px solid #BABABB;
+
+    border-bottom: 1px solid #dee2e6;
+    z-index: 1034;
+    /* White */
+    /* Neutral/neutral100 */
+    border-bottom: 1px solid #BABABB;
+
+
+
+    /*position: relative;*/
+    /*display: flex;*/
+    /*flex-wrap: wrap;*/
+    /*align-items: center;*/
+    /*justify-content: space-between;*/
+    /*padding-top: 0.5rem;*/
+    /*padding-bottom: 0.5rem;*/
 }
 
 .navbar > .container,
@@ -35424,7 +35442,7 @@ button:focus {
     position: relative;
     background: transparent;
     padding: 1.5rem 1.875rem 1.25rem;
-    display: flex;
+    /*display: flex;*/
     justify-content: space-between;
     align-items: center;
 }
@@ -36228,16 +36246,23 @@ select {
 
 .card-dashboard {
     /*width : 300px;*/
-    background-position: center;
-    margin-bottom: 1.875rem;
-    background-color: white;
-    transition: all .5s ease-in-out;
-    position: relative;
-    border: 1px solid white;
+    /*background-position: center;*/
+    /*margin-bottom: 1.875rem;*/
+    /*background-color: white;*/
+    /*transition: all .5s ease-in-out;*/
+    /*position: relative;*/
+    /*border: 1px solid white;*/
+    /*border-radius: 5px;*/
+    /*box-shadow: 0px 5px 5px 0px gray;*/
+    /*height: 200px;*/
+    /*padding: 20px;*/
+
+    background: #D0F6DF;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
     border-radius: 5px;
-    box-shadow: 0px 5px 5px 0px gray;
-    height: 200px;
-    padding: 20px;
+    width: 260%;
+    height: 150px;
+    top: calc(50% - 191px/2 + 0.5px);
 }
 
 .card {
@@ -36250,7 +36275,7 @@ select {
     border: 1px solid white;
     border-radius: 5px;
     box-shadow: 0px 5px 5px 0px gray;
-    /*height: 220px;*/
+    max-height: 750px;
     padding: 20px;
 }
 

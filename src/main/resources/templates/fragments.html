@@ -88,48 +88,48 @@
         // history.replaceState(null, null, document.URL);
 
 
-            history.pushState(null, null, location.href);
-            window.onpopstate = function () {
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
             history.go(1);
 
 
-        // Disable right-click
-        // window.addEventListener('contextmenu', function (e) {
-                //     e.preventDefault();
-                // });
+            // Disable right-click
+            // window.addEventListener('contextmenu', function (e) {
+            //     e.preventDefault();
+            // });
 
-                document.addEventListener("contextmenu", function(e) {
-                    e.preventDefault();
-                });
-
-        let idleTimeoutMilliseconds;
-        $(document).ready(function () {
-            $.ajax({
-                type: 'GET',
-                url: `/properties`,// URL of the controller method
-                success: function (response) {
-                    idleTimeoutMilliseconds = response;
-                    console.log(response);
-                    let timeoutTimer;
-
-                    function resetTimer() {
-                        clearTimeout(timeoutTimer);
-                        timeoutTimer = setTimeout(logout, idleTimeoutMilliseconds);
-                    }
-
-                    function logout() {
-                        window.location.href = '/login?timeout=true';
-                    }
-
-                    // Add event listeners to reset the timer on user activity
-                    document.addEventListener("mousemove", resetTimer);
-                    document.addEventListener("keydown", resetTimer);
-                },
-                error: function (error) {
-
-                }
+            document.addEventListener("contextmenu", function (e) {
+                e.preventDefault();
             });
-        });
+
+            let idleTimeoutMilliseconds;
+            $(document).ready(function () {
+                $.ajax({
+                    type: 'GET',
+                    url: `/properties`,// URL of the controller method
+                    success: function (response) {
+                        idleTimeoutMilliseconds = response;
+                        console.log(response);
+                        let timeoutTimer;
+
+                        function resetTimer() {
+                            clearTimeout(timeoutTimer);
+                            timeoutTimer = setTimeout(logout, idleTimeoutMilliseconds);
+                        }
+
+                        function logout() {
+                            window.location.href = '/login?timeout=true';
+                        }
+
+                        // Add event listeners to reset the timer on user activity
+                        document.addEventListener("mousemove", resetTimer);
+                        document.addEventListener("keydown", resetTimer);
+                    },
+                    error: function (error) {
+
+                    }
+                });
+            });
     </script>
 
 </head>
@@ -152,26 +152,6 @@
 
 </div>
 
-<div th:fragment="account-balance" class="col-md-6 col-sm-12 col-lg-6 col-xl-4 col-xs-12" id="card-fast"
-     th:each="accountBalance : ${accountBalanceResponse}">
-    <div class="card-dashboard card-balance invoice-card">
-        <div class="balance">
-            <div class="show-bal">
-                <span style="float: left" th:text="${accountBalance.getAvailableBalance}">N0.00</span>
-            </div>
-            <div class="show-card">
-                        <span style="color: #fff; font-stretch: expanded;"
-                              th:text="${accountBalance.getAccountNumber}"></span>
-            </div>
-            <div class="show-name">
-                                <span style="font-weight: bolder"
-                                      th:text="${customerDetails.getFirstName() + ' ' + customerDetails.getMiddleName() + ' ' + customerDetails.getLastName()}"> "></span>
-                <span style="float: right; font-weight: bolder"
-                      th:text="${'Tier ' + customerDetails.getKycTier()}"></span>
-            </div>
-        </div>
 
-    </div>
-</div>
 </body>
 </html>

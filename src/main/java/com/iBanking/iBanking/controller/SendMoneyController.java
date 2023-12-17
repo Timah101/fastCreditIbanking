@@ -1,9 +1,9 @@
 package com.iBanking.iBanking.controller;
 
 import com.iBanking.iBanking.Forms.SendMoneyForms;
-import com.iBanking.iBanking.payload.accout.AccountDetailsListResponsePayload;
-import com.iBanking.iBanking.payload.accout.AccountDetailsResponsePayload;
-import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
+import com.iBanking.iBanking.payload.accout.AccountDetailsList;
+import com.iBanking.iBanking.payload.accout.AccountDetailsResponse;
+import com.iBanking.iBanking.payload.generics.GeneralResponse;
 import com.iBanking.iBanking.payload.transactions.sendMoney.GetBankListPResponsePayload;
 import com.iBanking.iBanking.payload.transactions.sendMoney.OtherBanksNameEnquiryResponsePayload;
 import com.iBanking.iBanking.services.AccountService;
@@ -31,7 +31,7 @@ public class SendMoneyController {
     //Loan Send Money Page
     @GetMapping("/send-money")
     public String sendMoneyLocal(Model model, HttpSession session) {
-        AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
+        AccountDetailsList accountBalanceResponse = (AccountDetailsList) session.getAttribute("accountBalanceResponse");
         GetBankListPResponsePayload bankList = (GetBankListPResponsePayload) session.getAttribute("getBankListResponse");
         model.addAttribute("bankListResponse", bankList.getBankList());
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
@@ -44,13 +44,73 @@ public class SendMoneyController {
         return "transactions/send-money";
     }
 
+    @GetMapping("/send-money/details")
+    public String sendMoneyLocalDetails(Model model, HttpSession session) {
+//        AccountDetailsList accountBalanceResponse = (AccountDetailsList) session.getAttribute("accountBalanceResponse");
+//        GetBankListPResponsePayload bankList = (GetBankListPResponsePayload) session.getAttribute("getBankListResponse");
+//        model.addAttribute("bankListResponse", bankList.getBankList());
+//        model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
+//        model.addAttribute("sendMoneyLocalForm", new SendMoneyForms());
+//        model.addAttribute("sendMoneyLocalFormPin", new SendMoneyForms());
+//        model.addAttribute("sendMoneyOthersPin", new SendMoneyForms());
+//        model.addAttribute("sendMoneyOthersForm", new SendMoneyForms());
+//        model.addAttribute("mobileView", true);
+//        model.addAttribute("showLocal", true);
+        return "transactions/send-money-local-details";
+    }
+
+    @GetMapping("/transaction/pin")
+    public String pin(Model model, HttpSession session) {
+//        AccountDetailsList accountBalanceResponse = (AccountDetailsList) session.getAttribute("accountBalanceResponse");
+//        GetBankListPResponsePayload bankList = (GetBankListPResponsePayload) session.getAttribute("getBankListResponse");
+//        model.addAttribute("bankListResponse", bankList.getBankList());
+//        model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
+//        model.addAttribute("sendMoneyLocalForm", new SendMoneyForms());
+//        model.addAttribute("sendMoneyLocalFormPin", new SendMoneyForms());
+//        model.addAttribute("sendMoneyOthersPin", new SendMoneyForms());
+//        model.addAttribute("sendMoneyOthersForm", new SendMoneyForms());
+//        model.addAttribute("mobileView", true);
+//        model.addAttribute("showLocal", true);
+        return "transactions/transaction-pin";
+    }
+
+    @GetMapping("/transaction/success")
+    public String transactionSuccess(Model model, HttpSession session) {
+//        AccountDetailsList accountBalanceResponse = (AccountDetailsList) session.getAttribute("accountBalanceResponse");
+//        GetBankListPResponsePayload bankList = (GetBankListPResponsePayload) session.getAttribute("getBankListResponse");
+//        model.addAttribute("bankListResponse", bankList.getBankList());
+//        model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
+//        model.addAttribute("sendMoneyLocalForm", new SendMoneyForms());
+//        model.addAttribute("sendMoneyLocalFormPin", new SendMoneyForms());
+//        model.addAttribute("sendMoneyOthersPin", new SendMoneyForms());
+//        model.addAttribute("sendMoneyOthersForm", new SendMoneyForms());
+//        model.addAttribute("mobileView", true);
+//        model.addAttribute("showLocal", true);
+        return "transactions/transaction-success";
+    }
+
+    @GetMapping("/beneficiaries")
+    public String beneficiaries(Model model, HttpSession session) {
+//        AccountDetailsList accountBalanceResponse = (AccountDetailsList) session.getAttribute("accountBalanceResponse");
+//        GetBankListPResponsePayload bankList = (GetBankListPResponsePayload) session.getAttribute("getBankListResponse");
+//        model.addAttribute("bankListResponse", bankList.getBankList());
+//        model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
+//        model.addAttribute("sendMoneyLocalForm", new SendMoneyForms());
+//        model.addAttribute("sendMoneyLocalFormPin", new SendMoneyForms());
+//        model.addAttribute("sendMoneyOthersPin", new SendMoneyForms());
+//        model.addAttribute("sendMoneyOthersForm", new SendMoneyForms());
+//        model.addAttribute("mobileView", true);
+//        model.addAttribute("showLocal", true);
+        return "transactions/beneficiaries";
+    }
+
     //Reload to Confirm OTP div on same page
     @PostMapping("/local-form")
     public String processSendMoneyLocalFormSubmit(@Valid @ModelAttribute("sendMoneyLocalForm") SendMoneyForms sendMoneyLocalForm, BindingResult result,
                                                   HttpSession session, Model model) throws UnirestException {
         session.setAttribute("sendMoneyLocalForm", sendMoneyLocalForm);
         if (result.hasErrors()) {
-            AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
+            AccountDetailsList accountBalanceResponse = (AccountDetailsList) session.getAttribute("accountBalanceResponse");
 //             sendMoneyService.getBankList(session);
             GetBankListPResponsePayload bankList = (GetBankListPResponsePayload) session.getAttribute("getBankListResponse");
             model.addAttribute("bankListResponse", bankList.getBankList());
@@ -62,7 +122,7 @@ public class SendMoneyController {
             model.addAttribute("showLocal", true);
             return "transactions/send-money";
         }
-        AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
+        AccountDetailsList accountBalanceResponse = (AccountDetailsList) session.getAttribute("accountBalanceResponse");
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
         model.addAttribute("sendMoneyLocalForm", new SendMoneyForms());
         model.addAttribute("sendMoneyLocalFormPin", new SendMoneyForms());
@@ -85,7 +145,7 @@ public class SendMoneyController {
         session.setAttribute("sendMoneyLocalFormPin", sendMoneyLocalFormPin);
         sendMoneyService.sendMoneyLocal(session);
 
-        GeneralResponsePayload sendMoneyLocal = (GeneralResponsePayload) session.getAttribute("sendMoneyLocalResponse");
+        GeneralResponse sendMoneyLocal = (GeneralResponse) session.getAttribute("sendMoneyLocalResponse");
         if (sendMoneyLocal.getResponseCode().equals("00")) {
             return "00";
         } else {
@@ -101,7 +161,7 @@ public class SendMoneyController {
     @ResponseBody
     public String localNameEnquiry(@PathVariable("accountNumber") String accountNumber, Model model, HttpSession session) throws UnirestException {
         log.info("ARE YOU GETTING HERE FOR LOCAL {}", "YES");
-        AccountDetailsResponsePayload accountDetailsLocal = accountService.getAccountDetailsLocal(session, accountNumber);
+        AccountDetailsResponse accountDetailsLocal = accountService.getAccountDetailsLocal(session, accountNumber);
         if (accountDetailsLocal.getResponseCode().equals("00")) {
             log.info("NAME ENQUIRY {}", accountDetailsLocal);
             String name = accountDetailsLocal.getAccountName();
@@ -121,7 +181,7 @@ public class SendMoneyController {
                                                    HttpSession session, Model model) throws UnirestException {
         session.setAttribute("sendMoneyOthersForm", sendMoneyOthersForm);
         if (result.hasErrors()) {
-            AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
+            AccountDetailsList accountBalanceResponse = (AccountDetailsList) session.getAttribute("accountBalanceResponse");
             // sendMoneyService.getBankList(session);
             GetBankListPResponsePayload bankList = (GetBankListPResponsePayload) session.getAttribute("getBankListResponse");
             model.addAttribute("bankListResponse", bankList.getBankList());
@@ -133,7 +193,7 @@ public class SendMoneyController {
             model.addAttribute("showOthers", true);
             return "transactions/send-money";
         }
-        AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
+        AccountDetailsList accountBalanceResponse = (AccountDetailsList) session.getAttribute("accountBalanceResponse");
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
         model.addAttribute("sendMoneyLocalForm", new SendMoneyForms());
         model.addAttribute("sendMoneyLocalFormPin", new SendMoneyForms());
@@ -153,7 +213,7 @@ public class SendMoneyController {
     @ResponseBody
     public String processSendMoneyOthers(@ModelAttribute SendMoneyForms sendMoneyOthersFormPin, HttpSession session, RedirectAttributes redirectAttributes, Model model) throws UnirestException {
         session.setAttribute("sendMoneyOthersFormPin", sendMoneyOthersFormPin);
-        GeneralResponsePayload sendMoneyOthers = sendMoneyService.sendMoneyOthers(session);
+        GeneralResponse sendMoneyOthers = sendMoneyService.sendMoneyOthers(session);
         if (sendMoneyOthers.getResponseCode().equals("00")) {
             return "00";
         } else {
@@ -183,7 +243,7 @@ public class SendMoneyController {
 
     @PostMapping("/toggle-local")
     public String toggleLocal(Model model, HttpSession session) throws UnirestException {
-        AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
+        AccountDetailsList accountBalanceResponse = (AccountDetailsList) session.getAttribute("accountBalanceResponse");
         // sendMoneyService.getBankList(session);
         GetBankListPResponsePayload bankList = (GetBankListPResponsePayload) session.getAttribute("getBankListResponse");
         model.addAttribute("bankListResponse", bankList.getBankList());
@@ -199,7 +259,7 @@ public class SendMoneyController {
 
     @PostMapping("/toggle-others")
     public String toggleOthers(Model model, HttpSession session) throws UnirestException {
-        AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
+        AccountDetailsList accountBalanceResponse = (AccountDetailsList) session.getAttribute("accountBalanceResponse");
         // sendMoneyService.getBankList(session);
         GetBankListPResponsePayload bankList = (GetBankListPResponsePayload) session.getAttribute("getBankListResponse");
         model.addAttribute("bankListResponse", bankList.getBankList());

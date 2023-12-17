@@ -2,13 +2,13 @@ package com.iBanking.iBanking.services;
 
 import com.google.gson.Gson;
 import com.iBanking.iBanking.Forms.TransactionForms;
-import com.iBanking.iBanking.payload.accout.AccountDetailsListResponsePayload;
-import com.iBanking.iBanking.payload.accout.AccountDetailsRequestPayload;
-import com.iBanking.iBanking.payload.accout.AccountDetailsResponsePayload;
+import com.iBanking.iBanking.payload.accout.AccountDetailsList;
+import com.iBanking.iBanking.payload.accout.AccountDetailsRequest;
+import com.iBanking.iBanking.payload.accout.AccountDetailsResponse;
 import com.iBanking.iBanking.payload.accout.AccountList;
-import com.iBanking.iBanking.payload.generics.DecryptRequestPayload;
-import com.iBanking.iBanking.payload.generics.EncryptResponsePayload;
-import com.iBanking.iBanking.payload.generics.MobileNumberRequestPayload;
+import com.iBanking.iBanking.payload.generics.DecryptRequest;
+import com.iBanking.iBanking.payload.generics.EncryptResponse;
+import com.iBanking.iBanking.payload.generics.MobileNumberRequest;
 import com.iBanking.iBanking.utils.AuthenticationApi;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
@@ -33,12 +33,12 @@ public class AccountServiceImpl implements AccountService {
     AuthenticationApi authenticationApi;
 
     @Override
-    public AccountDetailsResponsePayload getAccountDetailsLocal(HttpSession session, String accountNumber) {
+    public AccountDetailsResponse getAccountDetailsLocal(HttpSession session, String accountNumber) {
         try {
             String accessToken = (String) session.getAttribute("accessToken");
             TransactionForms loginForm = (TransactionForms) session.getAttribute("loginForm");
-            AccountDetailsResponsePayload accountDetailsResponse;
-            AccountDetailsRequestPayload accountDetailsRequestPayload = new AccountDetailsRequestPayload();
+            AccountDetailsResponse accountDetailsResponse;
+            AccountDetailsRequest accountDetailsRequestPayload = new AccountDetailsRequest();
             accountDetailsRequestPayload.setMobileNumber(loginForm.getMobileNumber());
             accountDetailsRequestPayload.setAccountNumber(accountNumber);
             accountDetailsRequestPayload.setDeviceId("dv123456");
@@ -46,10 +46,10 @@ public class AccountServiceImpl implements AccountService {
 
             //Call the Encrypt API
             String encryptResponsePayload = authenticationApi.encryptPayload(requestPayload);
-            EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
-            encryptResponsePayload1.setRequest(encryptResponsePayload);
+            EncryptResponse encryptResponse1 = new EncryptResponse();
+            encryptResponse1.setRequest(encryptResponsePayload);
             //CALL THE ACCOUNT DETAILS ENDPOINT
-            String requestPayloadJson = gson.toJson(encryptResponsePayload1);
+            String requestPayloadJson = gson.toJson(encryptResponse1);
             log.info("LOCAL NAME ENQUIRY REQUEST PAYLOAD : {}", requestPayload);
             log.info("LOCAL NAME ENQUIRY ENCRYPTED REQUEST PAYLOAD : {}", requestPayloadJson);
             HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + ACCOUNT_DETAILS)
@@ -61,18 +61,18 @@ public class AccountServiceImpl implements AccountService {
 
             log.info("LOCAL NAME ENQUIRY API RESPONSE PAYLOAD : {}", responseBody);
             if (jsonResponse.getStatus() == 200 && responseBody != null && responseBody.contains("response")) {
-                DecryptRequestPayload decryptRequestPayload = gson.fromJson(responseBody, DecryptRequestPayload.class);
-                String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+                DecryptRequest decryptRequest = gson.fromJson(responseBody, DecryptRequest.class);
+                String decrypt = authenticationApi.decryptPayload(decryptRequest.getResponse());
                 if (decrypt != null) {
-                    accountDetailsResponse = gson.fromJson(decrypt, AccountDetailsResponsePayload.class);
+                    accountDetailsResponse = gson.fromJson(decrypt, AccountDetailsResponse.class);
                 } else {
-                    accountDetailsResponse = new AccountDetailsResponsePayload();
+                    accountDetailsResponse = new AccountDetailsResponse();
                     accountDetailsResponse.setResponseCode("199");
                     accountDetailsResponse.setResponseMessage("error occurred");
                 }
                 log.info("DECRYPTED LOCAL NAME ENQUIRY RESPONSE API : {}", decrypt);
             } else {
-                accountDetailsResponse = new AccountDetailsResponsePayload();
+                accountDetailsResponse = new AccountDetailsResponse();
                 accountDetailsResponse.setResponseCode("199");
                 accountDetailsResponse.setResponseMessage("error occurred");
             }
@@ -87,22 +87,22 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountDetailsListResponsePayload getAccountBalances(HttpSession session) {
+    public AccountDetailsList getAccountBalances(HttpSession session) {
         try {
             String accessToken = (String) session.getAttribute("accessToken");
-            AccountDetailsListResponsePayload accountBalanceResponse;
-            MobileNumberRequestPayload requestPayload = new MobileNumberRequestPayload();
+            AccountDetailsList accountBalanceResponse;
+            MobileNumberRequest requestPayload = new MobileNumberRequest();
             TransactionForms loginForm = (TransactionForms) session.getAttribute("loginForm");
-            requestPayload.setMobileNumber(loginForm.getMobileNumber());
+            requestPayload.setMobileNumber("08076235565"); // loginForm.getMobileNumber()
             String requestPayloadJson = gson.toJson(requestPayload);
             //Call the Encrypt API
             String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
-            EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
-            encryptResponsePayload1.setRequest(encryptResponsePayload);
+            EncryptResponse encryptResponse1 = new EncryptResponse();
+            encryptResponse1.setRequest(encryptResponsePayload);
             log.info("ACCOUNT DETAILS LIST REQUEST PAYLOAD : {}", requestPayloadJson);
-            log.info("ACCOUNT DETAILS LIST ENCRYPTED REQUEST PAYLOAD : {}", encryptResponsePayload1);
+            log.info("ACCOUNT DETAILS LIST ENCRYPTED REQUEST PAYLOAD : {}", encryptResponse1);
             //CALL THE ACCOUNT DETAILS LIST ENDPOINT
-            String requestString = gson.toJson(encryptResponsePayload1);
+            String requestString = gson.toJson(encryptResponse1);
             log.info("ACCOUNT DETAILS LIST REQUEST PAYLOAD : {}", requestString);
             HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + ACCOUNT_DETAILS_LIST)
                     .header("accept", "application/json")
@@ -113,12 +113,12 @@ public class AccountServiceImpl implements AccountService {
 
             log.info("ACCOUNT DETAILS LIST API RESPONSE PAYLOAD : {}", responseBody);
             if (jsonResponse.getStatus() == 200 && responseBody != null && responseBody.contains("response")) {
-                DecryptRequestPayload decryptRequestPayload = gson.fromJson(responseBody, DecryptRequestPayload.class);
-                String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+                DecryptRequest decryptRequest = gson.fromJson(responseBody, DecryptRequest.class);
+                String decrypt = authenticationApi.decryptPayload(decryptRequest.getResponse());
                 if (decrypt != null) {
-                    accountBalanceResponse = gson.fromJson(decrypt, AccountDetailsListResponsePayload.class);
+                    accountBalanceResponse = gson.fromJson(decrypt, AccountDetailsList.class);
                     if (accountBalanceResponse.getResponseCode().equals("03")) {
-                        accountBalanceResponse = new AccountDetailsListResponsePayload();
+                        accountBalanceResponse = new AccountDetailsList();
                         AccountList accountList = new AccountList();
                         List<AccountList> accountListArrayList = new ArrayList<>();
                         accountList.setAccountName("");
@@ -130,7 +130,7 @@ public class AccountServiceImpl implements AccountService {
                         accountBalanceResponse.setAccountList(accountListArrayList);
                     }
                 } else {
-                    accountBalanceResponse = new AccountDetailsListResponsePayload();
+                    accountBalanceResponse = new AccountDetailsList();
                     AccountList accountList = new AccountList();
                     List<AccountList> accountListArrayList = new ArrayList<>();
                     accountList.setAccountName("");
@@ -144,7 +144,7 @@ public class AccountServiceImpl implements AccountService {
                 }
                 log.info("DECRYPTED ACCOUNT DETAILS LIST RESPONSE API : {}", decrypt);
             } else {
-                accountBalanceResponse = new AccountDetailsListResponsePayload();
+                accountBalanceResponse = new AccountDetailsList();
                 AccountList accountList = new AccountList();
                 List<AccountList> accountListArrayList = new ArrayList<>();
                 accountList.setAccountName("");

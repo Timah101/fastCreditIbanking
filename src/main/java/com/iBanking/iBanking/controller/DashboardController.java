@@ -1,9 +1,10 @@
 package com.iBanking.iBanking.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.gson.Gson;
 import com.iBanking.iBanking.Forms.TransactionForms;
-import com.iBanking.iBanking.payload.accout.AccountDetailsListResponsePayload;
-import com.iBanking.iBanking.payload.customer.CustomerDetailsResponsePayload;
+import com.iBanking.iBanking.payload.accout.AccountDetailsList;
+import com.iBanking.iBanking.payload.customer.CustomerDetailsResponse;
 import com.iBanking.iBanking.services.AccountService;
 import com.iBanking.iBanking.services.AirtimeDataService;
 import com.iBanking.iBanking.services.CustomerService;
@@ -36,13 +37,15 @@ public class DashboardController {
         model.addAttribute("airtimeForm", new TransactionForms());
         model.addAttribute("sendMoneyLocalForm", new TransactionForms());
 
-        CustomerDetailsResponsePayload customerDetails = (CustomerDetailsResponsePayload) session.getAttribute("customerDetailsResponse");
-        AccountDetailsListResponsePayload accountBalanceResponse = accountService.getAccountBalances(session);
+        CustomerDetailsResponse customerDetails = (CustomerDetailsResponse) session.getAttribute("customerDetailsResponse");
+        AccountDetailsList accountBalanceResponse = accountService.getAccountBalances(session);
+
 
         if (!customerDetails.getResponseCode().equals("00") || !accountBalanceResponse.getResponseCode().equals("00")) {
-            model.addAttribute("accountBalanceResponse", new AccountDetailsListResponsePayload());
-            model.addAttribute("customerDetails", new CustomerDetailsResponsePayload());
+            model.addAttribute("accountBalanceResponse", new AccountDetailsList());
+            model.addAttribute("customerDetails", new CustomerDetailsResponse());
         }
+        System.out.println("CUSTOMER DETAILS FOR SEND MONEY " + new Gson().toJson(customerDetails));
 
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
         model.addAttribute("customerDetails", customerDetails);
@@ -55,12 +58,12 @@ public class DashboardController {
 //        model.addAttribute("airtimeForm", new TransactionForms());
 //        model.addAttribute("sendMoneyLocalForm", new TransactionForms());
 //
-//        CustomerDetailsResponsePayload customerDetails = (CustomerDetailsResponsePayload) session.getAttribute("customerDetailsResponse");
-//        AccountDetailsListResponsePayload accountBalanceResponse = accountService.getAccountBalances(session);
+//        CustomerDetailsResponse customerDetails = (CustomerDetailsResponse) session.getAttribute("customerDetailsResponse");
+//        AccountDetailsList accountBalanceResponse = accountService.getAccountBalances(session);
 //
 //        if (!customerDetails.getResponseCode().equals("00") || !accountBalanceResponse.getResponseCode().equals("00")) {
-//            model.addAttribute("accountBalanceResponse", new AccountDetailsListResponsePayload());
-//            model.addAttribute("customerDetails", new CustomerDetailsResponsePayload());
+//            model.addAttribute("accountBalanceResponse", new AccountDetailsList());
+//            model.addAttribute("customerDetails", new CustomerDetailsResponse());
 //        }
 //
 //        model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());

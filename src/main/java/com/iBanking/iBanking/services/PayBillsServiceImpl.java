@@ -2,9 +2,9 @@ package com.iBanking.iBanking.services;
 
 import com.google.gson.Gson;
 import com.iBanking.iBanking.Forms.TransactionForms;
-import com.iBanking.iBanking.payload.generics.DecryptRequestPayload;
-import com.iBanking.iBanking.payload.generics.EncryptResponsePayload;
-import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
+import com.iBanking.iBanking.payload.generics.DecryptRequest;
+import com.iBanking.iBanking.payload.generics.EncryptResponse;
+import com.iBanking.iBanking.payload.generics.GeneralResponse;
 import com.iBanking.iBanking.payload.transactions.cableTv.*;
 import com.iBanking.iBanking.utils.AuthenticationApi;
 import com.mashape.unirest.http.HttpResponse;
@@ -41,9 +41,9 @@ public class PayBillsServiceImpl implements PayBillsService {
             String requestPayloadJson = gson.toJson(requestPayload);
             //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD TO ENCRYPT
             String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
-            EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
-            encryptResponsePayload1.setRequest(encryptResponsePayload);
-            String requestPayloadJsonString = gson.toJson(encryptResponsePayload1);
+            EncryptResponse encryptResponse1 = new EncryptResponse();
+            encryptResponse1.setRequest(encryptResponsePayload);
+            String requestPayloadJsonString = gson.toJson(encryptResponse1);
             log.info("CABLE TV BILLERS LIST REQUEST PAYLOAD : {}", requestPayloadJson);
             log.info("CABLE TV BILLERS LIST ENCRYPTED REQUEST PAYLOAD : {}", requestPayloadJsonString);
             HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + CABLE_TV_BILLERS_LIST)
@@ -54,8 +54,8 @@ public class PayBillsServiceImpl implements PayBillsService {
             String responseBody = jsonResponse.getBody();
             log.info("CABLE TV LIST API RESPONSE PAYLOAD : {}", responseBody);
             if (jsonResponse.getStatus() == 200 && responseBody != null && responseBody.contains("response")) {
-                DecryptRequestPayload decryptRequestPayload = gson.fromJson(responseBody, DecryptRequestPayload.class);
-                String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+                DecryptRequest decryptRequest = gson.fromJson(responseBody, DecryptRequest.class);
+                String decrypt = authenticationApi.decryptPayload(decryptRequest.getResponse());
                 if (decrypt != null) {
                     cableTvBillers = gson.fromJson(decrypt, GetCableTvBillersResponsePayload.class);
                 } else {
@@ -97,10 +97,10 @@ public class PayBillsServiceImpl implements PayBillsService {
             String requestPayloadJson = gson.toJson(requestPayload);
             //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD TO ENCRYPT
             String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
-            EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
-            encryptResponsePayload1.setRequest(encryptResponsePayload);
+            EncryptResponse encryptResponse1 = new EncryptResponse();
+            encryptResponse1.setRequest(encryptResponsePayload);
             //CALL THE GET BANKS ENDPOINT AND PASS THE ENCRYPTED PAYLOAD
-            String requestPayloadJsonString = gson.toJson(encryptResponsePayload1);
+            String requestPayloadJsonString = gson.toJson(encryptResponse1);
             log.info("VALIDATE CABLE TV REQUEST PAYLOAD : {}", requestPayloadJson);
             log.info("VALIDATE CABLE TV ENCRYPTED REQUEST PAYLOAD : {}", requestPayloadJsonString);
             HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + VALIDATE_CABLE_TV)
@@ -112,8 +112,8 @@ public class PayBillsServiceImpl implements PayBillsService {
 
             log.info("VALIDATE CABLE API ENCRYPTED RESPONSE PAYLOAD : {}", responseBody);
             if (jsonResponse.getStatus() == 200 && responseBody != null && responseBody.contains("response")) {
-                DecryptRequestPayload decryptRequestPayload = gson.fromJson(responseBody, DecryptRequestPayload.class);
-                String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+                DecryptRequest decryptRequest = gson.fromJson(responseBody, DecryptRequest.class);
+                String decrypt = authenticationApi.decryptPayload(decryptRequest.getResponse());
                 log.info("VALIDATE CABLE API DECRYPTED RESPONSE PAYLOAD : {}", decrypt);
                 validateCableTv = gson.fromJson(decrypt, ValidateCableTvResponsePayload.class);
             } else {
@@ -177,11 +177,11 @@ public class PayBillsServiceImpl implements PayBillsService {
 
             //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD TO ENCRYPT
             String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
-            EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
-            encryptResponsePayload1.setRequest(encryptResponsePayload);
+            EncryptResponse encryptResponse1 = new EncryptResponse();
+            encryptResponse1.setRequest(encryptResponsePayload);
 
 
-            String requestPayloadJsonString = gson.toJson(encryptResponsePayload1);
+            String requestPayloadJsonString = gson.toJson(encryptResponse1);
             log.info("CABLE PAYMENT REQUEST PAYLOAD : {}", requestPayloadJson);
             log.info("CABLE PAYMENT ENCRYPTED REQUEST PAYLOAD : {}", requestPayloadJsonString);
             HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + CABLE_TV_PAYMENT)
@@ -194,8 +194,8 @@ public class PayBillsServiceImpl implements PayBillsService {
             log.info("CABLE PAYMENT RESPONSE PAYLOAD : {}", responseBody);
 
             if (jsonResponse.getStatus() == 200 && responseBody != null && responseBody.contains("response")) {
-                DecryptRequestPayload decryptRequestPayload = gson.fromJson(responseBody, DecryptRequestPayload.class);
-                String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+                DecryptRequest decryptRequest = gson.fromJson(responseBody, DecryptRequest.class);
+                String decrypt = authenticationApi.decryptPayload(decryptRequest.getResponse());
                 if (decrypt != null) {
                     cableTvPayment = gson.fromJson(decrypt, CableTvPaymentResponse.class);
                 } else {
@@ -228,10 +228,10 @@ public class PayBillsServiceImpl implements PayBillsService {
             String requestPayloadJson = gson.toJson(requestPayload);
             //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD TO ENCRYPT
             String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
-            EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
-            encryptResponsePayload1.setRequest(encryptResponsePayload);
+            EncryptResponse encryptResponse1 = new EncryptResponse();
+            encryptResponse1.setRequest(encryptResponsePayload);
             //CALL THE GET BANKS ENDPOINT AND PASS THE ENCRYPTED PAYLOAD
-            String requestPayloadJsonString = gson.toJson(encryptResponsePayload1);
+            String requestPayloadJsonString = gson.toJson(encryptResponse1);
             log.info("ELECTRICITY BILLERS LIST REQUEST PAYLOAD : {}", requestPayloadJson);
             log.info("ELECTRICITY BILLERS LIST REQUEST PAYLOAD : {}", requestPayloadJsonString);
             HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + ELECTRICITY_BILLERS_LIST)
@@ -244,8 +244,8 @@ public class PayBillsServiceImpl implements PayBillsService {
             log.info("ELECTRICITY BILLERS LIST API RESPONSE PAYLOAD : {}", responseBody);
 
             if (jsonResponse.getStatus() == 200 && responseBody != null && responseBody.contains("response")) {
-                DecryptRequestPayload decryptRequestPayload = gson.fromJson(responseBody, DecryptRequestPayload.class);
-                String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+                DecryptRequest decryptRequest = gson.fromJson(responseBody, DecryptRequest.class);
+                String decrypt = authenticationApi.decryptPayload(decryptRequest.getResponse());
                 if (decrypt != null) {
                     getElectricityBillers = gson.fromJson(decrypt, GetElectricityBillerResponsePayload.class);
                 } else {
@@ -290,10 +290,10 @@ public class PayBillsServiceImpl implements PayBillsService {
 
             //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD TO ENCRYPT
             String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
-            EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
-            encryptResponsePayload1.setRequest(encryptResponsePayload);
+            EncryptResponse encryptResponse1 = new EncryptResponse();
+            encryptResponse1.setRequest(encryptResponsePayload);
 
-            String requestPayloadJsonString = gson.toJson(encryptResponsePayload1);
+            String requestPayloadJsonString = gson.toJson(encryptResponse1);
             log.info("VALIDATE ELECTRICITY REQUEST PAYLOAD : {}", requestPayloadJson);
             log.info("VALIDATE ELECTRICITY ENCRYPTED REQUEST PAYLOAD : {}", requestPayloadJson);
             HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + VALIDATE_ELECTRICITY)
@@ -306,8 +306,8 @@ public class PayBillsServiceImpl implements PayBillsService {
             log.info("VALIDATE ELECTRICITY RESPONSE PAYLOAD : {}", responseBody);
 
             if (jsonResponse.getStatus() == 200 && responseBody != null && responseBody.contains("response")) {
-                DecryptRequestPayload decryptRequestPayload = gson.fromJson(responseBody, DecryptRequestPayload.class);
-                String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+                DecryptRequest decryptRequest = gson.fromJson(responseBody, DecryptRequest.class);
+                String decrypt = authenticationApi.decryptPayload(decryptRequest.getResponse());
                 if (decrypt != null) {
                     validateElectricity = gson.fromJson(decrypt, ValidateElectricityResponsePayload.class);
                 } else {
@@ -331,10 +331,10 @@ public class PayBillsServiceImpl implements PayBillsService {
     }
 
     @Override
-    public GeneralResponsePayload electricityPayment(HttpSession session) throws UnirestException {
+    public GeneralResponse electricityPayment(HttpSession session) throws UnirestException {
         try {
             String accessToken = (String) session.getAttribute("accessToken");
-            GeneralResponsePayload electricityPayment = new GeneralResponsePayload();
+            GeneralResponse electricityPayment = new GeneralResponse();
             ElectricityPaymentRequestPayload requestPayload = new ElectricityPaymentRequestPayload();
 
             TransactionForms form = (TransactionForms) session.getAttribute("electricityForm");
@@ -357,10 +357,10 @@ public class PayBillsServiceImpl implements PayBillsService {
 
             //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD TO ENCRYPT
             String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
-            EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
-            encryptResponsePayload1.setRequest(encryptResponsePayload);
+            EncryptResponse encryptResponse1 = new EncryptResponse();
+            encryptResponse1.setRequest(encryptResponsePayload);
 
-            String requestPayloadJsonString = gson.toJson(encryptResponsePayload1);
+            String requestPayloadJsonString = gson.toJson(encryptResponse1);
             log.info("ELECTRICITY PAYMENT REQUEST PAYLOAD : {}", requestPayloadJson);
             log.info("ELECTRICITY PAYMENT ENCRYPTED REQUEST PAYLOAD : {}", requestPayloadJsonString);
             HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + CABLE_TV_PAYMENT)
@@ -373,18 +373,18 @@ public class PayBillsServiceImpl implements PayBillsService {
             log.info("ELECTRICITY PAYMENT API RESPONSE PAYLOAD : {}", responseBody);
 
             if (jsonResponse.getStatus() == 200 && responseBody != null && responseBody.contains("response")) {
-                DecryptRequestPayload decryptRequestPayload = gson.fromJson(responseBody, DecryptRequestPayload.class);
-                String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+                DecryptRequest decryptRequest = gson.fromJson(responseBody, DecryptRequest.class);
+                String decrypt = authenticationApi.decryptPayload(decryptRequest.getResponse());
                 if (decrypt != null) {
-                    electricityPayment = gson.fromJson(decrypt, GeneralResponsePayload.class);
+                    electricityPayment = gson.fromJson(decrypt, GeneralResponse.class);
                 } else {
-                    electricityPayment = new GeneralResponsePayload();
+                    electricityPayment = new GeneralResponse();
                     electricityPayment.setResponseCode("199");
                     electricityPayment.setResponseMessage("error occurred");
                 }
                 log.info("ELECTRICITY PAYMENT RESPONSE API : {}", decrypt);
             } else {
-                electricityPayment = new GeneralResponsePayload();
+                electricityPayment = new GeneralResponse();
                 electricityPayment.setResponseCode("199");
                 electricityPayment.setResponseMessage("error occurred");
             }

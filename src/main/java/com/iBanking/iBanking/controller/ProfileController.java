@@ -2,8 +2,8 @@ package com.iBanking.iBanking.controller;
 
 import com.iBanking.iBanking.Forms.TransactionForms;
 import com.iBanking.iBanking.payload.SendOtpResponsePayload;
-import com.iBanking.iBanking.payload.customer.CustomerDetailsResponsePayload;
-import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
+import com.iBanking.iBanking.payload.customer.CustomerDetailsResponse;
+import com.iBanking.iBanking.payload.generics.GeneralResponse;
 import com.iBanking.iBanking.services.CustomerService;
 import com.iBanking.iBanking.services.SendOtpService;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -40,7 +40,7 @@ public class ProfileController {
         session.setAttribute("resetForm1", resetForm1);
         String purpose = "PR";
         TransactionForms formPasswordReset = (TransactionForms) session.getAttribute("resetForm1");
-        CustomerDetailsResponsePayload customerDetails = customerService.getCustomerDetails(session, formPasswordReset.getMobileNumber());
+        CustomerDetailsResponse customerDetails = customerService.getCustomerDetails(session, formPasswordReset.getMobileNumber());
         if (customerDetails.getResponseCode().equals("00")) {
             final SendOtpResponsePayload sendOtp = sendOtpService.sendOtp(session, purpose, formPasswordReset.getMobileNumber());
             if (sendOtp.getResponseCode().equals("00")) {
@@ -78,7 +78,7 @@ public class ProfileController {
     @GetMapping("/reset-2")
     public String showReset2(Model model, HttpSession session) {
 
-        CustomerDetailsResponsePayload customer = (CustomerDetailsResponsePayload) session.getAttribute("customerDetailsResponse");
+        CustomerDetailsResponse customer = (CustomerDetailsResponse) session.getAttribute("customerDetailsResponse");
         model.addAttribute("resetForm2", new TransactionForms());
         model.addAttribute("securityQuestion", customer);
         return "profile/reset-password-2";
@@ -89,7 +89,7 @@ public class ProfileController {
 
         session.setAttribute("resetForm2", resetForm2);
 
-        final GeneralResponsePayload resetPassword = customerService.resetPassword(session);
+        final GeneralResponse resetPassword = customerService.resetPassword(session);
         if (resetPassword.getResponseCode().equals("00")) {
             return "redirect:/login";
         } else if (resetPassword.getResponseCode().equals("03")) {
@@ -128,7 +128,7 @@ public class ProfileController {
         session.setAttribute("pinResetForm1", pinResetForm1);
         String purpose = "PI";
         TransactionForms formPinReset = (TransactionForms) session.getAttribute("pinResetForm1");
-        CustomerDetailsResponsePayload customerDetails = customerService.getCustomerDetails(session, formPinReset.getMobileNumber());
+        CustomerDetailsResponse customerDetails = customerService.getCustomerDetails(session, formPinReset.getMobileNumber());
         if (customerDetails.getResponseCode().equals("00")) {
             final SendOtpResponsePayload sendOtp = sendOtpService.sendOtp(session, purpose, formPinReset.getMobileNumber());
             if (sendOtp.getResponseCode().equals("00")) {
@@ -166,7 +166,7 @@ public class ProfileController {
     @GetMapping("/reset-pin-2")
     public String showResetPin2(Model model, HttpSession session) {
 
-        CustomerDetailsResponsePayload customer = (CustomerDetailsResponsePayload) session.getAttribute("customerDetailsResponse");
+        CustomerDetailsResponse customer = (CustomerDetailsResponse) session.getAttribute("customerDetailsResponse");
         model.addAttribute("resetForm2", new TransactionForms());
         model.addAttribute("securityQuestion", customer);
         return "profile/reset-pin-2";
@@ -177,7 +177,7 @@ public class ProfileController {
 
         session.setAttribute("resetPinForm2", resetForm2);
 
-        final GeneralResponsePayload resetPin = customerService.resetPin(session);
+        final GeneralResponse resetPin = customerService.resetPin(session);
         if (resetPin.getResponseCode().equals("00")) {
             return "redirect:/dashboard";
         } else if (resetPin.getResponseCode().equals("03")) {

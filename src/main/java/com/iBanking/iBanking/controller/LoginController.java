@@ -2,10 +2,9 @@ package com.iBanking.iBanking.controller;
 
 
 import com.iBanking.iBanking.Forms.TransactionForms;
-import com.iBanking.iBanking.payload.accout.AccountDetailsListResponsePayload;
-import com.iBanking.iBanking.payload.customer.CustomerDetailsResponsePayload;
+import com.iBanking.iBanking.payload.accout.AccountDetailsList;
+import com.iBanking.iBanking.payload.customer.CustomerDetailsResponse;
 import com.iBanking.iBanking.payload.customer.LoginResponsePayload;
-import com.iBanking.iBanking.payload.transactions.sendMoney.GetBankListPResponsePayload;
 import com.iBanking.iBanking.services.*;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +53,7 @@ public class LoginController {
             LoginResponsePayload login = (LoginResponsePayload) session.getAttribute("loginResponse");
             if (login.getResponseCode().equals("00")) {
                 session.setAttribute("loggedIn", true);
-                CompletableFuture<CustomerDetailsResponsePayload> customerDetailsFuture = CompletableFuture.supplyAsync(() -> {
+                CompletableFuture<CustomerDetailsResponse> customerDetailsFuture = CompletableFuture.supplyAsync(() -> {
                     try {
                         TransactionForms loginFormMobileNumber = (TransactionForms) session.getAttribute("loginForm");
                         return customerService.getCustomerDetails(session, loginFormMobileNumber.getMobileNumber());
@@ -62,7 +61,7 @@ public class LoginController {
                         throw new RuntimeException("Error while getting customer details", e);
                     }
                 });
-                CompletableFuture<AccountDetailsListResponsePayload> accountBalanceFuture = CompletableFuture.supplyAsync(() -> {
+                CompletableFuture<AccountDetailsList> accountBalanceFuture = CompletableFuture.supplyAsync(() -> {
 
                     try {
                         return accountService.getAccountBalances(session);

@@ -5,10 +5,9 @@ import com.google.gson.Gson;
 import com.iBanking.iBanking.Forms.AirtimeDataTransactionForms;
 import com.iBanking.iBanking.Forms.DataTransactionForms;
 import com.iBanking.iBanking.Forms.PinForm;
-import com.iBanking.iBanking.Forms.TransactionForms;
-import com.iBanking.iBanking.payload.accout.AccountDetailsListResponsePayload;
-import com.iBanking.iBanking.payload.customer.CustomerDetailsResponsePayload;
-import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
+import com.iBanking.iBanking.payload.accout.AccountDetailsList;
+import com.iBanking.iBanking.payload.customer.CustomerDetailsResponse;
+import com.iBanking.iBanking.payload.generics.GeneralResponse;
 import com.iBanking.iBanking.payload.transactions.airtimeData.DataPlansResponsePayload;
 import com.iBanking.iBanking.services.AccountService;
 import com.iBanking.iBanking.services.AirtimeDataService;
@@ -37,12 +36,12 @@ public class AirtimeDataController {
     @GetMapping("/airtime-data")
     public String showAirtimeData(Model model, HttpSession session) throws UnirestException, JsonProcessingException {
 
-        AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
+        AccountDetailsList accountBalanceResponse = (AccountDetailsList) session.getAttribute("accountBalanceResponse");
 
         model.addAttribute("airtimeForm", new AirtimeDataTransactionForms());
         model.addAttribute("dataForm", new DataTransactionForms());
-        model.addAttribute("accountBalanceResponse", new AccountDetailsListResponsePayload());
-        model.addAttribute("customerDetails", new CustomerDetailsResponsePayload());
+        model.addAttribute("accountBalanceResponse", new AccountDetailsList());
+        model.addAttribute("customerDetails", new CustomerDetailsResponse());
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
         String selectedOption = "";
         model.addAttribute("selectedOptionGotv", selectedOption);
@@ -59,11 +58,11 @@ public class AirtimeDataController {
         session.setAttribute("airtimeForm", airtimeForm);
         if (result.hasErrors()) {
             System.out.println(result.getAllErrors());
-            AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
+            AccountDetailsList accountBalanceResponse = (AccountDetailsList) session.getAttribute("accountBalanceResponse");
 
             model.addAttribute("dataForm", new DataTransactionForms());
-            model.addAttribute("accountBalanceResponse", new AccountDetailsListResponsePayload());
-            model.addAttribute("customerDetails", new CustomerDetailsResponsePayload());
+            model.addAttribute("accountBalanceResponse", new AccountDetailsList());
+            model.addAttribute("customerDetails", new CustomerDetailsResponse());
             model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
             String selectedOption = "";
             model.addAttribute("selectedOptionGotv", selectedOption);
@@ -71,13 +70,13 @@ public class AirtimeDataController {
             model.addAttribute("showAirtime", true);
             return "transactions/airtime-data";
         }
-        AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
+        AccountDetailsList accountBalanceResponse = (AccountDetailsList) session.getAttribute("accountBalanceResponse");
 
         model.addAttribute("dataForm", new DataTransactionForms());
         model.addAttribute("airtimeFormPin", new PinForm());
         model.addAttribute("dataFormPin", new PinForm());
-        model.addAttribute("accountBalanceResponse", new AccountDetailsListResponsePayload());
-        model.addAttribute("customerDetails", new CustomerDetailsResponsePayload());
+        model.addAttribute("accountBalanceResponse", new AccountDetailsList());
+        model.addAttribute("customerDetails", new CustomerDetailsResponse());
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
 
         AirtimeDataTransactionForms airtimeTxnData = (AirtimeDataTransactionForms) session.getAttribute("airtimeForm");
@@ -96,7 +95,7 @@ public class AirtimeDataController {
                                  RedirectAttributes redirectAttributes) throws UnirestException {
         session.setAttribute("airtimeFormPin", airtimeFormPin);
         airtimeService.airtimeTopUp(session);
-        GeneralResponsePayload airtimeTopUp = (GeneralResponsePayload) session.getAttribute("airtimeTopUpResponse");
+        GeneralResponse airtimeTopUp = (GeneralResponse) session.getAttribute("airtimeTopUpResponse");
         if (airtimeTopUp.getResponseCode().equals("00")) {
             return "00";
         } else {
@@ -113,11 +112,11 @@ public class AirtimeDataController {
         session.setAttribute("dataForm", dataForm);
         if (result.hasErrors()) {
             System.out.println(result.getAllErrors());
-            AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
+            AccountDetailsList accountBalanceResponse = (AccountDetailsList) session.getAttribute("accountBalanceResponse");
             model.addAttribute("showData", true);
 //            model.addAttribute("dataForm", new DataTransactionForms());
-            model.addAttribute("accountBalanceResponse", new AccountDetailsListResponsePayload());
-            model.addAttribute("customerDetails", new CustomerDetailsResponsePayload());
+            model.addAttribute("accountBalanceResponse", new AccountDetailsList());
+            model.addAttribute("customerDetails", new CustomerDetailsResponse());
             model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
             String selectedOption = "";
             model.addAttribute("selectedOptionGotv", selectedOption);
@@ -125,11 +124,11 @@ public class AirtimeDataController {
 
             return "transactions/airtime-data";
         }
-        AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
+        AccountDetailsList accountBalanceResponse = (AccountDetailsList) session.getAttribute("accountBalanceResponse");
         model.addAttribute("airtimeFormPin", new PinForm());
         model.addAttribute("dataFormPin", new PinForm());
-        model.addAttribute("accountBalanceResponse", new AccountDetailsListResponsePayload());
-        model.addAttribute("customerDetails", new CustomerDetailsResponsePayload());
+        model.addAttribute("accountBalanceResponse", new AccountDetailsList());
+        model.addAttribute("customerDetails", new CustomerDetailsResponse());
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
 
         DataTransactionForms dataTxnData = (DataTransactionForms) session.getAttribute("dataForm");
@@ -146,7 +145,7 @@ public class AirtimeDataController {
     public String processData(@ModelAttribute PinForm dataFormPin, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
         session.setAttribute("dataFormPin", dataFormPin);
         airtimeService.dataTopUp(session);
-        GeneralResponsePayload dataTopUp = (GeneralResponsePayload) session.getAttribute("dataTopUpResponse");
+        GeneralResponse dataTopUp = (GeneralResponse) session.getAttribute("dataTopUpResponse");
         if (dataTopUp.getResponseCode().equals("00")) {
             return "00";
         } else {
@@ -173,12 +172,12 @@ public class AirtimeDataController {
     @PostMapping("/toggle-airtime")
     public String toggleAirtime(Model model, HttpSession session) {
 
-        AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
+        AccountDetailsList accountBalanceResponse = (AccountDetailsList) session.getAttribute("accountBalanceResponse");
 
         model.addAttribute("airtimeForm", new AirtimeDataTransactionForms());
         model.addAttribute("dataForm", new DataTransactionForms());
-        model.addAttribute("accountBalanceResponse", new AccountDetailsListResponsePayload());
-        model.addAttribute("customerDetails", new CustomerDetailsResponsePayload());
+        model.addAttribute("accountBalanceResponse", new AccountDetailsList());
+        model.addAttribute("customerDetails", new CustomerDetailsResponse());
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
         String selectedOption = "";
         model.addAttribute("selectedOptionGotv", selectedOption);
@@ -191,12 +190,12 @@ public class AirtimeDataController {
     @PostMapping("/toggle-data")
     public String toggleData(Model model, HttpSession session) {
 
-        AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
+        AccountDetailsList accountBalanceResponse = (AccountDetailsList) session.getAttribute("accountBalanceResponse");
 
         model.addAttribute("airtimeForm", new AirtimeDataTransactionForms());
         model.addAttribute("dataForm", new DataTransactionForms());
-        model.addAttribute("accountBalanceResponse", new AccountDetailsListResponsePayload());
-        model.addAttribute("customerDetails", new CustomerDetailsResponsePayload());
+        model.addAttribute("accountBalanceResponse", new AccountDetailsList());
+        model.addAttribute("customerDetails", new CustomerDetailsResponse());
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
         String selectedOption = "";
         model.addAttribute("selectedOptionGotv", selectedOption);

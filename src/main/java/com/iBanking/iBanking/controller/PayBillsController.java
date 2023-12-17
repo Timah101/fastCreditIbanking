@@ -2,8 +2,8 @@ package com.iBanking.iBanking.controller;
 
 import com.google.gson.Gson;
 import com.iBanking.iBanking.Forms.TransactionForms;
-import com.iBanking.iBanking.payload.accout.AccountDetailsListResponsePayload;
-import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
+import com.iBanking.iBanking.payload.accout.AccountDetailsList;
+import com.iBanking.iBanking.payload.generics.GeneralResponse;
 import com.iBanking.iBanking.payload.transactions.cableTv.*;
 import com.iBanking.iBanking.services.PayBillsService;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -40,7 +40,7 @@ public class PayBillsController {
         model.addAttribute("selectedOptionGotv", selectedOptionGotv);
         model.addAttribute("selectedOptionDstv", selectedOptionDstv);
 
-        AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
+        AccountDetailsList accountBalanceResponse = (AccountDetailsList) session.getAttribute("accountBalanceResponse");
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
         model.addAttribute("gotvBillerPlan", gotvBillerPlan.getBillers());
         model.addAttribute("dstvBillerPlan", dstvBillerPlan.getBillers());
@@ -63,7 +63,7 @@ public class PayBillsController {
         GetCableTvBillersResponsePayload dstvBillerPlan = (GetCableTvBillersResponsePayload) session.getAttribute("cableTvBillersResponse");
         GetElectricityBillerResponsePayload electricityBiller = (GetElectricityBillerResponsePayload) session.getAttribute("electricityBillersResponse");
 
-        AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
+        AccountDetailsList accountBalanceResponse = (AccountDetailsList) session.getAttribute("accountBalanceResponse");
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
         model.addAttribute("gotvBillerPlan", gotvBillerPlan.getBillers());
         model.addAttribute("dstvBillerPlan", dstvBillerPlan.getBillers());
@@ -150,7 +150,7 @@ public class PayBillsController {
         GetCableTvBillersResponsePayload gotvBillerPlan = (GetCableTvBillersResponsePayload) session.getAttribute("cableTvBillersResponse");
         GetCableTvBillersResponsePayload dstvBillerPlan = (GetCableTvBillersResponsePayload) session.getAttribute("cableTvBillersResponse");
         GetElectricityBillerResponsePayload electricityBiller = (GetElectricityBillerResponsePayload) session.getAttribute("electricityBillersResponse");
-        AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
+        AccountDetailsList accountBalanceResponse = (AccountDetailsList) session.getAttribute("accountBalanceResponse");
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
         model.addAttribute("gotvBillerPlan", gotvBillerPlan.getBillers());
         model.addAttribute("dstvBillerPlan", dstvBillerPlan.getBillers());
@@ -224,7 +224,7 @@ public class PayBillsController {
         GetCableTvBillersResponsePayload dstvBillerPlan = (GetCableTvBillersResponsePayload) session.getAttribute("cableTvBillersResponse");
         GetElectricityBillerResponsePayload electricityBiller = (GetElectricityBillerResponsePayload) session.getAttribute("electricityBillersResponse");
 
-        AccountDetailsListResponsePayload accountBalanceResponse = (AccountDetailsListResponsePayload) session.getAttribute("accountBalanceResponse");
+        AccountDetailsList accountBalanceResponse = (AccountDetailsList) session.getAttribute("accountBalanceResponse");
         model.addAttribute("accountBalanceResponse", accountBalanceResponse.getAccountList());
         model.addAttribute("gotvBillerPlan", gotvBillerPlan.getBillers());
         model.addAttribute("dstvBillerPlan", dstvBillerPlan.getBillers());
@@ -256,7 +256,7 @@ public class PayBillsController {
     public String processElectricity(Model model, TransactionForms electricityFormPin, HttpSession session, RedirectAttributes redirectAttributes) throws UnirestException {
         session.setAttribute("electricityFormPin", electricityFormPin);
         payBillsService.electricityPayment(session);
-        final GeneralResponsePayload electricityPaymentResponse = (GeneralResponsePayload) session.getAttribute("electricityPaymentResponse");
+        final GeneralResponse electricityPaymentResponse = (GeneralResponse) session.getAttribute("electricityPaymentResponse");
         if (electricityPaymentResponse.getResponseCode().equals("00")) {
             return "00";
         } else {

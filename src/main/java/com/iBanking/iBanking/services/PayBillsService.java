@@ -1,6 +1,6 @@
 package com.iBanking.iBanking.services;
 
-import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
+import com.iBanking.iBanking.payload.generics.GeneralResponse;
 import com.iBanking.iBanking.payload.transactions.cableTv.*;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
@@ -18,5 +18,5 @@ public interface PayBillsService {
 
     ValidateElectricityResponsePayload validateElectricity(HttpSession session, String biller, String meterNumber) throws UnirestException;
 
-    GeneralResponsePayload electricityPayment(HttpSession session) throws UnirestException;
+    GeneralResponse electricityPayment(HttpSession session) throws UnirestException;
 }

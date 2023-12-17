@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragments :: header}">
+
+    <title>Send Money</title>
+</head>
+<body>
+
+
+<div class="loader" id="loader">
+    <div class="loader-inner"></div>
+</div>
+
+<header th:insert="~{dashboard :: headerfast}"></header>
+<div th:insert="~{dashboard :: sidebarfast}"></div>
+
+<div class="main-module-big" style="min-height: 254.875px;">
+    <div class="main-module-big-body">
+        <div class="container-fluid">
+            <div class="row-custom">
+                <div class="offset-3 col-sm-6">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <div class="form-row mb-5">
+                                <div class="col-sm-12">
+                                    <div class="card-header">
+                                        <div class="mini-header">
+                                            Beneficiaries
+                                        </div>
+                                    </div>
+                                    <div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="col-sm-12">
+                                    <input id="beneficiary" class="form-control-send-money"
+                                           placeholder="Search Name/Account Number">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!--//SHOW OR HIDE LOADER-->
+<script th:inline="javascript">
+    function showLoader() {
+        const loader = document.getElementById('loader');
+        loader.style.display = 'block';
+    }
+
+    function hideLoader() {
+        const loader = document.getElementById('loader');
+        loader.style.display = 'none';
+    }
+</script>
+
+<!--//SUBMIT LOCAL FORM-->
+<script>
+    //submit local form
+    $(document).ready(function () {
+        $("#select-bank-others").select2();
+        $('#myForm').submit(function (event) {
+            event.preventDefault();
+            const form = $(this);
+            showLoader();
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (response) {
+                    if (response === "00") {
+                        window.location.href = '/success';
+                    } else {
+                        hideLoader();
+
+                        const resultSection = $('#resultSection');
+                        const resultMessage = $('#resultMessage');
+                        const retryButton = $('#retryButton');
+                        showErrorMessage();
+                        resultMessage.text(response);
+                        resultSection.show();
+                        retryButton.show();
+                    }
+                },
+                error: function (xhr) {
+                    hideLoader();
+                    const resultSection = $('#resultSection');
+                    const resultMessage = $('#resultMessage');
+                    const retryButton = $('#retryButton');
+                    resultMessage.text(xhr.responseText);
+                    resultSection.show();
+                    retryButton.show();
+                }
+            });
+        });
+    });
+
+
+    //Submit others form
+    $(document).ready(function () {
+        $('#formData').submit(function (event) {
+            event.preventDefault();
+            const form = $(this);
+            showLoader();
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (response) {
+                    if (response === "00") {
+                        window.location.href = '/success';
+                    } else {
+                        hideLoader();
+                        const resultSection = $('#resultSection');
+                        const resultMessage = $('#resultMessageData');
+                        const retryButton = $('#retryButton');
+                        showErrorMessageData();
+                        resultMessage.text(response);
+                        resultSection.show();
+                        retryButton.show();
+                    }
+                },
+                error: function (xhr) {
+                    hideLoader();
+                    const resultSection = $('#resultSection');
+                    const resultMessage = $('#resultMessageData');
+                    const retryButton = $('#retryButton');
+                    resultMessage.text(xhr.responseText);
+                }
+            });
+        });
+    });
+
+    function showErrorMessage() {
+        const resultMessage = $('#resultMessage')
+        resultMessage.show();
+    }
+
+    function hideConfirmLocal() {
+        const resultMessage = $('#confirm-local')
+        resultMessage.hide();
+    }
+
+    function hideConfirmOthers() {
+        const resultMessage = $('#confirm-others')
+        resultMessage.hide();
+    }
+
+    function showErrorMessageData() {
+        const resultMessage = $('#resultMessageData')
+        resultMessage.show();
+    }
+
+    window.addEventListener('load', hideLoader);
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggleIcon = document.querySelector(".toggle-icon");
+        const sidebar = document.querySelector(".sidebar");
+        toggleIcon.addEventListener("click", function () {
+            sidebar.classList.toggle("collapsed");
+        });
+    });
+</script>
+
+<!--NAME ENQUIRY SCRIPT-->
+<script th:inline="javascript">
+    //Name Enquiry for Local
+    $(document).ready(function () {
+        $('#account_local').on('input', function () {
+            const submitButton = document.getElementById("submit-local");
+            const accountNumber = $(this).val();
+            console.log("LOCAL ACCOUNT " + accountNumber)
+            if (accountNumber.length === 10) {
+                if (accountNumber.match(/^[0-9]+$/)) {
+                    showLoader();
+                    $.ajax({
+                        type: 'GET',
+                        url: `/name/lookup/local/${accountNumber}`,// URL of the controller method
+                        success: function (response) {
+                            hideLoader();
+                            // Update the view with the response data
+                            $('#localName').text(response);
+                            console.log(response);
+                            console.log(response.toString())
+                        },
+                        error: function (error) {
+                            submitButton.disabled = true;
+                            submitButton.style.backgroundColor = "grey";
+                            hideLoader();
+                            $('#localName').text("Invalid");
+                        }
+                    });
+
+                } else {
+                    submitButton.disabled = true;
+                    submitButton.style.backgroundColor = "grey";
+                    hideLoader();
+                    $('#localName').text("Invalid");
+                }
+            }
+        });
+    });
+
+
+    //Name Enquiry For Others
+    $(document).ready(function () {
+        $('#account_others').on('input', function () {
+            const submitButton = document.getElementById("submit-others");
+            const beneficiaryAccountNumber = $(this).val();
+            const beneficiaryBankCode = $("#select-bank-others").val();
+            if (beneficiaryAccountNumber.length === 10) {
+                if (beneficiaryAccountNumber.match(/^[0-9]+$/)) {
+                    showLoader();
+                    $.ajax({
+                        type: 'GET',
+                        url: `/name/lookup/others/${beneficiaryAccountNumber}/${beneficiaryBankCode}`,// URL of the controller method
+                        success: function (response) {
+                            hideLoader();
+                            // Update the view with the response data
+                            $('#othersName').text(response);
+                            console.log(response);
+                            console.log(response.toString())
+                        },
+                        error: function (error) {
+                            submitButton.disabled = true;
+                            submitButton.style.backgroundColor = "grey";
+                            hideLoader();
+                            $('#othersName').text("Invalid");
+                        }
+                    });
+
+                } else {
+                    submitButton.disabled = true;
+                    submitButton.style.backgroundColor = "grey";
+                    hideLoader();
+                    $('#othersName').text("Invalid");
+                }
+            }
+        });
+    });
+</script>
+
+<script th:src="@{/js/global.min.js}" type="text/javascript"></script>
+<!--    <script type="text/javascript" th:src="@{/js/Chart.bundle.min.js}"></script>-->
+<script th:src="@{/js/jquery.nice-select.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/custom.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/dlabnav-init.js}" type="text/javascript"></script>
+
+<script th:src="@{/js/select2.full.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/select2-init.js}" type="text/javascript"></script>
+
+<script>
+
+    function toggleMobileSendMoneyLocal() {
+        // hideConfirmLocal();
+        // hideConfirmOthers()
+        const mainModuleMobile = document.getElementById("main-module-mobile");
+        const contentAirtime = document.getElementById("send-money-local");
+        mainModuleMobile.style.display = "none";
+        contentAirtime.style.display = "block";
+    }
+
+    function toggleMobileSendMoneyOthers() {
+        // hideConfirmLocal();
+        // hideConfirmOthers()
+        const mainModuleMobile = document.getElementById("main-module-mobile");
+        const contentData = document.getElementById("send-money-local");
+        mainModuleMobile.style.display = "none";
+        contentData.style.display = "block";
+    }
+
+    function toggleSendMoneyLocal() {
+        showLoader();
+        hideConfirmLocal();
+        hideConfirmOthers();
+        const contentDiv = document.getElementById("send-money-local");
+        const contentOthers = document.getElementById("send-money-others");
+        if (contentDiv.style.display === "none") {
+            contentDiv.style.display = "block";
+            contentOthers.style.display = "none";
+        } else {
+            contentDiv.style.display = "none";
+            contentOthers.style.display = "none";
+        }
+    }
+
+    function toggleSendMoneyOthers() {
+        showLoader();
+        hideConfirmLocal();
+        hideConfirmOthers();
+        const contentDiv = document.getElementById("send-money-others");
+        const contentOthers = document.getElementById("send-money-local");
+        if (contentDiv.style.display === "none") {
+            contentDiv.style.display = "block";
+            contentOthers.style.display = "none";
+        } else {
+            contentDiv.style.display = "none";
+            contentOthers.style.display = "none";
+        }
+    }
+</script>
+</body>
+</html>

@@ -3,11 +3,11 @@ package com.iBanking.iBanking.services;
 import com.google.gson.Gson;
 import com.iBanking.iBanking.Forms.SendMoneyForms;
 import com.iBanking.iBanking.Forms.TransactionForms;
-import com.iBanking.iBanking.payload.accout.AccountDetailsResponsePayload;
-import com.iBanking.iBanking.payload.customer.CustomerDetailsResponsePayload;
-import com.iBanking.iBanking.payload.generics.DecryptRequestPayload;
-import com.iBanking.iBanking.payload.generics.EncryptResponsePayload;
-import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
+import com.iBanking.iBanking.payload.accout.AccountDetailsResponse;
+import com.iBanking.iBanking.payload.customer.CustomerDetailsResponse;
+import com.iBanking.iBanking.payload.generics.DecryptRequest;
+import com.iBanking.iBanking.payload.generics.EncryptResponse;
+import com.iBanking.iBanking.payload.generics.GeneralResponse;
 import com.iBanking.iBanking.payload.transactions.sendMoney.*;
 import com.iBanking.iBanking.utils.AuthenticationApi;
 import com.mashape.unirest.http.HttpResponse;
@@ -33,16 +33,16 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
     AuthenticationApi authenticationApi;
 
     @Override
-    public GeneralResponsePayload sendMoneyLocal(HttpSession session) {
+    public GeneralResponse sendMoneyLocal(HttpSession session) {
         try {
             String accessToken = (String) session.getAttribute("accessToken");
-            GeneralResponsePayload sendMoney;
+            GeneralResponse sendMoney;
             SendMoneyLocalRequestPayload requestPayload = new SendMoneyLocalRequestPayload();
 
             SendMoneyForms sendMoneyLocalForm = (SendMoneyForms) session.getAttribute("sendMoneyLocalForm");
             SendMoneyForms sendMoneyLocalFormPin = (SendMoneyForms) session.getAttribute("sendMoneyLocalFormPin");
-            CustomerDetailsResponsePayload customerDetails = (CustomerDetailsResponsePayload) session.getAttribute("customerDetailsResponse");
-            AccountDetailsResponsePayload accountDetails = (AccountDetailsResponsePayload) session.getAttribute("nameEnquiryLocalResponse");
+            CustomerDetailsResponse customerDetails = (CustomerDetailsResponse) session.getAttribute("customerDetailsResponse");
+            AccountDetailsResponse accountDetails = (AccountDetailsResponse) session.getAttribute("nameEnquiryLocalResponse");
             TransactionForms login = (TransactionForms) session.getAttribute("loginForm");
             String originatorName = customerDetails.getFirstName() + " " + customerDetails.getMiddleName() + " " + customerDetails.getLastName();
             requestPayload.setOriginatorName(originatorName);
@@ -57,12 +57,12 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
 
             //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD TO ENCRYPT
             String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
-            EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
-            encryptResponsePayload1.setRequest(encryptResponsePayload);
+            EncryptResponse encryptResponse1 = new EncryptResponse();
+            encryptResponse1.setRequest(encryptResponsePayload);
 
-            encryptResponsePayload1.setRequest(encryptResponsePayload);
+            encryptResponse1.setRequest(encryptResponsePayload);
             //CALL THE SEND MONEY ENDPOINT AND PASS THE ENCRYPTED PAYLOAD
-            String requestPayloadJsonString = gson.toJson(encryptResponsePayload1);
+            String requestPayloadJsonString = gson.toJson(encryptResponse1);
             log.info("SEND MONEY LOCAL REQUEST PAYLOAD : {}", requestPayloadJson);
             log.info("SEND MONEY LOCAL ENCRYPTED REQUEST PAYLOAD : {}", requestPayloadJsonString);
             HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + SEND_MONEY_LOCAL)
@@ -75,18 +75,18 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
             log.info("SEND MONEY LOCAL RESPONSE PAYLOAD : {}", responseBody);
 
             if (jsonResponse.getStatus() == 200 && responseBody != null && responseBody.contains("response")) {
-                DecryptRequestPayload decryptRequestPayload = gson.fromJson(responseBody, DecryptRequestPayload.class);
-                String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+                DecryptRequest decryptRequest = gson.fromJson(responseBody, DecryptRequest.class);
+                String decrypt = authenticationApi.decryptPayload(decryptRequest.getResponse());
                 if (decrypt != null) {
-                    sendMoney = gson.fromJson(decrypt, GeneralResponsePayload.class);
+                    sendMoney = gson.fromJson(decrypt, GeneralResponse.class);
                 } else {
-                    sendMoney = new GeneralResponsePayload();
+                    sendMoney = new GeneralResponse();
                     sendMoney.setResponseCode("199");
                     sendMoney.setResponseMessage("error occurred");
                 }
                 log.info("SEND MONEY LOCAL RESPONSE API : {}", decrypt);
             } else {
-                sendMoney = new GeneralResponsePayload();
+                sendMoney = new GeneralResponse();
                 sendMoney.setResponseCode("199");
                 sendMoney.setResponseMessage("error occurred");
             }
@@ -100,10 +100,10 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
     }
 
     @Override
-    public GeneralResponsePayload sendMoneyOthers(HttpSession session) throws UnirestException {
+    public GeneralResponse sendMoneyOthers(HttpSession session) throws UnirestException {
         try {
             String accessToken = (String) session.getAttribute("accessToken");
-            GeneralResponsePayload sendMoney;
+            GeneralResponse sendMoney;
             SendMoneyOthersRequestPayload requestPayload = new SendMoneyOthersRequestPayload();
 
             SendMoneyForms sendMoneyOthersForm = (SendMoneyForms) session.getAttribute("sendMoneyOthersForm");
@@ -128,10 +128,10 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
 
             //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
             String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
-            EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
-            encryptResponsePayload1.setRequest(encryptResponsePayload);
+            EncryptResponse encryptResponse1 = new EncryptResponse();
+            encryptResponse1.setRequest(encryptResponsePayload);
 
-            String requestPayloadJsonString = gson.toJson(encryptResponsePayload1);
+            String requestPayloadJsonString = gson.toJson(encryptResponse1);
             log.info("SEND MONEY OTHERS REQUEST PAYLOAD  {}", requestPayloadJson);
             log.info("SEND MONEY OTHERS ENCRYPTED REQUEST PAYLOAD  {}", requestPayloadJsonString);
             HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + SEND_MONEY_OTHERS)
@@ -144,18 +144,18 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
             log.info("SEND MONEY OTHERS API RESPONSE PAYLOAD : {}", responseBody);
 
             if (jsonResponse.getStatus() == 200 && responseBody != null && responseBody.contains("response")) {
-                DecryptRequestPayload decryptRequestPayload = gson.fromJson(responseBody, DecryptRequestPayload.class);
-                String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+                DecryptRequest decryptRequest = gson.fromJson(responseBody, DecryptRequest.class);
+                String decrypt = authenticationApi.decryptPayload(decryptRequest.getResponse());
                 if (decrypt != null) {
-                    sendMoney = gson.fromJson(decrypt, GeneralResponsePayload.class);
+                    sendMoney = gson.fromJson(decrypt, GeneralResponse.class);
                 } else {
-                    sendMoney = new GeneralResponsePayload();
+                    sendMoney = new GeneralResponse();
                     sendMoney.setResponseCode("199");
                     sendMoney.setResponseMessage("error occurred");
                 }
                 log.info("DECRYPTED SEND MONEY OTHERS RESPONSE API : {}", decrypt);
             } else {
-                sendMoney = new GeneralResponsePayload();
+                sendMoney = new GeneralResponse();
                 sendMoney.setResponseCode("199");
                 sendMoney.setResponseMessage("error occurred");
             }
@@ -179,11 +179,11 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
 
             //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD TO ENCRYPT
             String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
-            EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
-            encryptResponsePayload1.setRequest(encryptResponsePayload);
+            EncryptResponse encryptResponse1 = new EncryptResponse();
+            encryptResponse1.setRequest(encryptResponsePayload);
 
             //CALL THE GET BANKS ENDPOINT AND PASS THE ENCRYPTED PAYLOAD
-            String requestPayloadJsonString = gson.toJson(encryptResponsePayload1);
+            String requestPayloadJsonString = gson.toJson(encryptResponse1);
             log.info("GET BANKS LIST REQUEST PAYLOAD : {}", requestPayloadJson);
             log.info("GET BANKS LIST REQUEST PAYLOAD ENCRYPTED : {}", requestPayloadJsonString);
             HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + GET_BANKS_LIST)
@@ -196,8 +196,8 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
             log.info("GETTING BANK LIST API RESPONSE PAYLOAD : {}", responseBody);
 
             if (jsonResponse.getStatus() == 200 && responseBody != null && responseBody.contains("response")) {
-                DecryptRequestPayload decryptRequestPayload = gson.fromJson(responseBody, DecryptRequestPayload.class);
-                String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+                DecryptRequest decryptRequest = gson.fromJson(responseBody, DecryptRequest.class);
+                String decrypt = authenticationApi.decryptPayload(decryptRequest.getResponse());
                 if (decrypt != null) {
                     getBanksList = gson.fromJson(decrypt, GetBankListPResponsePayload.class);
                 } else {
@@ -241,10 +241,10 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
 
             //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD TO ENCRYPT
             String encryptResponsePayload = authenticationApi.encryptPayload(requestPayloadJson);
-            EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
-            encryptResponsePayload1.setRequest(encryptResponsePayload);
+            EncryptResponse encryptResponse1 = new EncryptResponse();
+            encryptResponse1.setRequest(encryptResponsePayload);
 
-            String requestPayloadJsonString = gson.toJson(encryptResponsePayload1);
+            String requestPayloadJsonString = gson.toJson(encryptResponse1);
             log.info("OTHER BANKS NAME ENQUIRY REQUEST PAYLOAD : {}", requestPayloadJson);
             log.info("OTHER BANKS NAME ENQUIRY ENCRYPT REQUEST PAYLOAD : {}", requestPayloadJsonString);
             HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + OTHER_BANKS_NAME_ENQUIRY)
@@ -257,8 +257,8 @@ public class SendMoneyServiceImplServiceImpl implements SendMoneyService {
             log.info("OTHER BANKS NAME ENQUIRY API RESPONSE PAYLOAD : {}", responseBody);
 
             if (jsonResponse.getStatus() == 200 && responseBody != null && responseBody.contains("response")) {
-                DecryptRequestPayload decryptRequestPayload = gson.fromJson(responseBody, DecryptRequestPayload.class);
-                String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+                DecryptRequest decryptRequest = gson.fromJson(responseBody, DecryptRequest.class);
+                String decrypt = authenticationApi.decryptPayload(decryptRequest.getResponse());
                 if (decrypt != null) {
                     otherBanksNameEnquiry = gson.fromJson(decrypt, OtherBanksNameEnquiryResponsePayload.class);
                 } else {

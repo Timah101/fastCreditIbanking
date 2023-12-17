@@ -1,14 +1,13 @@
 package com.iBanking.iBanking.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.iBanking.iBanking.Forms.TransactionForms;
-import com.iBanking.iBanking.payload.customer.CustomerDetailsResponsePayload;
+import com.iBanking.iBanking.payload.customer.CustomerDetailsResponse;
 import com.iBanking.iBanking.payload.SendOtpResponsePayload;
 import com.iBanking.iBanking.payload.customer.UpdateCustomerRequestPayload;
-import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
+import com.iBanking.iBanking.payload.generics.GeneralResponse;
 import com.iBanking.iBanking.services.CustomerService;
-import com.iBanking.iBanking.payload.customer.RegisterCustomerResponsePayload;
+import com.iBanking.iBanking.payload.customer.RegisterCustomerResponse;
 import com.iBanking.iBanking.services.SendOtpService;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import lombok.extern.slf4j.Slf4j;
@@ -21,12 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.Reader;
-import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.Map;
-
-import static com.iBanking.iBanking.utils.Generics.encodeMultipartFileToBase64;
 
 @Controller
 @Slf4j
@@ -48,7 +42,7 @@ public class RegisterCustomerController {
 
     @GetMapping("/update-customer")
     public String updateCustomer(Model model, HttpSession session) {
-        CustomerDetailsResponsePayload customerDetailsResponse = (CustomerDetailsResponsePayload) session.getAttribute("customerDetailsResponse");
+        CustomerDetailsResponse customerDetailsResponse = (CustomerDetailsResponse) session.getAttribute("customerDetailsResponse");
         model.addAttribute("updateCustomer", customerDetailsResponse.getMissingFields());
         return "register/update-customer";
     }
@@ -85,7 +79,7 @@ public class RegisterCustomerController {
             System.out.println(requestPayload);
 
         }
-        GeneralResponsePayload updateCustomerDetails = customerService.updateCustomerDetails(session, requestPayload);
+        GeneralResponse updateCustomerDetails = customerService.updateCustomerDetails(session, requestPayload);
         System.out.println("Update Customer Details Response " + updateCustomerDetails);
         if (updateCustomerDetails.getResponseCode().equals("00")) {
             return "redirect:/register/confirm-otp";
@@ -102,7 +96,7 @@ public class RegisterCustomerController {
 
         //CHECK IF CUSTOMER EXISTING FIRST
         TransactionForms formMobileNumber = (TransactionForms) session.getAttribute("registerForm1");
-        CustomerDetailsResponsePayload customerDetails = customerService.getCustomerDetails(session, formMobileNumber.getMobileNumber());
+        CustomerDetailsResponse customerDetails = customerService.getCustomerDetails(session, formMobileNumber.getMobileNumber());
         TransactionForms registerForm11 = (TransactionForms) session.getAttribute("registerForm1");
         if (!customerDetails.getResponseCode().equals("00")) {
             String customErrorMessage = customerDetails.getResponseMessage();
@@ -172,7 +166,7 @@ public class RegisterCustomerController {
         session.setAttribute("registerForm3", registerForm3);
         try {
             customerService.registerCustomer(session);
-            RegisterCustomerResponsePayload registerCustomerResponse = (RegisterCustomerResponsePayload) session.getAttribute("registerCustomerResponse");
+            RegisterCustomerResponse registerCustomerResponse = (RegisterCustomerResponse) session.getAttribute("registerCustomerResponse");
             if (registerCustomerResponse.getResponseCode().equals("00")) {
                 return "00";
             } else if (registerCustomerResponse.getResponseCode().equals("03")) {

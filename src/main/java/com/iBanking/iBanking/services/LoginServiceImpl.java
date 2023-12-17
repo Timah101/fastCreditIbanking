@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.iBanking.iBanking.Forms.TransactionForms;
 import com.iBanking.iBanking.payload.customer.LoginRequestPayload;
 import com.iBanking.iBanking.payload.customer.LoginResponsePayload;
-import com.iBanking.iBanking.payload.generics.DecryptRequestPayload;
-import com.iBanking.iBanking.payload.generics.EncryptResponsePayload;
+import com.iBanking.iBanking.payload.generics.DecryptRequest;
+import com.iBanking.iBanking.payload.generics.EncryptResponse;
 import com.iBanking.iBanking.utils.AuthenticationApi;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
@@ -39,14 +39,14 @@ public class LoginServiceImpl implements LoginService {
         TransactionForms loginForm = (TransactionForms) session.getAttribute("loginForm");
         loginRequestPayload.setMobileNumber(loginForm.getMobileNumber()); //
         loginRequestPayload.setAuthValue(loginForm.getPassword()); //
-        loginRequestPayload.setDeviceId("dv123456");
+        loginRequestPayload.setDeviceId("dv123456789");
         String requestPayload = gson.toJson(loginRequestPayload);
         //Call the Encrypt ENDPOINT AND PASS THE PAYLOAD
         String encryptResponsePayload = authenticationApi.encryptPayload(requestPayload);
-        EncryptResponsePayload encryptResponsePayload1 = new EncryptResponsePayload();
-        encryptResponsePayload1.setRequest(encryptResponsePayload);
+        EncryptResponse encryptResponse1 = new EncryptResponse();
+        encryptResponse1.setRequest(encryptResponsePayload);
         //CALL THE LOGIN ENDPOINT
-        String requestPayloadJson = gson.toJson(encryptResponsePayload1);
+        String requestPayloadJson = gson.toJson(encryptResponse1);
         log.info("LOGIN DETAILS PAYLOAD {}", requestPayload);
         log.info("LOGIN DETAILS ENCRYPTED PAYLOAD {}", requestPayloadJson);
         HttpResponse<String> jsonResponse = Unirest.post(BASE_URL + CUSTOMER_AUTH)
@@ -66,8 +66,8 @@ public class LoginServiceImpl implements LoginService {
         }
 
         // PASS ENCRYPTED RESPONSE TO DECRYPT API
-        DecryptRequestPayload decryptRequestPayload = gson.fromJson(requestBody, DecryptRequestPayload.class);
-        String decrypt = authenticationApi.decryptPayload(decryptRequestPayload.getResponse());
+        DecryptRequest decryptRequest = gson.fromJson(requestBody, DecryptRequest.class);
+        String decrypt = authenticationApi.decryptPayload(decryptRequest.getResponse());
         loginResponsePayload = gson.fromJson(decrypt, LoginResponsePayload.class);
         //LOG REQUEST AND RESPONSE
         log.info("LOGIN RESPONSE PAYLOAD : {}", gson.toJson(loginResponsePayload));

@@ -1,22 +1,22 @@
 package com.iBanking.iBanking.services;
 
-import com.iBanking.iBanking.payload.customer.CreateCustomerResponsePayload;
-import com.iBanking.iBanking.payload.customer.CustomerDetailsResponsePayload;
-import com.iBanking.iBanking.payload.customer.RegisterCustomerResponsePayload;
+import com.iBanking.iBanking.payload.customer.CreateCustomerResponse;
+import com.iBanking.iBanking.payload.customer.CustomerDetailsResponse;
+import com.iBanking.iBanking.payload.customer.RegisterCustomerResponse;
 import com.iBanking.iBanking.payload.customer.UpdateCustomerRequestPayload;
-import com.iBanking.iBanking.payload.generics.GeneralResponsePayload;
+import com.iBanking.iBanking.payload.generics.GeneralResponse;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 import javax.servlet.http.HttpSession;
 
 public interface CustomerService {
-    CustomerDetailsResponsePayload getCustomerDetails(HttpSession httpSession, String mobileNumber) throws UnirestException;
+    CustomerDetailsResponse getCustomerDetails(HttpSession httpSession, String mobileNumber) throws UnirestException;
 
-    RegisterCustomerResponsePayload registerCustomer(HttpSession session) throws UnirestException;
+    RegisterCustomerResponse registerCustomer(HttpSession session) throws UnirestException;
 
-    CreateCustomerResponsePayload createCustomer(HttpSession session) throws UnirestException;
+    CreateCustomerResponse createCustomer(HttpSession session) throws UnirestException;
 
-    GeneralResponsePayload resetPassword(HttpSession session) throws UnirestException;
-    GeneralResponsePayload resetPin(HttpSession session) throws UnirestException;
-    GeneralResponsePayload updateCustomerDetails(HttpSession session, UpdateCustomerRequestPayload requestPayload) throws UnirestException;
+    GeneralResponse resetPassword(HttpSession session) throws UnirestException;
+    GeneralResponse resetPin(HttpSession session) throws UnirestException;
+    GeneralResponse updateCustomerDetails(HttpSession session, UpdateCustomerRequestPayload requestPayload) throws UnirestException;
 }

@@ -21,8 +21,8 @@
         border: 0.0625rem solid #029247;
         padding: 0.3125rem 1.25rem;
         color: #fff;
-        height: 2.6rem;
-        border-radius: 5px;
+        height: 50px;
+        border-radius: 30px;
     }
 
     .submit-comfirm-money {
@@ -88,14 +88,15 @@
     }
 
     .form-control-send-money {
-        background: #fff;
-        border: 1px solid green;
+        background: #F2F2F2;
+        border: none;
         padding: 0.6rem 1.25rem;
-        color: #6e6e6e;
-        height: 2.5rem;
+        color: #BABABA;
+        height: 50px;
         width: 100%;
         border-radius: 0.3rem;
-        font-size: 12px;
+        font-size: 14px;
+        font-family: 'Poppins', sans-serif;
     }
 
     .transfer-money-block {
